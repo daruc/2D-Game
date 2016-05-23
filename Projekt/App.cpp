@@ -1,0 +1,39 @@
+#include <string>
+#include "App.h"
+#include "MainManuState.h"
+
+App::App()
+{
+
+}
+
+App::~App()
+{
+
+}
+
+void App::init()
+{
+	int width = 800;
+	int height = 600;
+	std::string title("Gra");
+	window = std::make_shared<sf::RenderWindow>(sf::VideoMode(width, height), title);
+	currentState = std::make_shared<MainMenuState>(window);
+	
+}
+
+void App::run()
+{
+	while (window->isOpen())
+	{
+		currentState->handleEvents();
+		currentState->update();
+		currentState->draw();
+
+		if (currentState->getNextState() != nullptr)
+		{
+			currentState = currentState->getNextState();
+		}
+	}
+
+}
