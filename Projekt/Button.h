@@ -14,6 +14,7 @@ protected:
 	bool click;
 public:
 	Button(std::shared_ptr<sf::RenderWindow> window, std::string title);
+	virtual void handleEvents(sf::Event & event);
 	virtual void update();
 	virtual void draw();
 

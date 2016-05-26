@@ -2,6 +2,7 @@
 #include <memory>
 #include "MainManuState.h"
 #include "MapMenuState.h"
+#include "EditorState.h"
 #include "ControlsState.h"
 #include "Control.h"
 #include "Button.h"
@@ -27,8 +28,17 @@ MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(controls_button);
 
+	std::shared_ptr<Button> edit_button = std::make_shared<Button>(window, "Edytor map");
+	edit_button->setCoordinates(300.0f, 300.0f);
+	edit_button->setDimensions(200.0f, 50.0f);
+	edit_button->addListener([this](std::string str)->void {
+		std::cout << "click " << str << std::endl;
+		State::nextState = std::make_shared<EditorState>(State::window);
+	});
+	controls.push_back(edit_button);
+
 	std::shared_ptr<Button> exit_button = std::make_shared<Button>(window, "Wyjœcie");
-	exit_button->setCoordinates(300.0f, 300.0f);
+	exit_button->setCoordinates(300.0f, 400.0f);
 	exit_button->setDimensions(200.0f, 50.0f);
 	exit_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -49,6 +59,14 @@ void MainMenuState::handleEvents()
 	{
 		if (event.type == sf::Event::Closed)
 			window->close();
+		else {
+			auto begin = controls.begin();
+			auto end = controls.end();
+			for (auto it = begin; it != end; ++it)
+			{
+				(*it)->handleEvents(event);
+			}
+		}
 	}
 }
 

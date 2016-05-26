@@ -151,19 +151,29 @@
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControlsState.cpp" />
+    <ClCompile Include="EditorState.cpp" />
+    <ClCompile Include="LoadMapState.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapMenuState.cpp" />
+    <ClCompile Include="SaveMapState.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="TextField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Control.h" />
     <ClInclude Include="ControlsState.h" />
+    <ClInclude Include="EditorState.h" />
+    <ClInclude Include="LoadMapState.h" />
     <ClInclude Include="MainManuState.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="MapMenuState.h" />
+    <ClInclude Include="SaveMapState.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="TextField.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

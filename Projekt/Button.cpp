@@ -12,8 +12,26 @@ Button::Button(std::shared_ptr<sf::RenderWindow> window, std::string title)
 
 	text.setFont(font);
 	text.setString(title);
+	text.setCharacterSize(25);
 	text.setColor(sf::Color::Black);
 	rectangle.setFillColor(sf::Color(200, 200, 200, 255));
+}
+
+void Button::handleEvents(sf::Event & event)
+{
+	
+	if (event.type == sf::Event::MouseButtonReleased)
+	{
+		sf::Vector2i coor(sf::Mouse::getPosition(*window));
+		sf::Vector2f dim(rectangle.getSize());
+		sf::Vector2f rec_coor(rectangle.getPosition());
+
+		if (coor.x >= rec_coor.x && coor.x <= rec_coor.x + dim.x
+			&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y)
+		{
+			listener(text.getString());
+		}
+	}
 }
 
 void Button::update()
@@ -31,7 +49,6 @@ void Button::update()
 			{
 				rectangle.setFillColor(sf::Color::Red);
 				click = true;
-				listener(text.getString());
 			}
 		}
 		else
