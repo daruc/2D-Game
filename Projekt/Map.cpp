@@ -1,4 +1,6 @@
 #include "Map.h"
+#include <utility>
+#include <cstring>
 
 void Map::addShape(std::list<sf::Vector2f> points)
 {
@@ -51,4 +53,82 @@ void Map::removeLast()
 {
 	if (shapes.size() > 0)
 		shapes.pop_back();
+}
+
+std::pair<int, char*> Map::toBinary( ) const
+{
+	size_t size = 20;	//player and finish position + nShapes
+	size_t nShapes = shapes.size();
+	size_t verticles = 0;
+	auto begin = shapes.begin();
+	auto end = shapes.end();
+	for (auto it = begin; it != end; ++it)
+	{
+		size += 4;	//number of verticles
+		size += (*it)->getPointCount() * 8;	//verticles
+		verticles += (*it)->getPointCount();
+	}
+
+	char * bytes = new char[size];
+	char * ptr = bytes;
+	memcpy(ptr, &player.x, sizeof(player.x));
+	ptr += sizeof(player.x);
+	memcpy(ptr, &player.y, sizeof(player.y));
+	ptr += sizeof(player.y);
+	memcpy(ptr, &finish.x, sizeof(finish.x));
+	ptr += sizeof(finish.x);
+	memcpy(ptr, &finish.y, sizeof(finish.y));
+	ptr += sizeof(finish.y);
+	memcpy(ptr, &nShapes, sizeof(nShapes));
+	ptr += sizeof(nShapes);
+	for (auto it = begin; it != end; ++it)
+	{
+		size_t count = (*it)->getPointCount();
+		memcpy(ptr, &count, sizeof(count));
+		ptr += sizeof(count);
+		for (size_t j = 0; j < count; ++j)
+		{
+			sf::Vector2f point = (*it)->getPoint(j);
+			memcpy(ptr, &point.x, sizeof(point.x));
+			ptr += sizeof(point.x);
+			memcpy(ptr, &point.y, sizeof(point.y));
+			ptr += sizeof(point.y);
+		}
+	}
+
+	return std::pair<int, char*>(size, bytes);
+}
+
+void Map::fromBinary(int size, char * bytes)
+{
+	shapes.clear();
+	int nShapes;
+	int verticles;
+	char * ptr = bytes;
+	memcpy(&player.x, ptr, sizeof(player.x));
+	ptr += sizeof(player.x);
+	memcpy(&player.y, ptr, sizeof(player.y));
+	ptr += sizeof(player.y);
+	memcpy(&finish.x, ptr, sizeof(finish.x));
+	ptr += sizeof(finish.x);
+	memcpy(&finish.y, ptr, sizeof(finish.y));
+	ptr += sizeof(finish.y);
+	memcpy(&nShapes, ptr, sizeof(nShapes));
+	ptr += sizeof(nShapes);
+	for (int i = 0; i < nShapes; ++i)
+	{
+		memcpy(&verticles, bytes, sizeof(verticles));
+		ptr += sizeof(verticles);
+		std::list<sf::Vector2f> vertx;
+		for (int j = 0; j < verticles; ++j)
+		{
+			sf::Vector2f vex;
+			memcpy(&vex.x, bytes, sizeof(vex.x));
+			ptr += sizeof(vex.x);
+			memcpy(&vex.y, bytes, sizeof(vex.y));
+			ptr += sizeof(vex.y);
+			vertx.push_back(vex);
+		}
+	}
+
 }

@@ -145,10 +145,14 @@ void TextField::handleKeys(sf::Event & event)
 	case sf::Keyboard::Numpad9:
 		ch = '9';
 		break;
+	case sf::Keyboard::Space:
+		ch = ' ';
+		break;
 	case sf::Keyboard::BackSpace:
 		sf::String str = text.getString();
 		str = str.substring(0, str.getSize() - 1);
 		text.setString(str);
+		break;
 	}
 
 	if (ch != '#')

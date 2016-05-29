@@ -3,8 +3,9 @@
 #include <list>
 #include <memory>
 #include <SFML/Graphics.hpp>
+#include "Binary.h"
 
-class Map
+class Map : public Binary
 {
 private:
 	sf::Vector2f player;
@@ -21,6 +22,9 @@ public:
 	inline sf::Vector2f getFinishPosition() { return finish; }
 	void setPlayerPosition(float x, float y);
 	void setFinishPosition(float x, float y);
+	virtual std::pair<int, char*> Map::toBinary() const;
+	virtual void fromBinary(int size, char * bytes);
+
 };
 
 #endif

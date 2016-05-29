@@ -10,6 +10,7 @@ class SaveMapState : public State
 private:
 	std::list<std::shared_ptr<Control>> controls;
 	std::shared_ptr<Map> map;
+	void save(sf::String filename);
 public:
 	SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~SaveMapState();
