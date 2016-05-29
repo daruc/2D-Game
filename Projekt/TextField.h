@@ -7,7 +7,9 @@ class TextField : public Control
 private:
 	sf::RectangleShape rectangle;
 	sf::Text text;
+	sf::Font font;
 	bool focus;
+	void handleKeys(sf::Event & event);
 public:
 	TextField(std::shared_ptr <sf::RenderWindow> window);
 	virtual void handleEvents(sf::Event & event);

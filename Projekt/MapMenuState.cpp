@@ -2,6 +2,7 @@
 #include <iostream>
 #include "MapMenuState.h"
 #include "MainManuState.h"
+#include "TextField.h"
 #include "Button.h"
 
 MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
@@ -47,6 +48,11 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 		State::nextState = std::make_shared<MainMenuState>(State::window);
 	});
 	controls.push_back(back);
+
+	std::shared_ptr<TextField> text_field = std::make_shared<TextField>(window);
+	text_field->setCoordinates(500.0f, 500.0f);
+	text_field->setDimensions(100.0f, 40.0f);
+	controls.push_back(text_field);
 }
 
 MapMenuState::~MapMenuState()
