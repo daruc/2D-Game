@@ -4,6 +4,7 @@
 #include "SaveMapState.h"
 #include "TextField.h"
 #include "Button.h"
+#include "EditorState.h"
 
 SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window)
@@ -22,6 +23,14 @@ SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 		save(text_field->getString());
 	});
 	controls.push_back(save_button);
+
+	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, "Edytor");
+	editor_button->setCoordinates(20.0f, 20.0f);
+	editor_button->setDimensions(130.0f, 40.0f);
+	editor_button->addListener([this](std::string str)->void {
+		State::nextState = std::make_shared<EditorState>(State::window, this->map);
+	});
+	controls.push_back(editor_button);
 }
 
 SaveMapState::~SaveMapState()

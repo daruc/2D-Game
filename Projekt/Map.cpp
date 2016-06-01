@@ -117,18 +117,23 @@ void Map::fromBinary(int size, char * bytes)
 	ptr += sizeof(nShapes);
 	for (int i = 0; i < nShapes; ++i)
 	{
-		memcpy(&verticles, bytes, sizeof(verticles));
+		memcpy(&verticles, ptr, sizeof(verticles));
 		ptr += sizeof(verticles);
-		std::list<sf::Vector2f> vertx;
+
+		std::shared_ptr<sf::ConvexShape> shape = std::make_shared<sf::ConvexShape>();
+		shape->setPointCount(verticles);
+		shape->setFillColor(sf::Color::Yellow);
 		for (int j = 0; j < verticles; ++j)
 		{
 			sf::Vector2f vex;
-			memcpy(&vex.x, bytes, sizeof(vex.x));
+			memcpy(&vex.x, ptr, sizeof(vex.x));
 			ptr += sizeof(vex.x);
-			memcpy(&vex.y, bytes, sizeof(vex.y));
+			memcpy(&vex.y, ptr, sizeof(vex.y));
 			ptr += sizeof(vex.y);
-			vertx.push_back(vex);
+			shape->setPoint(j, vex);
 		}
+		shapes.push_back(shape);
+		
 	}
 
 }

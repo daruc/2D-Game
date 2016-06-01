@@ -50,7 +50,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	load_button->setDimensions(130.0f, 40.0f);
 	load_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
-		State::nextState = std::make_shared<LoadMapState>(State::window);
+		State::nextState = std::make_shared<LoadMapState>(State::window, map);
 	});
 	controls.push_back(load_button);
 
@@ -133,6 +133,18 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	finish.setRadius(30.0f);
 	finish.setFillColor(sf::Color::Red);
 	finish.setPosition(map->getFinishPosition());
+}
+
+EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
+	:EditorState(window)
+{
+	this->map = map;
+
+	sf::Vector2f player_coor = map->getPlayerPosition();
+	start.setPosition(player_coor.x, player_coor.y);
+
+	sf::Vector2f finish_coor = map->getFinishPosition();
+	finish.setPosition(finish_coor.x, finish_coor.y);
 }
 
 EditorState::~EditorState()

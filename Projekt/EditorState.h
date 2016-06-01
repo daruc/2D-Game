@@ -28,6 +28,7 @@ private:
 	void moveAllPoints(float x, float y);
 public:
 	EditorState(std::shared_ptr<sf::RenderWindow> window);
+	EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~EditorState();
 	virtual void handleEvents();
 	virtual void update();
