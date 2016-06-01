@@ -8,8 +8,12 @@
 class SaveMapState : public State
 {
 private:
+	sf::RectangleShape background;
 	std::list<std::shared_ptr<Control>> controls;
 	std::shared_ptr<Map> map;
+	sf::Font font;
+	sf::Text title;
+
 	void save(sf::String filename);
 public:
 	SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);

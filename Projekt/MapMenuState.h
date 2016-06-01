@@ -8,7 +8,10 @@
 class MapMenuState : public State
 {
 private:
+	sf::Font font;
+	sf::Text title;
 	std::list<std::shared_ptr<Control>> controls;
+	sf::RectangleShape background;
 public:
 	MapMenuState(std::shared_ptr<sf::RenderWindow> window);
 	virtual ~MapMenuState();

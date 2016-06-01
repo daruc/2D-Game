@@ -54,7 +54,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(load_button);
 
-	std::shared_ptr<Button> begin_button = std::make_shared<Button>(window, "Pocz¹tek");
+	std::shared_ptr<Button> begin_button = std::make_shared<Button>(window, L"Pocz¹tek");
 	begin_button->setCoordinates(0.0f, 180.0f);
 	begin_button->setDimensions(130.0f, 40.0f);
 	begin_button->addListener([this](std::string str)->void {
@@ -95,6 +95,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	type1_button->setDimensions(130.0f, 40.0f);
 	type1_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
+		selected_type.setPosition(110.0f, 360.0f);
+		map->setType(1);
 	});
 	controls.push_back(type1_button);
 
@@ -103,6 +105,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	type2_button->setDimensions(130.0f, 40.0f);
 	type2_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
+		selected_type.setPosition(110.0f, 405.0f);
+		map->setType(2);
 	});
 	controls.push_back(type2_button);
 
@@ -111,6 +115,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	type3_button->setDimensions(130.0f, 40.0f);
 	type3_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
+		selected_type.setPosition(110.0f, 450.0f);
+		map->setType(3);
 	});
 	controls.push_back(type3_button);
 
@@ -119,13 +125,15 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	type4_button->setDimensions(130.0f, 40.0f);
 	type4_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
+		selected_type.setPosition(110.0f, 495.0f);
+		map->setType(4);
 	});
 	controls.push_back(type4_button);
 
 	map = std::make_shared<Map>();
 
 	background.setSize(sf::Vector2f(130.0, 600.0f));
-	background.setFillColor(sf::Color::White);
+	background.setFillColor(sf::Color(0, 0, 100, 255));
 
 	start.setRadius(30.0f);
 	start.setFillColor(sf::Color::Green);
@@ -133,6 +141,10 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	finish.setRadius(30.0f);
 	finish.setFillColor(sf::Color::Red);
 	finish.setPosition(map->getFinishPosition());
+
+	selected_type.setSize(sf::Vector2f(20.0f, 40.0f));
+	selected_type.setFillColor(sf::Color::Green);
+	selected_type.setPosition(110.0f, 360.0f);
 }
 
 EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
@@ -145,6 +157,24 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_p
 
 	sf::Vector2f finish_coor = map->getFinishPosition();
 	finish.setPosition(finish_coor.x, finish_coor.y);
+
+	switch (map->getType())
+	{
+	case 1:
+		selected_type.setPosition(110.0f, 360.0f);
+		break;
+	case 2:
+		selected_type.setPosition(110.0f, 405.0f);
+		break;
+	case 3:
+		selected_type.setPosition(110.0f, 450.0f);
+		break;
+	case 4:
+		selected_type.setPosition(110.0f, 495.0f);
+		break;
+	defaut:
+		std::cout << "ERROR! Undefined type of the map!\n";
+	}
 }
 
 EditorState::~EditorState()
@@ -333,6 +363,7 @@ void EditorState::draw()
 	{
 		(*it)->draw();
 	}
+	window->draw(selected_type);
 
 	window->display();
 }

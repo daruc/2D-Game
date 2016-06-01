@@ -37,7 +37,7 @@ MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(edit_button);
 
-	std::shared_ptr<Button> exit_button = std::make_shared<Button>(window, "Wyjœcie");
+	std::shared_ptr<Button> exit_button = std::make_shared<Button>(window, L"Wyjœcie");
 	exit_button->setCoordinates(300.0f, 400.0f);
 	exit_button->setDimensions(200.0f, 50.0f);
 	exit_button->addListener([this](std::string str)->void {
@@ -82,7 +82,7 @@ void MainMenuState::update()
 
 void MainMenuState::draw()
 {
-	State::window->clear();
+	State::window->clear(sf::Color(0, 0, 100, 255));
 
 	auto begin = controls.begin();
 	auto end = controls.end();

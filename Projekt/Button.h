@@ -12,8 +12,11 @@ protected:
 	sf::Text text;
 	sf::Font font;
 	bool click;
+
+	void setTextPosition();
 public:
 	Button(std::shared_ptr<sf::RenderWindow> window, std::string title);
+	Button(std::shared_ptr<sf::RenderWindow> window, std::wstring title);
 	virtual void handleEvents(sf::Event & event);
 	virtual void update();
 	virtual void draw();

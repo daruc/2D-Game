@@ -50,6 +50,18 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 		State::nextState = std::make_shared<EditorState>(State::window, prev_map);
 	});
 	controls.push_back(editor_button);
+
+	if (!font.loadFromFile("font.ttf"))
+	{
+		std::cout << "Cannot load font from file.\n";
+	}
+
+	title.setString("Wczytywanie mapy");
+	title.setPosition(180.0f, 20.0f);
+	title.setFont(font);
+
+	background.setSize(sf::Vector2f(800.0f, 80.0f));
+	background.setFillColor(sf::Color(0, 0, 80, 255));
 }
 LoadMapState::~LoadMapState()
 {
@@ -87,12 +99,14 @@ void LoadMapState::update()
 }
 void LoadMapState::draw()
 {
-	window->clear();
+	window->clear(sf::Color(0, 0, 100, 255));
+	window->draw(background);
 	auto begin = controls.begin();
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
 		(*it)->draw();
 	}
+	window->draw(title);
 	window->display();
 }

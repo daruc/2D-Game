@@ -1,9 +1,13 @@
 #include <memory>
 #include <iostream>
+#include <fstream>
 #include "MapMenuState.h"
 #include "MainManuState.h"
+#include "GameState.h"
 #include "TextField.h"
 #include "Button.h"
+#include "Map.h"
+
 
 MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
@@ -13,6 +17,22 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	map_1->setDimensions(100.0f, 100.0f);
 	map_1->addListener([this](std::string str)->void {
 		std::cout << "Mapa 1\n";
+		char * bytes;
+		std::ifstream fin;
+		fin.open("Mapa 1");
+		if (!fin.is_open())
+		{
+			std::cout << "Cannot open map file.\n";
+		}
+		fin.seekg(0, fin.end);
+		int size = fin.tellg();
+		fin.seekg(0, fin.beg);
+		bytes = new char[size];
+		fin.read(bytes, size);
+		std::shared_ptr<Map> map = std::make_shared<Map>();
+		map->fromBinary(size, bytes);
+		State::nextState = std::make_shared<GameState>(State::window, map);
+		delete[] bytes;
 	});
 	controls.push_back(map_1);
 
@@ -40,9 +60,9 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(map_4);
 
-	std::shared_ptr<Button> back = std::make_shared<Button>(window, "Menu g³ówne\n");
+	std::shared_ptr<Button> back = std::make_shared<Button>(window, L"Menu g³ówne");
 	back->setCoordinates(20.0f, 20.0f);
-	back->setDimensions(80.0f, 40.0f);
+	back->setDimensions(200.0f, 40.0f);
 	back->addListener([this](std::string str)->void {
 		std::cout << "back\n";
 		State::nextState = std::make_shared<MainMenuState>(State::window);
@@ -53,6 +73,18 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	text_field->setCoordinates(500.0f, 500.0f);
 	text_field->setDimensions(100.0f, 40.0f);
 	controls.push_back(text_field);
+
+	if (!font.loadFromFile("font.ttf"))
+	{
+		std::cout << "Cannot load font from file.\n";
+	}
+
+	title.setString(L"Wybór mapy");
+	title.setPosition(250.0f, 20.0f);
+	title.setFont(font);
+
+	background.setSize(sf::Vector2f(800.0f, 80.0f));
+	background.setFillColor(sf::Color(0, 0, 80, 255));
 }
 
 MapMenuState::~MapMenuState()
@@ -93,7 +125,8 @@ void MapMenuState::update()
 
 void MapMenuState::draw()
 {
-	window->clear();
+	window->clear(sf::Color(0, 0, 100, 255));
+	window->draw(background);
 
 	auto begin = controls.begin();
 	auto end = controls.end();
@@ -101,6 +134,7 @@ void MapMenuState::draw()
 	{
 		(*it)->draw();
 	}
-
+	
+	window->draw(title);
 	window->display();
 }

@@ -17,6 +17,7 @@ private:
 	sf::View view;
 
 	sf::RectangleShape background;
+	sf::RectangleShape selected_type;
 
 	sf::CircleShape start;
 	sf::CircleShape finish;

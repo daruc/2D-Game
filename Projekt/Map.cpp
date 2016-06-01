@@ -2,6 +2,11 @@
 #include <utility>
 #include <cstring>
 
+Map::Map()
+{
+	type = 1;
+}
+
 void Map::addShape(std::list<sf::Vector2f> points)
 {
 	std::shared_ptr<sf::ConvexShape> shape = std::make_shared<sf::ConvexShape>();
@@ -57,7 +62,7 @@ void Map::removeLast()
 
 std::pair<int, char*> Map::toBinary( ) const
 {
-	size_t size = 20;	//player and finish position + nShapes
+	size_t size = 24;	//type + player and finish position + nShapes
 	size_t nShapes = shapes.size();
 	size_t verticles = 0;
 	auto begin = shapes.begin();
@@ -71,6 +76,8 @@ std::pair<int, char*> Map::toBinary( ) const
 
 	char * bytes = new char[size];
 	char * ptr = bytes;
+	memcpy(ptr, &type, sizeof(type));
+	ptr += sizeof(type);
 	memcpy(ptr, &player.x, sizeof(player.x));
 	ptr += sizeof(player.x);
 	memcpy(ptr, &player.y, sizeof(player.y));
@@ -105,6 +112,8 @@ void Map::fromBinary(int size, char * bytes)
 	int nShapes;
 	int verticles;
 	char * ptr = bytes;
+	memcpy(&type, ptr, sizeof(type));
+	ptr += sizeof(type);
 	memcpy(&player.x, ptr, sizeof(player.x));
 	ptr += sizeof(player.x);
 	memcpy(&player.y, ptr, sizeof(player.y));
