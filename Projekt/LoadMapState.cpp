@@ -5,17 +5,19 @@
 #include "Button.h"
 #include "Map.h"
 #include "EditorState.h"
+#include "Strings.h"
 
 LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window)
 {
+	Strings* strings = Strings::Instance();
 	prev_map = map;
 	std::shared_ptr<TextField> text_field = std::make_shared<TextField>(window);
 	text_field->setCoordinates(150.0f, 300.0f);
 	text_field->setDimensions(300.0f, 40.0f);
 	controls.push_back(text_field);
 
-	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, "Wczytaj");
+	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->getLoad());
 	load_button->setCoordinates(470.0f, 300.0f);
 	load_button->setDimensions(100.0f, 40.0f);
 	load_button->addListener([=](std::string str)->void {
@@ -43,7 +45,7 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	});
 	controls.push_back(load_button);
 
-	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, "Edytor");
+	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->getEditor());
 	editor_button->setCoordinates(20.0f, 20.0f);
 	editor_button->setDimensions(130.0f, 40.0f);
 	editor_button->addListener([this](std::string str)->void {
@@ -56,7 +58,7 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 		std::cout << "Cannot load font from file.\n";
 	}
 
-	title.setString("Wczytywanie mapy");
+	title.setString(strings->getLoadMapTitle());
 	title.setPosition(180.0f, 20.0f);
 	title.setFont(font);
 

@@ -6,9 +6,12 @@ class Textures
 {
 private:
 	sf::Texture cursor;
+	sf::Texture ground;
 public:
 	void loadCursor();
+	void loadMapType(int type);
 	inline sf::Texture* getCursor() { return &cursor; }
+	inline sf::Texture* getGround() { return &ground; }
 };
 
 #endif

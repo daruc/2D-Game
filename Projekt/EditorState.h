@@ -5,6 +5,7 @@
 #include "State.h"
 #include "Control.h"
 #include "Map.h"
+#include "Textures.h"
 
 class EditorState : public State
 {
@@ -16,11 +17,13 @@ private:
 	std::list<sf::Vector2f> points;
 	sf::View view;
 
+	Textures textures;
+
 	sf::RectangleShape background;
 	sf::RectangleShape selected_type;
 
-	sf::CircleShape start;
-	sf::CircleShape finish;
+	sf::RectangleShape start;
+	sf::RectangleShape finish;
 
 	void handleMouse(sf::Event & event);
 	void handleMouseModeGround(sf::Event & event);

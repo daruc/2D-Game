@@ -13,6 +13,7 @@ private:
 	std::shared_ptr<Map> map;
 	Textures textures;
 	sf::RectangleShape player;
+	sf::RectangleShape finish;
 	Physics physics;
 	sf::View view;
 public:

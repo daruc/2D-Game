@@ -71,12 +71,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -89,6 +93,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>D:\Biblioteki\C++\SFML-2.3.2-x86\include;D:\Biblioteki\C++\boost_1_59_0;D:\Biblioteki\C++\Box2D\Box2D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -120,6 +125,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>D:\Biblioteki\C++\SFML-2.3.2-x86\include;D:\Biblioteki\C++\boost_1_59_0;D:\Biblioteki\C++\Box2D\Box2D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,6 +158,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControlsState.cpp" />
     <ClCompile Include="EditorState.cpp" />
+    <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="KeyField.cpp" />
     <ClCompile Include="LoadMapState.cpp" />
@@ -159,9 +166,11 @@
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapMenuState.cpp" />
+    <ClCompile Include="MyContactListener.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="SaveMapState.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="Strings.cpp" />
     <ClCompile Include="TextField.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Utils.cpp" />
@@ -170,6 +179,7 @@
     <ClInclude Include="App.h" />
     <ClInclude Include="Binary.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="KeyField.h" />
     <ClInclude Include="Control.h" />
@@ -179,12 +189,17 @@
     <ClInclude Include="MainManuState.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapMenuState.h" />
+    <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="SaveMapState.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="Strings.h" />
     <ClInclude Include="TextField.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

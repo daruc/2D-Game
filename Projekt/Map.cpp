@@ -7,10 +7,22 @@ Map::Map()
 	type = 1;
 }
 
-void Map::addShape(std::list<sf::Vector2f> points)
+void Map::setGroundTexture(sf::Texture * texture)
+{
+	auto begin = shapes.begin();
+	auto end = shapes.end();
+
+	for (auto it = begin; it != end; ++it)
+	{
+		(*it)->setTexture(texture);
+		sf::FloatRect local_bounds = (*it)->getLocalBounds();
+		(*it)->setTextureRect(sf::IntRect(0, 0, local_bounds.width, local_bounds.height));
+	}
+}
+
+void Map::addShape(std::list<sf::Vector2f> points, sf::Texture* texture)
 {
 	std::shared_ptr<sf::ConvexShape> shape = std::make_shared<sf::ConvexShape>();
-	shape->setFillColor(sf::Color::Yellow);
 	shape->setPointCount(points.size());
 
 	auto begin = points.begin();
@@ -23,6 +35,9 @@ void Map::addShape(std::list<sf::Vector2f> points)
 		++index;
 	}
 	shape->setPosition(viewOffset);
+	shape->setTexture(texture);
+	sf::FloatRect local_bounds = shape->getLocalBounds();
+	shape->setTextureRect(sf::IntRect(0, 0, local_bounds.width, local_bounds.height));
 	shapes.push_back(shape);
 }
 
@@ -45,6 +60,7 @@ void Map::draw(sf::RenderWindow & window)
 
 	for (auto it = begin; it != end; ++it)
 	{
+		//(*it)->setFillColor(sf::Color::Black);
 		window.draw(**it);
 	}
 }
@@ -69,7 +85,7 @@ std::pair<int, char*> Map::toBinary( ) const
 	auto end = shapes.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		size += 4;	//number of verticles
+		size += 12;	//number of verticles + position
 		size += (*it)->getPointCount() * 8;	//verticles
 		verticles += (*it)->getPointCount();
 	}
@@ -93,6 +109,11 @@ std::pair<int, char*> Map::toBinary( ) const
 		size_t count = (*it)->getPointCount();
 		memcpy(ptr, &count, sizeof(count));
 		ptr += sizeof(count);
+		sf::Vector2f shape_position = (*it)->getPosition();
+		memcpy(ptr, &shape_position.x, sizeof(shape_position.x));
+		ptr += sizeof(shape_position.x);
+		memcpy(ptr, &shape_position.y, sizeof(shape_position.y));
+		ptr += sizeof(shape_position.y);
 		for (size_t j = 0; j < count; ++j)
 		{
 			sf::Vector2f point = (*it)->getPoint(j);
@@ -111,6 +132,7 @@ void Map::fromBinary(int size, char * bytes)
 	shapes.clear();
 	int nShapes;
 	int verticles;
+	sf::Vector2f position;
 	char * ptr = bytes;
 	memcpy(&type, ptr, sizeof(type));
 	ptr += sizeof(type);
@@ -129,9 +151,16 @@ void Map::fromBinary(int size, char * bytes)
 		memcpy(&verticles, ptr, sizeof(verticles));
 		ptr += sizeof(verticles);
 
+		memcpy(&position.x, ptr, sizeof(position.x));
+		ptr += sizeof(position.x);
+
+		memcpy(&position.y, ptr, sizeof(position.y));
+		ptr += sizeof(position.y);
+
 		std::shared_ptr<sf::ConvexShape> shape = std::make_shared<sf::ConvexShape>();
+		shape->setPosition(position);
 		shape->setPointCount(verticles);
-		shape->setFillColor(sf::Color::Yellow);
+		//shape->setFillColor(sf::Color::Yellow);
 		for (int j = 0; j < verticles; ++j)
 		{
 			sf::Vector2f vex;

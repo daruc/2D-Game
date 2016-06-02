@@ -6,15 +6,17 @@
 Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: gravity(0.0f, 10.0f), world(gravity), MAX_PLAYER_SPEED(3.0f)
 {
+	world.SetContactListener(&myContactListener);
 	this->window = window;
 	this->map = map;
-	ready = false;
 	loadMap(map);
+	loadControlsFromFile();
 }
 
 Physics::~Physics()
 {
 	world.DestroyBody(player_body);
+	world.DestroyBody(finish_body);
 
 	while (ground_list.size() > 0)
 	{
@@ -47,7 +49,7 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	for (auto it = begin; it != end; ++it)
 	{
 		b2BodyDef groundBodyDef;
-		groundBodyDef.position.Set(0.0f, 0.0f);
+		groundBodyDef.position.Set(pixels2Meters((*it)->getPosition().x), pixels2Meters((*it)->getPosition().y));
 		b2Body* groundBody = world.CreateBody(&groundBodyDef);
 		b2PolygonShape groundBox;
 		std::pair<b2Vec2*, size_t> points = getPoints(*it);
@@ -74,52 +76,115 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	fixtureDef.density = 40.0f;
 	fixtureDef.friction = 0.9f;
 	fixtureDef.restitution = 0.3f;
-	player_body->CreateFixture(&fixtureDef);
+	b2Fixture* player_fixture = player_body->CreateFixture(&fixtureDef);
+
+	myContactListener.setPlayerFixture(player_fixture);
 
 	std::cout << "player mass: " << player_body->GetMass();
 
-	ready = true;
+	//finish
+	b2BodyDef finishBodyDef;
+	sf::Vector2f finish_position = map->getFinishPosition();
+	finishBodyDef.position.Set(pixels2Meters(finish_position.x), pixels2Meters(finish_position.y));
+	finish_body = world.CreateBody(&finishBodyDef);
+	b2PolygonShape finishBox;
+	finishBox.SetAsBox(1.0f / 2, 1.0f / 2);
+	b2Fixture* finish_fixture = finish_body->CreateFixture(&finishBox, 0.0);
+
+	myContactListener.setFinishFixture(finish_fixture);
+
+
+
 	clock.restart();
+}
+
+void Physics::goLeft()
+{
+	b2Vec2 velocity = player_body->GetLinearVelocity();
+	if (velocity.x >= -MAX_PLAYER_SPEED)
+	{
+		velocity.x = -MAX_PLAYER_SPEED;
+		player_body->SetLinearVelocity(velocity);
+	}
+}
+
+void Physics::goRight()
+{
+	b2Vec2 velocity = player_body->GetLinearVelocity();
+	if (velocity.x <= MAX_PLAYER_SPEED)
+	{
+		velocity.x = MAX_PLAYER_SPEED;
+		player_body->SetLinearVelocity(velocity);
+	}
+}
+
+void Physics::jump()
+{
+	sf::Time time_since_last_jump = jump_clock.getElapsedTime();
+	if (myContactListener.isOnGround() && player_body->GetLinearVelocity().y < MAX_PLAYER_SPEED
+		&& time_since_last_jump.asSeconds() > 0.5f)
+	{
+		jump_clock.restart();
+		player_body->ApplyLinearImpulse(b2Vec2(0.0f, -800.0f), b2Vec2(player_body->GetPosition()), true);
+	}
+		
+}
+
+void Physics::controls()
+{
+	if (sf::Keyboard::isKeyPressed(key_left))
+	{
+		goLeft();
+	}
+	if (sf::Keyboard::isKeyPressed(key_right))
+	{
+		goRight();
+
+	}
+	if (sf::Keyboard::isKeyPressed(key_jump))
+	{
+		jump();
+	}
 }
 
 void Physics::simulate()
 {
-	if (ready)
+	sf::Time delta_time = clock.getElapsedTime();
+	clock.restart();
+
+	player_body->SetLinearVelocity( b2Vec2(b2Vec2_zero.x, player_body->GetLinearVelocity().y));
+
+	controls();
+
+	const int positionIt = 3;
+	const int velocityIt = 8;
+	world.Step(delta_time.asSeconds(), velocityIt, positionIt);
+
+	b2Vec2 player_position = player_body->GetPosition();
+	map->setPlayerPosition(meters2pixels(player_position.x), meters2pixels(player_position.y));
+}
+
+void Physics::loadControlsFromFile()
+{
+	std::ifstream fin;
+	fin.open("controls.bin", std::fstream::binary | std::fstream::in);
+	if (!fin.is_open())
 	{
-		sf::Time delta_time = clock.getElapsedTime();
-		clock.restart();
-
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
-		{
-			b2Vec2 velocity = player_body->GetLinearVelocity();
-			if (velocity.x >= -MAX_PLAYER_SPEED)
-			{
-				velocity.x = -MAX_PLAYER_SPEED;
-				player_body->SetLinearVelocity(velocity);
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-		{
-			b2Vec2 velocity = player_body->GetLinearVelocity();
-			if (velocity.x <= MAX_PLAYER_SPEED)
-			{
-				velocity.x = MAX_PLAYER_SPEED;
-				player_body->SetLinearVelocity(velocity);
-			}
-			
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
-		{
-			player_body->ApplyLinearImpulse(b2Vec2(0.0f, -5.0f), b2Vec2(player_body->GetPosition()), true);
-		}
-
-		const int positionIt = 3;
-		const int velocityIt = 8;
-		world.Step(delta_time.asSeconds(), velocityIt, positionIt);
-
-		b2Vec2 player_position = player_body->GetPosition();
-		map->setPlayerPosition(meters2pixels(player_position.x), meters2pixels(player_position.y));
-		/*std::cout << "player("
-			<< player_body->GetPosition().x << ", " << player_body->GetPosition().y << ")\n";*/
+		std::cout << "Cannot load controls.bin file.\n";
 	}
+
+	int key;
+	char * buffer = new char[16];
+	fin.read(buffer, 16);
+	memcpy(&key, buffer, 4);
+	key_left = static_cast<sf::Keyboard::Key>(key);
+	memcpy(&key, buffer + 4, 4);
+	key_right = static_cast<sf::Keyboard::Key>(key);
+	memcpy(&key, buffer + 8, 4);
+	key_crouch = static_cast<sf::Keyboard::Key>(key);
+	memcpy(&key, buffer + 12, 4);
+	key_jump = static_cast<sf::Keyboard::Key>(key);
+
+	delete[] buffer;
+	fin.close();
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include "GameState.h"
 #include "MapMenuState.h"
+#include "GameOverState.h"
 #include "Utils.h"
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
@@ -8,6 +9,8 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 {
 	this->map = map;
 	textures.loadCursor();
+	textures.loadMapType(map->getType());
+	map->setGroundTexture(textures.getGround());
 	cursor.setTexture(*textures.getCursor(), true);
 	cursor.setOrigin(16.0f, 16.0f);
 	cursor.setPosition(.0f, 0.0f);
@@ -20,6 +23,17 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	float height = meters2pixels(2.0f);
 	player.setSize(sf::Vector2f(width, height));
 	player.setOrigin(sf::Vector2f(width / 2, height / 2));
+
+	finish.setPosition(map->getFinishPosition());
+	finish.setFillColor(sf::Color::Red);
+	width = meters2pixels(1.0f);
+	height = meters2pixels(1.0f);
+	finish.setSize(sf::Vector2f(width, height));
+	finish.setOrigin(sf::Vector2f(width / 2, height / 2));
+
+	view.setSize(800.0f, 600.0f);
+
+	view.move(player.getPosition() - view.getCenter());
 }
 
 GameState::~GameState()
@@ -56,15 +70,31 @@ void GameState::update()
 	physics.simulate();
 	
 	player.setPosition(map->getPlayerPosition());
-	view = window->getDefaultView();
-	
+
+	//set camera
+	view.setCenter(player.getPosition());
+
+	//check if the game is over
+	if (physics.isWin())
+	{
+		window->setMouseCursorVisible(true);
+		State::nextState = std::make_shared<GameOverState>(window);
+	}
 }
 void GameState::draw()
 {
 	window->clear();
+
+	window->setView(view);
 	map->draw(*window);
 	window->draw(player);
+	window->draw(finish);
+	
+
+	window->setView(window->getDefaultView());
 
 	window->draw(cursor);
+
+	
 	window->display();
 };

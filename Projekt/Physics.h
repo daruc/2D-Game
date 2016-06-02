@@ -1,32 +1,48 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 #include <SFML/Graphics.hpp>
+#include <fstream>
 #include <Box2D/Box2D.h>
 #include <list>
 #include "Map.h"
+#include "MyContactListener.h"
 
 class Physics
 {
 private:
 	sf::Clock clock;
+	sf::Clock jump_clock;
 	std::shared_ptr<sf::RenderWindow> window;
 	std::shared_ptr<Map> map;
 	b2Vec2 gravity;
 	b2World world;
+	MyContactListener myContactListener;
 
 	b2Body* player_body;
+	b2Body* finish_body;
 	std::list<b2Body*> ground_list;
 
 	const float MAX_PLAYER_SPEED;
 
 	void loadMap(std::shared_ptr<Map> map);
-	std::pair<b2Vec2*, size_t> getPoints(std::shared_ptr<sf::ConvexShape> shape);
 
-	bool ready;
+	void loadControlsFromFile();
+	sf::Keyboard::Key key_left;
+	sf::Keyboard::Key key_right;
+	sf::Keyboard::Key key_jump;
+	sf::Keyboard::Key key_crouch;
+
+	std::pair<b2Vec2*, size_t> getPoints(std::shared_ptr<sf::ConvexShape> shape);
+	void goLeft();
+	void goRight();
+	void jump();
+	void controls();
 public:
 	Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	Physics::~Physics();
 	void simulate();
+
+	inline bool isWin() const { return myContactListener.isWin(); }
 };
 
 #endif
