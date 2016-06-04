@@ -165,6 +165,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapBuilder.cpp" />
     <ClCompile Include="MapMenuState.cpp" />
     <ClCompile Include="MyContactListener.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="LoadMapState.h" />
     <ClInclude Include="MainManuState.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapBuilder.h" />
     <ClInclude Include="MapMenuState.h" />
     <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Physics.h" />

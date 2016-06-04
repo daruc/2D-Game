@@ -99,6 +99,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 		std::cout << "click " << str << std::endl;
 		selected_type.setPosition(110.0f, 360.0f);
 		map->setType(1);
+		textures.loadMapType(1);
+		map->setGroundTexture(textures.getGround());
 	});
 	controls.push_back(type1_button);
 
@@ -109,6 +111,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 		std::cout << "click " << str << std::endl;
 		selected_type.setPosition(110.0f, 405.0f);
 		map->setType(2);
+		textures.loadMapType(2);
+		map->setGroundTexture(textures.getGround());
 	});
 	controls.push_back(type2_button);
 
@@ -119,6 +123,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 		std::cout << "click " << str << std::endl;
 		selected_type.setPosition(110.0f, 450.0f);
 		map->setType(3);
+		textures.loadMapType(3);
+		map->setGroundTexture(textures.getGround());
 	});
 	controls.push_back(type3_button);
 
@@ -129,6 +135,8 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 		std::cout << "click " << str << std::endl;
 		selected_type.setPosition(110.0f, 495.0f);
 		map->setType(4);
+		textures.loadMapType(4);
+		map->setGroundTexture(textures.getGround());
 	});
 	controls.push_back(type4_button);
 

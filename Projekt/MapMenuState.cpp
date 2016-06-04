@@ -8,6 +8,7 @@
 #include "Button.h"
 #include "Map.h"
 #include "Strings.h"
+#include "MapBuilder.h"
 
 
 MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
@@ -19,22 +20,11 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	map_1->setDimensions(100.0f, 100.0f);
 	map_1->addListener([this](std::string str)->void {
 		std::cout << "Mapa 1\n";
-		char * bytes;
-		std::ifstream fin;
-		fin.open("Mapa 1");
-		if (!fin.is_open())
-		{
-			std::cout << "Cannot open map file.\n";
-		}
-		fin.seekg(0, fin.end);
-		int size = fin.tellg();
-		fin.seekg(0, fin.beg);
-		bytes = new char[size];
-		fin.read(bytes, size);
-		std::shared_ptr<Map> map = std::make_shared<Map>();
-		map->fromBinary(size, bytes);
+
+		MapBuilder mapBuilder;
+		mapBuilder.loadFromFile(L"Mapa 1");
+		std::shared_ptr<Map> map = mapBuilder.get();
 		State::nextState = std::make_shared<GameState>(State::window, map);
-		delete[] bytes;
 	});
 	controls.push_back(map_1);
 
@@ -43,6 +33,11 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	map_2->setDimensions(100.0f, 100.0f);
 	map_2->addListener([this](std::string str)->void {
 		std::cout << "Mapa 2\n";
+
+		MapBuilder mapBuilder;
+		mapBuilder.loadFromFile(L"Mapa 2");
+		std::shared_ptr<Map> map = mapBuilder.get();
+		State::nextState = std::make_shared<GameState>(State::window, map);
 	});
 	controls.push_back(map_2);
 
@@ -51,6 +46,11 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	map_3->setDimensions(100.0f, 100.0f);
 	map_3->addListener([this](std::string str)->void {
 		std::cout << "Mapa 3\n";
+
+		MapBuilder mapBuilder;
+		mapBuilder.loadFromFile(L"Mapa 3");
+		std::shared_ptr<Map> map = mapBuilder.get();
+		State::nextState = std::make_shared<GameState>(State::window, map);
 	});
 	controls.push_back(map_3);
 
@@ -59,6 +59,11 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	map_4->setDimensions(100.0f, 100.0f);
 	map_4->addListener([this](std::string str)->void {
 		std::cout << "Mapa 4\n";
+
+		MapBuilder mapBuilder;
+		mapBuilder.loadFromFile(L"Mapa 4");
+		std::shared_ptr<Map> map = mapBuilder.get();
+		State::nextState = std::make_shared<GameState>(State::window, map);
 	});
 	controls.push_back(map_4);
 
@@ -72,9 +77,22 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	controls.push_back(back);
 
 	std::shared_ptr<TextField> text_field = std::make_shared<TextField>(window);
-	text_field->setCoordinates(500.0f, 500.0f);
-	text_field->setDimensions(100.0f, 40.0f);
+	text_field->setCoordinates(300.0f, 500.0f);
+	text_field->setDimensions(200.0f, 40.0f);
 	controls.push_back(text_field);
+
+	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->getLoad());
+	load_button->setCoordinates(520.0f, 500.0f);
+	load_button->setDimensions(130.0f, 40.0f);
+	load_button->addListener([=](std::string str)->void {
+		std::cout << "click " << str << std::endl;
+
+		MapBuilder mapBuilder;
+		mapBuilder.loadFromFile(text_field->getString().toWideString());
+		std::shared_ptr<Map> map = mapBuilder.get();
+		State::nextState = std::make_shared<GameState>(State::window, map);
+	});
+	controls.push_back(load_button);
 
 	if (!font.loadFromFile("font.ttf"))
 	{
