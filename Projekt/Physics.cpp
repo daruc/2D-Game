@@ -22,6 +22,7 @@ Physics::~Physics()
 	{
 		b2Body* body = ground_list.back();
 		ground_list.pop_back();
+		world.DestroyBody(body);
 	}
 }
 
@@ -74,13 +75,23 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.density = 40.0f;
-	fixtureDef.friction = 0.9f;
+	fixtureDef.friction = 0.4f;
 	fixtureDef.restitution = 0.3f;
 	b2Fixture* player_fixture = player_body->CreateFixture(&fixtureDef);
 
 	myContactListener.setPlayerFixture(player_fixture);
 
 	std::cout << "player mass: " << player_body->GetMass();
+
+	//sensor
+	b2Fixture* footSensorFixture;
+	b2PolygonShape footSensorBox;
+	b2FixtureDef footSensorFixtureDef;
+	footSensorBox.SetAsBox(0.95f / 2, 0.1f / 2, b2Vec2(0, 2.0f / 2), 0);
+	footSensorFixtureDef.isSensor = true;
+	footSensorFixtureDef.shape = &footSensorBox;
+	footSensorFixture = player_body->CreateFixture(&footSensorFixtureDef);
+	footSensorFixture->SetUserData((void*)3);
 
 	//finish
 	b2BodyDef finishBodyDef;
@@ -101,20 +112,27 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 void Physics::goLeft()
 {
 	b2Vec2 velocity = player_body->GetLinearVelocity();
-	if (velocity.x >= -MAX_PLAYER_SPEED)
+
+	if (velocity.x >= 0)
 	{
-		velocity.x = -MAX_PLAYER_SPEED;
-		player_body->SetLinearVelocity(velocity);
+		player_body->ApplyForce(b2Vec2(-1000.0f, 0.f), player_body->GetWorldCenter(), true);
+	}
+	else if (velocity.x >= -MAX_PLAYER_SPEED)
+	{
+		player_body->ApplyForce(b2Vec2(-10000.0f, 0.f), player_body->GetWorldCenter(), true);
 	}
 }
 
 void Physics::goRight()
 {
 	b2Vec2 velocity = player_body->GetLinearVelocity();
-	if (velocity.x <= MAX_PLAYER_SPEED)
+	if (velocity.x <= 0)
 	{
-		velocity.x = MAX_PLAYER_SPEED;
-		player_body->SetLinearVelocity(velocity);
+		player_body->ApplyForce(b2Vec2(1000.0f, 0.f), player_body->GetWorldCenter(), true);
+	}
+	else if (velocity.x <= MAX_PLAYER_SPEED)
+	{
+		player_body->ApplyForce(b2Vec2(10000.0f, 0.f), player_body->GetWorldCenter(), true);
 	}
 }
 
@@ -152,9 +170,11 @@ void Physics::simulate()
 	sf::Time delta_time = clock.getElapsedTime();
 	clock.restart();
 
-	player_body->SetLinearVelocity( b2Vec2(b2Vec2_zero.x, player_body->GetLinearVelocity().y));
+	//player_body->SetLinearVelocity( b2Vec2(b2Vec2_zero.x, player_body->GetLinearVelocity().y));
 
 	controls();
+
+	//update player_bottom position
 
 	const int positionIt = 3;
 	const int velocityIt = 8;
