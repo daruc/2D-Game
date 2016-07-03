@@ -31,6 +31,7 @@ Strings::Strings()
 	menu(L"Menu"),
 	undo(L"Confij"),
 	ground(L"Ziemia"),
+	fire(L"Ogieñ"),
 	player(L"Gracz"),
 	finish(L"Meta"),
 	enemy(L"Przeciwnik"),
@@ -41,7 +42,8 @@ Strings::Strings()
 	load(L"Wczytaj"),
 	save_map_title(L"Zapisywanie mapy"),
 	load_map_title(L"Wczytywanie mapy"),
-	win(L"Wygrana")
+	win(L"Wygrana"),
+	defeat(L"Przegrana")
 
 	/*std::wstring menu;
 	std::wstring undo;

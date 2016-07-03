@@ -152,8 +152,9 @@ void KeyField::handleKeys(sf::Event & event)
 		ch = "Num 4";
 		break;
 	case sf::Keyboard::Num5:
-	case sf::Keyboard::Numpad5:
 		ch = "5";
+	case sf::Keyboard::Numpad5:
+		ch = "Num 5";
 		break;
 	case sf::Keyboard::Num6:
 		ch = "6";

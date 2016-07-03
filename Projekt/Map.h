@@ -4,6 +4,7 @@
 #include <memory>
 #include <SFML/Graphics.hpp>
 #include "Binary.h"
+#include "MapShape.h"
 
 class Map : public Binary
 {
@@ -11,7 +12,8 @@ private:
 	int type;
 	sf::Vector2f player;
 	sf::Vector2f finish;
-	std::list<std::shared_ptr<sf::ConvexShape>> shapes;
+	std::list<std::shared_ptr<MapShape>> shapes;
+	std::list<std::shared_ptr<sf::RectangleShape>> bullets;
 	sf::Vector2f viewOffset;
 public:
 	Map();
@@ -26,6 +28,7 @@ public:
 	inline auto getGroundEnd() { return shapes.end(); }
 	inline int getType() { return type; }
 	inline void setType(int type) { this->type = type; }
+	inline std::list<std::shared_ptr<sf::RectangleShape>>* getBulletsList() { return &bullets; }
 	void setPlayerPosition(float x, float y);
 	void setFinishPosition(float x, float y);
 	void setGroundTexture(sf::Texture * texture);

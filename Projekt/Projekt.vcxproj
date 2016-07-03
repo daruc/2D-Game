@@ -191,6 +191,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapBuilder.h" />
     <ClInclude Include="MapMenuState.h" />
+    <ClInclude Include="MapShape.h" />
     <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="SaveMapState.h" />

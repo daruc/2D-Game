@@ -10,6 +10,9 @@ private:
 	b2Fixture* player;
 	b2Fixture* finish;
 	bool win;
+	bool dead;
+
+	//	TODO: findAndDestroyBullet()
 public:
 	MyContactListener();
 	void BeginContact(b2Contact* contact);
@@ -21,6 +24,7 @@ public:
 	inline void setPlayerFixture(b2Fixture* player) { this->player = player; }
 	inline void setFinishFixture(b2Fixture* finish) { this->finish = finish; }
 	inline bool isWin() const { return win; }
+	inline bool isDead() const { return dead; }
 };
 
 #endif

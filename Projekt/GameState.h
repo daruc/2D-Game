@@ -16,6 +16,10 @@ private:
 	sf::RectangleShape finish;
 	Physics physics;
 	sf::View view;
+
+	sf::Clock clock;
+	sf::Font font;
+	sf::Text txtTime;
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~GameState();

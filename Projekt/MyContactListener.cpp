@@ -1,5 +1,6 @@
 #include <iostream>
 #include "MyContactListener.h"
+#include "MapShape.h"
 
 MyContactListener::MyContactListener()
 {
@@ -8,6 +9,7 @@ MyContactListener::MyContactListener()
 	touch_ground = false;
 	on_ground = false;
 	win = false;
+	dead = false;
 }
 
 
@@ -29,6 +31,8 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 	bool bPlayer = false;
 	bool bFinish = false;
+	bool bFire = false;
+
 	if (fixture_a == player || fixture_b == player)
 	{
 		bPlayer = true;
@@ -37,11 +41,21 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	{
 		bFinish = true;
 	}
+	if ((int)(fixture_a->GetUserData()) == MapShape::FIRE)
+	{
+		bFire = true;
+	}
 
 	if (bPlayer && bFinish)
 	{
 		std::cout << "game over\n";
 		win = true;
+	}
+
+	if (bPlayer && bFire)
+	{
+		std::cout << "fire\n";
+		dead = true;
 	}
 }
 

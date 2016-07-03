@@ -21,6 +21,7 @@ private:
 	b2Body* player_body;
 	b2Body* finish_body;
 	std::list<b2Body*> ground_list;
+	std::list<b2Body*> bullet_list;
 
 	const float MAX_PLAYER_SPEED;
 
@@ -43,6 +44,9 @@ public:
 	void simulate();
 
 	inline bool isWin() const { return myContactListener.isWin(); }
+	inline bool isDead() const { return myContactListener.isDead(); }
+
+	void throwBullet(float srcX, float srcY, float dstX, float dstY);
 };
 
 #endif

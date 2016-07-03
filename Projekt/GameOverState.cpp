@@ -5,7 +5,7 @@
 #include "GameOverState.h"
 #include "Strings.h"
 
-GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window)
+GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin)
 	: State(window)
 {
 	Strings* strings = Strings::Instance();
@@ -23,7 +23,14 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window)
 		std::cout << "Cannot load font from file.\n";
 	}
 
-	title.setString(strings->getWin());
+	if (isWin)
+	{
+		title.setString(strings->getWin());
+	}
+	else
+	{
+		title.setString(strings->getDefeat());
+	}
 	title.setPosition(250.0f, 20.0f);
 	title.setFont(font);
 

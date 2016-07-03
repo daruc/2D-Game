@@ -11,8 +11,9 @@ private:
 	sf::RectangleShape background;
 	sf::Font font;
 	sf::Text title;
+	sf::Text result;
 public:
-	GameOverState(std::shared_ptr<sf::RenderWindow> window);
+	GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin);
 	virtual ~GameOverState();
 	virtual void handleEvents();
 	virtual void update();

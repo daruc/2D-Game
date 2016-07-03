@@ -25,6 +25,7 @@ public:
 	inline std::wstring getMenu() const { return menu; }
 	inline std::wstring getUndo() const { return undo; }
 	inline std::wstring getGround() const { return ground; }
+	inline std::wstring getFire() const { return fire; }
 	inline std::wstring getPlayer() const { return player; }
 	inline std::wstring getFinish() const { return finish; }
 	inline std::wstring getEnemy() const { return enemy; }
@@ -36,6 +37,7 @@ public:
 	inline std::wstring getSaveMapTitle() const { return save_map_title; }
 	inline std::wstring getLoadMapTitle() const { return load_map_title; }
 	inline std::wstring getWin() const { return win; }
+	inline std::wstring getDefeat() const { return defeat; }
 protected:
 	Strings();
 private:
@@ -67,6 +69,7 @@ private:
 	std::wstring menu;
 	std::wstring undo;
 	std::wstring ground;
+	std::wstring fire;
 	std::wstring player;
 	std::wstring finish;
 	std::wstring enemy;
@@ -84,5 +87,6 @@ private:
 
 	//game over
 	std::wstring win;
+	std::wstring defeat;
 };
 #endif

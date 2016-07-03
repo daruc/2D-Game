@@ -10,7 +10,7 @@
 class EditorState : public State
 {
 private:
-	enum Item {GROUND, PLAYER, FINISH, ENEMY};
+	enum Item {GROUND, FIRE, PLAYER, FINISH, ENEMY};
 	Item selected;
 	std::list<std::shared_ptr<Control>> controls;
 	std::shared_ptr<Map> map;
@@ -27,6 +27,7 @@ private:
 
 	void handleMouse(sf::Event & event);
 	void handleMouseModeGround(sf::Event & event);
+	void handleMouseModeFire(sf::Event & event);
 	void handleMouseModePlayer(sf::Event & event);
 	void handleMouseModeFinish(sf::Event & event);
 	void moveAllPoints(float x, float y);

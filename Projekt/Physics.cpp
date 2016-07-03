@@ -24,6 +24,13 @@ Physics::~Physics()
 		ground_list.pop_back();
 		world.DestroyBody(body);
 	}
+
+	while (bullet_list.size() > 0)
+	{
+		b2Body* body = bullet_list.back();
+		bullet_list.pop_back();
+		world.DestroyBody(body);
+	}
 }
 
 std::pair<b2Vec2*, size_t> Physics::getPoints(std::shared_ptr<sf::ConvexShape> shape)
@@ -41,6 +48,47 @@ std::pair<b2Vec2*, size_t> Physics::getPoints(std::shared_ptr<sf::ConvexShape> s
 	return std::pair<b2Vec2*, size_t>(points, size);
 }
 
+void Physics::throwBullet(float srcX, float srcY, float dstX, float dstY)
+{
+	//Creates physics object.
+	b2BodyDef bodyDef;
+	bodyDef.type = b2_dynamicBody;
+	bodyDef.fixedRotation = true;
+	bodyDef.bullet = true;
+
+	bodyDef.position.Set(pixels2Meters(srcX), pixels2Meters(srcY));
+	b2Body* bullet = world.CreateBody(&bodyDef);
+	b2PolygonShape dynamicBox;
+	dynamicBox.SetAsBox(0.04f / 2, 0.04f / 2);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &dynamicBox;
+	fixtureDef.isSensor = true;
+	b2Fixture* bullet_fixture = bullet->CreateFixture(&fixtureDef);
+	bullet_fixture->SetUserData((void *)10);
+
+	bullet_list.push_back(bullet);
+
+	//Set velocity
+	b2Vec2 vec(dstX, dstY);
+	float len = vec.Length();
+	vec.x /= len;
+	vec.y /= len;
+
+	const int BULLET_SPEED = 20;
+	vec.x *= BULLET_SPEED;
+	vec.y *= BULLET_SPEED;
+
+	std::cout << "v=(" << vec.x << ", " << vec.y << ")\n";
+	bullet->SetLinearVelocity(vec);
+
+	//Add bullet to map
+	std::shared_ptr<sf::RectangleShape> bulletShape = std::make_shared<sf::RectangleShape>();
+	bulletShape->setSize(sf::Vector2f(meters2pixels(0.04f), meters2pixels(0.04f)));
+	bulletShape->setPosition(pixels2Meters(srcX), pixels2Meters(srcY));
+	map->getBulletsList()->push_back(bulletShape);
+}
+
 void Physics::loadMap(std::shared_ptr<Map> map)
 {
 	//ground
@@ -55,7 +103,10 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 		b2PolygonShape groundBox;
 		std::pair<b2Vec2*, size_t> points = getPoints(*it);
 		groundBox.Set(points.first, points.second);
-		groundBody->CreateFixture(&groundBox, 0.0f);
+
+		b2Fixture* groundFixture;
+		groundFixture = groundBody->CreateFixture(&groundBox, 0.0f);
+		groundFixture->SetUserData((void*)(*it)->getType());
 		ground_list.push_back(groundBody);
 
 		delete[] points.first;
@@ -182,6 +233,25 @@ void Physics::simulate()
 
 	b2Vec2 player_position = player_body->GetPosition();
 	map->setPlayerPosition(meters2pixels(player_position.x), meters2pixels(player_position.y));
+
+	//update bullets positions
+	auto shapesBegin = map->getBulletsList()->begin();
+	auto shapesEnd = map->getBulletsList()->end();
+	auto bodiesBegin = bullet_list.begin();
+	auto bodiesEnd = bullet_list.end();
+	
+	auto sIt = shapesBegin;
+	auto bIt = bodiesBegin;
+	while (sIt != shapesEnd)
+	{
+		sf::Vector2f shapePosition;
+		shapePosition.x = meters2pixels((*bIt)->GetPosition().x);
+		shapePosition.y = meters2pixels((*bIt)->GetPosition().y);
+		(*sIt)->setPosition(shapePosition);
+
+		++sIt;
+		++bIt;
+	}
 }
 
 void Physics::loadControlsFromFile()
