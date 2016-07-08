@@ -21,7 +21,9 @@ private:
 	b2Body* player_body;
 	b2Body* finish_body;
 	std::list<b2Body*> ground_list;
+	std::list<b2Body*> enemies_list;
 	std::list<b2Body*> bullet_list;
+	std::list<b2Body*> remove_list;
 
 	const float MAX_PLAYER_SPEED;
 

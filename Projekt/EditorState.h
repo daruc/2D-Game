@@ -29,6 +29,7 @@ private:
 	void handleMouseModeGround(sf::Event & event);
 	void handleMouseModeFire(sf::Event & event);
 	void handleMouseModePlayer(sf::Event & event);
+	void handleMouseModeEnemy(sf::Event & event);
 	void handleMouseModeFinish(sf::Event & event);
 	void moveAllPoints(float x, float y);
 public:

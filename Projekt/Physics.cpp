@@ -9,6 +9,10 @@ Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> 
 	world.SetContactListener(&myContactListener);
 	this->window = window;
 	this->map = map;
+	myContactListener.setBulletList(&bullet_list);
+	myContactListener.setMap(map);
+	myContactListener.setWorld(&world);
+	myContactListener.setRemoveList(&remove_list);
 	loadMap(map);
 	loadControlsFromFile();
 }
@@ -29,6 +33,13 @@ Physics::~Physics()
 	{
 		b2Body* body = bullet_list.back();
 		bullet_list.pop_back();
+		world.DestroyBody(body);
+	}
+
+	while (enemies_list.size() > 0)
+	{
+		b2Body* body = enemies_list.back();
+		enemies_list.pop_back();
 		world.DestroyBody(body);
 	}
 }
@@ -65,7 +76,7 @@ void Physics::throwBullet(float srcX, float srcY, float dstX, float dstY)
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.isSensor = true;
 	b2Fixture* bullet_fixture = bullet->CreateFixture(&fixtureDef);
-	bullet_fixture->SetUserData((void *)10);
+	bullet_fixture->SetUserData((void *) 10);
 
 	bullet_list.push_back(bullet);
 
@@ -112,6 +123,32 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 		delete[] points.first;
 	}
 
+	//enemies
+	auto beginEnemies = map->getEnemiesBegin();
+	auto endEnemies = map->getEnemiesEnd();
+	for (auto it = beginEnemies; it != endEnemies; ++it)
+	{
+		b2BodyDef bodyDef;
+		bodyDef.type = b2_dynamicBody;
+		bodyDef.fixedRotation = true;
+		sf::Vector2f position = (*it)->getPosition();
+
+		bodyDef.position.Set(pixels2Meters(position.x + 25), pixels2Meters(position.y + 50));
+		b2Body* body = world.CreateBody(&bodyDef);
+		b2PolygonShape dynamicBox;
+		dynamicBox.SetAsBox(1.0f / 2, 2.0f / 2);
+
+		b2FixtureDef fixtureDef;
+		fixtureDef.shape = &dynamicBox;
+		fixtureDef.density = 40.0f;
+		fixtureDef.friction = 0.4f;
+		fixtureDef.restitution = 0.3f;
+		b2Fixture* enemy_fixture = body->CreateFixture(&fixtureDef);
+		enemy_fixture->SetUserData((void*)20);
+
+		enemies_list.push_back(body);
+	}
+
 	//player
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
@@ -154,8 +191,6 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	b2Fixture* finish_fixture = finish_body->CreateFixture(&finishBox, 0.0);
 
 	myContactListener.setFinishFixture(finish_fixture);
-
-
 
 	clock.restart();
 }
@@ -231,6 +266,16 @@ void Physics::simulate()
 	const int velocityIt = 8;
 	world.Step(delta_time.asSeconds(), velocityIt, positionIt);
 
+	//remove bodies
+	auto begin = remove_list.begin();
+	auto end = remove_list.end();
+
+	for (auto it = begin; it != end; ++it)
+	{
+		world.DestroyBody(*it);
+	}
+	remove_list.clear();
+
 	b2Vec2 player_position = player_body->GetPosition();
 	map->setPlayerPosition(meters2pixels(player_position.x), meters2pixels(player_position.y));
 
@@ -251,6 +296,25 @@ void Physics::simulate()
 
 		++sIt;
 		++bIt;
+	}
+
+	//update enemies positions
+	auto beginRect = map->getEnemiesBegin();
+	auto endRect = map->getEnemiesEnd();
+	auto beginBody = enemies_list.begin();
+	auto endBody = enemies_list.end();
+	auto rectIt = beginRect;
+	auto bodyIt = beginBody;
+
+	while (rectIt != endRect)
+	{
+		sf::Vector2f rectPosition;
+		rectPosition.x = meters2pixels((*bodyIt)->GetPosition().x) - 25;
+		rectPosition.y = meters2pixels((*bodyIt)->GetPosition().y) - 50;
+		(*rectIt)->setPosition(rectPosition);
+
+		++rectIt;
+		++bodyIt;
 	}
 }
 

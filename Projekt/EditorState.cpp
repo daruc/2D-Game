@@ -287,6 +287,26 @@ void EditorState::handleMouseModePlayer(sf::Event & event)
 	}
 }
 
+void EditorState::handleMouseModeEnemy(sf::Event & event)
+{
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+		{
+			sf::Vector2i coor = sf::Mouse::getPosition(*State::window);
+			std::cout << "coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
+			if (coor.x > 130)
+			{
+				std::shared_ptr<sf::RectangleShape> enemy_rect = std::make_shared<sf::RectangleShape>();
+				enemy_rect->setPosition(coor.x, coor.y);
+				enemy_rect->setFillColor(sf::Color(236, 183, 0, 255));
+				enemy_rect->setSize(sf::Vector2f(50.0f, 100.0f));
+				map->addEnemy(enemy_rect);
+			}
+		}
+	}
+}
+
 void EditorState::handleMouseModeFinish(sf::Event & event)
 {
 	if (event.type == sf::Event::MouseButtonPressed)
@@ -321,6 +341,9 @@ void EditorState::handleMouse(sf::Event & event)
 		break;
 	case FINISH:
 		handleMouseModeFinish(event);
+		break;
+	case ENEMY:
+		handleMouseModeEnemy(event);
 		break;
 	}
 	

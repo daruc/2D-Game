@@ -114,6 +114,9 @@ void GameState::update()
 		std::cout << "defeated, time = " << clock.getElapsedTime().asSeconds() << std::endl;
 	}
 
+	//update blood
+	map->updateBlood();
+
 
 	//new thread
 	float seconds = clock.getElapsedTime().asMilliseconds() / 1000.0;
