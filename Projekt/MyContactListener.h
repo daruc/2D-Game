@@ -1,6 +1,7 @@
 #ifndef MY_CONTACT_LISTENER_H
 #define MY_CONTACT_LISTENER_H
 #include <Box2D/Box2D.h>
+#include <SFML/Audio.hpp>
 #include "Map.h"
 
 class MyContactListener : public b2ContactListener
@@ -17,7 +18,8 @@ private:
 	std::list<b2Body*>* bullet_list;
 	std::list<b2Body*>* remove_list;
 	b2World* world_ptr;
-
+	sf::Sound* ptr_hit_enemy;
+	sf::Sound* ptr_knock;
 public:
 	MyContactListener();
 	void BeginContact(b2Contact* contact);
@@ -25,6 +27,8 @@ public:
 	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 	void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 	inline void setMap(std::shared_ptr<Map> map) { this->map = map; }
+	inline void setHitEnemySound(sf::Sound* hit_enemy) { ptr_hit_enemy = hit_enemy; }
+	inline void setKnockSound(sf::Sound* knock) { ptr_knock = knock; }
 	inline void setBulletList(std::list<b2Body*>* bullet_list)
 	{
 		this->bullet_list = bullet_list;

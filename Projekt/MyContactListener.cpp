@@ -75,6 +75,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 				if ((int)fixture_a->GetUserData() == 20)
 				{
 					map->addBlood(meters2pixels(position.x), meters2pixels(position.y));
+					ptr_hit_enemy->play();
 				}
 				
 				std::cout << "found bullet\n";
@@ -119,6 +120,12 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	{
 		std::cout << "fire\n";
 		dead = true;
+	}
+
+	if (bPlayer)
+	{
+		std::cout << "play knock\n";
+		ptr_knock->play();
 	}
 }
 

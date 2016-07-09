@@ -10,15 +10,17 @@
 LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window)
 {
+	float center_x = window->getSize().x / 2;
+	float center_y = window->getSize().y / 2;
 	Strings* strings = Strings::Instance();
 	prev_map = map;
 	std::shared_ptr<TextField> text_field = std::make_shared<TextField>(window);
-	text_field->setCoordinates(150.0f, 300.0f);
+	text_field->setCoordinates(center_x - 180.0f, center_y - 20.0f);
 	text_field->setDimensions(300.0f, 40.0f);
 	controls.push_back(text_field);
 
 	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->getLoad());
-	load_button->setCoordinates(470.0f, 300.0f);
+	load_button->setCoordinates(center_x + 130.0f, center_y - 20.0f);
 	load_button->setDimensions(100.0f, 40.0f);
 	load_button->addListener([=](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -62,7 +64,7 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	title.setPosition(180.0f, 20.0f);
 	title.setFont(font);
 
-	background.setSize(sf::Vector2f(800.0f, 80.0f));
+	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
 	background.setFillColor(sf::Color(0, 0, 80, 255));
 }
 LoadMapState::~LoadMapState()

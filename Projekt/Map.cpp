@@ -79,7 +79,6 @@ void Map::draw(sf::RenderWindow & window)
 
 	for (auto it = begin; it != end; ++it)
 	{
-		//(*it)->setFillColor(sf::Color::Black);
 		window.draw(**it);
 	}
 

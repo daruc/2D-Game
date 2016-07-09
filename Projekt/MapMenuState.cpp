@@ -103,7 +103,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	title.setPosition(250.0f, 20.0f);
 	title.setFont(font);
 
-	background.setSize(sf::Vector2f(800.0f, 80.0f));
+	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
 	background.setFillColor(sf::Color(0, 0, 80, 255));
 }
 

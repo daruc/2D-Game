@@ -11,9 +11,10 @@
 MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
+	float center = window->getSize().x / 2;
 	Strings* strings = Strings::Instance();
 	std::shared_ptr<Button> new_game_button = std::make_shared<Button>(window, strings->getNewGame());
-	new_game_button->setCoordinates(300.0f, 100.0f);
+	new_game_button->setCoordinates(center - 100.0f, 100.0f);
 	new_game_button->setDimensions(200.0f, 50.0f);
 	new_game_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -22,7 +23,7 @@ MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	controls.push_back(new_game_button);
 
 	std::shared_ptr<Button> controls_button = std::make_shared<Button>(window, strings->getControls());
-	controls_button->setCoordinates(300.0f, 200.0f);
+	controls_button->setCoordinates(center - 100.0f, 200.0f);
 	controls_button->setDimensions(200.0f, 50.0f);
 	controls_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -31,7 +32,7 @@ MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	controls.push_back(controls_button);
 
 	std::shared_ptr<Button> edit_button = std::make_shared<Button>(window, strings->getEditor());
-	edit_button->setCoordinates(300.0f, 300.0f);
+	edit_button->setCoordinates(center - 100.0f, 300.0f);
 	edit_button->setDimensions(200.0f, 50.0f);
 	edit_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -40,7 +41,7 @@ MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	controls.push_back(edit_button);
 
 	std::shared_ptr<Button> exit_button = std::make_shared<Button>(window, strings->getExit());
-	exit_button->setCoordinates(300.0f, 400.0f);
+	exit_button->setCoordinates(center - 100.0f, 400.0f);
 	exit_button->setDimensions(200.0f, 50.0f);
 	exit_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;

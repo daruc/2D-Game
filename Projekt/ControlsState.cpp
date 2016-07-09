@@ -9,6 +9,7 @@
 ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
+	float center = window->getSize().x / 2;
 	Strings* strings = Strings::Instance();
 	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->getMainMenu());
 	back->setCoordinates(20.0f, 20.0f);
@@ -24,31 +25,31 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 
 	left_field = std::make_shared<KeyField>(window, std::get<0>(keys));
 	left_field->setDimensions(120.0f, 40.0f);
-	left_field->setCoordinates(300.0f, 100.0f);
+	left_field->setCoordinates(center - 60.0f, 100.0f);
 	left_field->setDescription(strings->getTurnLeft());
 	controls.push_back(left_field);
 
 	right_field = std::make_shared<KeyField>(window, std::get<1>(keys));
 	right_field->setDimensions(120.0f, 40.0f);
-	right_field->setCoordinates(300.0f, 150.0f);
+	right_field->setCoordinates(center - 60.0f, 150.0f);
 	right_field->setDescription(strings->getTurnRight());
 	controls.push_back(right_field);
 
 	crouch_field = std::make_shared<KeyField>(window, std::get<2>(keys));
 	crouch_field->setDimensions(120.0f, 40.0f);
-	crouch_field->setCoordinates(300.0f, 200.0f);
+	crouch_field->setCoordinates(center - 60.0f, 200.0f);
 	crouch_field->setDescription(strings->getCrouch());
 	controls.push_back(crouch_field);
 
 	jump_field = std::make_shared<KeyField>(window, std::get<3>(keys));
 	jump_field->setDimensions(120.0f, 40.0f);
-	jump_field->setCoordinates(300.0f, 250.0f);
+	jump_field->setCoordinates(center - 60.0f, 250.0f);
 	jump_field->setDescription(strings->getJump());
 	controls.push_back(jump_field);
 
 	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->getSave());
 	save_button->setDimensions(100.0f, 40.0f);
-	save_button->setCoordinates(350.0f, 400.0f);
+	save_button->setCoordinates(center - 50.0f, 400.0f);
 	save_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		save();
@@ -65,7 +66,7 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 	title.setFont(font);
 
 	background.setFillColor(sf::Color(0, 0, 80, 255));
-	background.setSize(sf::Vector2f(800.0f, 80.0f));
+	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
 }
 
 std::tuple<sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key>

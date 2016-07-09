@@ -153,7 +153,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 
 	map = std::make_shared<Map>();
 
-	background.setSize(sf::Vector2f(130.0, 600.0f));
+	background.setSize(sf::Vector2f(130.0, window->getSize().y));
 	background.setFillColor(sf::Color(0, 0, 100, 255));
 
 	start.setSize(sf::Vector2f(50.0f, 100.0f));

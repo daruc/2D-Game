@@ -40,9 +40,30 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	finish.setSize(sf::Vector2f(width, height));
 	finish.setOrigin(sf::Vector2f(width / 2, height / 2));
 
-	view.setSize(800.0f, 600.0f);
+	view.setSize(window->getSize().x, window->getSize().y);
 
 	view.move(player.getPosition() - view.getCenter());
+
+	if (!gunshot_buffer.loadFromFile("sounds\\gunshot.wav"))
+	{
+		std::cout << "Cannot load file gunshot.wav\n";
+	}
+	gunshot.setBuffer(gunshot_buffer);
+
+	if (!hit_enemy_buffer.loadFromFile("sounds\\hit_enemy.wav"))
+	{
+		std::cout << "Cannot load file hit_enemy.wav\n";
+	}
+	hit_enemy.setBuffer(hit_enemy_buffer);
+	physics.setHitEnemySound(&hit_enemy);
+
+	if (!knock_buffer.loadFromFile("sounds\\knock.wav"))
+	{
+		std::cout << "Cannot load file knock.wav\n";
+	}
+	knock.setBuffer(knock_buffer);
+	knock.setVolume(50);
+	physics.setKnockSound(&knock);
 
 	clock.restart();
 }
@@ -74,6 +95,7 @@ void GameState::handleEvents()
 			if (event.key.code == sf::Mouse::Left)
 			{
 				std::cout << "click fire\n";
+				gunshot.play();
 				sf::Vector2f mouse = cursor.getPosition();
 				sf::Vector2f playerPosition = player.getPosition();
 				sf::Vector2u resolution = window->getSize();
@@ -102,7 +124,7 @@ void GameState::update()
 	if (physics.isWin())
 	{
 		window->setMouseCursorVisible(true);
-		State::nextState = std::make_shared<GameOverState>(window, true);
+		State::nextState = std::make_shared<GameOverState>(window, true, clock.getElapsedTime().asSeconds());
 
 		std::cout << "win, time = " << clock.getElapsedTime().asSeconds() << std::endl;
 	}

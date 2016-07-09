@@ -48,6 +48,16 @@ public:
 	inline bool isWin() const { return myContactListener.isWin(); }
 	inline bool isDead() const { return myContactListener.isDead(); }
 
+	inline void setHitEnemySound(sf::Sound* hit_sound)
+	{ 
+		myContactListener.setHitEnemySound(hit_sound);
+	}
+
+	inline void setKnockSound(sf::Sound* knock_sound)
+	{
+		myContactListener.setKnockSound(knock_sound);
+	}
+
 	void throwBullet(float srcX, float srcY, float dstX, float dstY);
 };
 

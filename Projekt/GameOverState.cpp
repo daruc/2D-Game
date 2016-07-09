@@ -1,11 +1,12 @@
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include "Button.h"
 #include "MapMenuState.h"
 #include "GameOverState.h"
 #include "Strings.h"
 
-GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin)
+GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin, float seconds)
 	: State(window)
 {
 	Strings* strings = Strings::Instance();
@@ -26,16 +27,35 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 	if (isWin)
 	{
 		title.setString(strings->getWin());
+		if (!sound_buffer.loadFromFile("sounds\\victory.wav"))
+		{
+			std::cout << "Cannot load sound victory.wav\n";
+		}
+
+
+		std::wstringstream stream;
+		stream.precision(1);
+		stream << std::fixed;
+		stream << "Twój czas: " << seconds << " sekundy";
+		time.setString(stream.str());
 	}
 	else
 	{
 		title.setString(strings->getDefeat());
+		if (!sound_buffer.loadFromFile("sounds\\game_over.wav"))
+		{
+			std::cout << "Cannot load sound game_over.wav\n";
+		}
 	}
+	sound.setBuffer(sound_buffer);
 	title.setPosition(250.0f, 20.0f);
 	title.setFont(font);
+	time.setFont(font);
+	time.setPosition(window->getSize().x / 2 - 100.0f, window->getSize().y / 2 - 15.0f);
 
-	background.setSize(sf::Vector2f(800.0f, 80.0f));
+	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
 	background.setFillColor(sf::Color(0, 0, 80, 255));
+	sound.play();
 }
 
 GameOverState::~GameOverState()
@@ -85,5 +105,6 @@ void GameOverState::draw()
 	}
 
 	window->draw(title);
+	window->draw(time);
 	window->display();
 }
