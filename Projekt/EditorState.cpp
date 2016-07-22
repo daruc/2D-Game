@@ -12,7 +12,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 {
 	Strings* strings = Strings::Instance();
 	selected = GROUND;
-	std::shared_ptr<Button> menu_button = std::make_shared<Button>(window, strings->getMenu());
+	std::shared_ptr<Button> menu_button = std::make_shared<Button>(window, strings->get("menu"));
 	menu_button->setCoordinates(0.0f, 0.0f);
 	menu_button->setDimensions(130.0f, 40.0f);
 	menu_button->addListener([this](std::string str)->void {
@@ -21,7 +21,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(menu_button);
 
-	std::shared_ptr<Button> back_button = std::make_shared<Button>(window, strings->getUndo());
+	std::shared_ptr<Button> back_button = std::make_shared<Button>(window, strings->get("undo"));
 	back_button->setCoordinates(0.0f, 45.0f);
 	back_button->setDimensions(130.0f, 40.0f);
 	back_button->addListener([this](std::string str)->void {
@@ -38,7 +38,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(back_button);
 
-	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->getSave());
+	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
 	save_button->setCoordinates(0.0f, 90.0f);
 	save_button->setDimensions(130.0f, 40.0f);
 	save_button->addListener([this](std::string str)->void {
@@ -47,7 +47,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(save_button);
 
-	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->getLoad());
+	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->get("load"));
 	load_button->setCoordinates(0.0f, 135.f);
 	load_button->setDimensions(130.0f, 40.0f);
 	load_button->addListener([this](std::string str)->void {
@@ -56,7 +56,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(load_button);
 
-	std::shared_ptr<Button> begin_button = std::make_shared<Button>(window, strings->getPlayer());
+	std::shared_ptr<Button> begin_button = std::make_shared<Button>(window, strings->get("player"));
 	begin_button->setCoordinates(0.0f, 180.0f);
 	begin_button->setDimensions(130.0f, 40.0f);
 	begin_button->addListener([this](std::string str)->void {
@@ -65,7 +65,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(begin_button);
 
-	std::shared_ptr<Button> finish_button = std::make_shared<Button>(window, strings->getFinish());
+	std::shared_ptr<Button> finish_button = std::make_shared<Button>(window, strings->get("finish"));
 	finish_button->setCoordinates(0.0f, 225.0f);
 	finish_button->setDimensions(130.0f, 40.0f);
 	finish_button->addListener([this](std::string str)->void {
@@ -74,7 +74,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(finish_button);
 
-	std::shared_ptr<Button> ground_button = std::make_shared<Button>(window, strings->getGround());
+	std::shared_ptr<Button> ground_button = std::make_shared<Button>(window, strings->get("ground"));
 	ground_button->setCoordinates(0.0f, 270.0f);
 	ground_button->setDimensions(130.0f, 40.0f);
 	ground_button->addListener([this](std::string str)->void {
@@ -83,7 +83,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(ground_button);
 
-	std::shared_ptr<Button> fire_button = std::make_shared<Button>(window, strings->getFire());
+	std::shared_ptr<Button> fire_button = std::make_shared<Button>(window, strings->get("fire"));
 	fire_button->setCoordinates(0.0f, 315.0f);
 	fire_button->setDimensions(130.0f, 40.0f);
 	fire_button->addListener([this](std::string str)->void {
@@ -94,7 +94,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(fire_button);
 
-	std::shared_ptr<Button> enemy_button = std::make_shared<Button>(window, strings->getEnemy());
+	std::shared_ptr<Button> enemy_button = std::make_shared<Button>(window, strings->get("enemy"));
 	enemy_button->setCoordinates(0.0f, 360.0f);
 	enemy_button->setDimensions(130.0f, 40.0);
 	enemy_button->addListener([this](std::string str)->void {
@@ -103,7 +103,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(enemy_button);
 
-	std::shared_ptr<Button> type1_button = std::make_shared<Button>(window, strings->getType1());
+	std::shared_ptr<Button> type1_button = std::make_shared<Button>(window, strings->get("type_1"));
 	type1_button->setCoordinates(0.0f, 405.0f);
 	type1_button->setDimensions(130.0f, 40.0f);
 	type1_button->addListener([this](std::string str)->void {
@@ -115,7 +115,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(type1_button);
 
-	std::shared_ptr<Button> type2_button = std::make_shared<Button>(window, strings->getType2());
+	std::shared_ptr<Button> type2_button = std::make_shared<Button>(window, strings->get("type_2"));
 	type2_button->setCoordinates(0.0f, 450.0f);
 	type2_button->setDimensions(130.0f, 40.0f);
 	type2_button->addListener([this](std::string str)->void {
@@ -127,7 +127,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(type2_button);
 
-	std::shared_ptr<Button> type3_button = std::make_shared<Button>(window, strings->getType3());
+	std::shared_ptr<Button> type3_button = std::make_shared<Button>(window, strings->get("type_3"));
 	type3_button->setCoordinates(0.0f, 495.0f);
 	type3_button->setDimensions(130.0f, 40.0f);
 	type3_button->addListener([this](std::string str)->void {
@@ -139,7 +139,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(type3_button);
 
-	std::shared_ptr<Button> type4_button = std::make_shared<Button>(window, strings->getType4());
+	std::shared_ptr<Button> type4_button = std::make_shared<Button>(window, strings->get("type_4"));
 	type4_button->setCoordinates(0.0f, 540.0f);
 	type4_button->setDimensions(130.0f, 40.0f);
 	type4_button->addListener([this](std::string str)->void {

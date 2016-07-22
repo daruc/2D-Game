@@ -15,7 +15,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
 	Strings* strings = Strings::Instance();
-	std::shared_ptr<Button> map_1 = std::make_shared<Button>(window, strings->getMap1());
+	std::shared_ptr<Button> map_1 = std::make_shared<Button>(window, strings->get("map_1"));
 	map_1->setCoordinates(300.0f, 100.0f);
 	map_1->setDimensions(100.0f, 100.0f);
 	map_1->addListener([this](std::string str)->void {
@@ -28,7 +28,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(map_1);
 
-	std::shared_ptr<Button> map_2 = std::make_shared<Button>(window, strings->getMap2());
+	std::shared_ptr<Button> map_2 = std::make_shared<Button>(window, strings->get("map_2"));
 	map_2->setCoordinates(500.0f, 100.0f);
 	map_2->setDimensions(100.0f, 100.0f);
 	map_2->addListener([this](std::string str)->void {
@@ -41,7 +41,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(map_2);
 
-	std::shared_ptr<Button> map_3 = std::make_shared<Button>(window, strings->getMap3());
+	std::shared_ptr<Button> map_3 = std::make_shared<Button>(window, strings->get("map_3"));
 	map_3->setCoordinates(300.0f, 300.0f);
 	map_3->setDimensions(100.0f, 100.0f);
 	map_3->addListener([this](std::string str)->void {
@@ -54,7 +54,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(map_3);
 
-	std::shared_ptr<Button> map_4 = std::make_shared<Button>(window, strings->getMap4());
+	std::shared_ptr<Button> map_4 = std::make_shared<Button>(window, strings->get("map_4"));
 	map_4->setCoordinates(500.0f, 300.0f);
 	map_4->setDimensions(100.0f, 100.0f);
 	map_4->addListener([this](std::string str)->void {
@@ -67,7 +67,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	});
 	controls.push_back(map_4);
 
-	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->getMainMenu());
+	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("main_menu"));
 	back->setCoordinates(20.0f, 20.0f);
 	back->setDimensions(200.0f, 40.0f);
 	back->addListener([this](std::string str)->void {
@@ -81,7 +81,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	text_field->setDimensions(200.0f, 40.0f);
 	controls.push_back(text_field);
 
-	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->getLoad());
+	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->get("load"));
 	load_button->setCoordinates(520.0f, 500.0f);
 	load_button->setDimensions(130.0f, 40.0f);
 	load_button->addListener([=](std::string str)->void {
@@ -99,7 +99,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 		std::cout << "Cannot load font from file.\n";
 	}
 
-	title.setString(strings->getMapMenuTitle());
+	title.setString(strings->get("map_menu_title"));
 	title.setPosition(250.0f, 20.0f);
 	title.setFont(font);
 

@@ -11,7 +11,7 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 {
 	float center = window->getSize().x / 2;
 	Strings* strings = Strings::Instance();
-	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->getMainMenu());
+	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("main_menu"));
 	back->setCoordinates(20.0f, 20.0f);
 	back->setDimensions(200.0f, 40.0f);
 	back->addListener([this](std::string str)->void {
@@ -26,28 +26,28 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 	left_field = std::make_shared<KeyField>(window, std::get<0>(keys));
 	left_field->setDimensions(120.0f, 40.0f);
 	left_field->setCoordinates(center - 60.0f, 100.0f);
-	left_field->setDescription(strings->getTurnLeft());
+	left_field->setDescription(strings->get("turn_left"));
 	controls.push_back(left_field);
 
 	right_field = std::make_shared<KeyField>(window, std::get<1>(keys));
 	right_field->setDimensions(120.0f, 40.0f);
 	right_field->setCoordinates(center - 60.0f, 150.0f);
-	right_field->setDescription(strings->getTurnRight());
+	right_field->setDescription(strings->get("turn_right"));
 	controls.push_back(right_field);
 
 	crouch_field = std::make_shared<KeyField>(window, std::get<2>(keys));
 	crouch_field->setDimensions(120.0f, 40.0f);
 	crouch_field->setCoordinates(center - 60.0f, 200.0f);
-	crouch_field->setDescription(strings->getCrouch());
+	crouch_field->setDescription(strings->get("crouch"));
 	controls.push_back(crouch_field);
 
 	jump_field = std::make_shared<KeyField>(window, std::get<3>(keys));
 	jump_field->setDimensions(120.0f, 40.0f);
 	jump_field->setCoordinates(center - 60.0f, 250.0f);
-	jump_field->setDescription(strings->getJump());
+	jump_field->setDescription(strings->get("jump"));
 	controls.push_back(jump_field);
 
-	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->getSave());
+	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
 	save_button->setDimensions(100.0f, 40.0f);
 	save_button->setCoordinates(center - 50.0f, 400.0f);
 	save_button->addListener([this](std::string str)->void {
@@ -61,7 +61,7 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 		std::cout << "Cannot load font from file.\n";
 	}
 
-	title.setString(strings->getControlsTitle());
+	title.setString(strings->get("controls_title"));
 	title.setPosition(250.0f, 20.0f);
 	title.setFont(font);
 

@@ -10,7 +10,7 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 	: State(window)
 {
 	Strings* strings = Strings::Instance();
-	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->getNewGame());
+	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("new_game"));
 	back->setCoordinates(20.0f, 20.0f);
 	back->setDimensions(200.0f, 40.0f);
 	back->addListener([this](std::string str)->void {
@@ -26,7 +26,7 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 
 	if (isWin)
 	{
-		title.setString(strings->getWin());
+		title.setString(strings->get("win"));
 		if (!sound_buffer.loadFromFile("sounds\\victory.wav"))
 		{
 			std::cout << "Cannot load sound victory.wav\n";
@@ -36,12 +36,12 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 		std::wstringstream stream;
 		stream.precision(1);
 		stream << std::fixed;
-		stream << "Twój czas: " << seconds << " sekundy";
+		stream << strings->get("your_time") << ": " << seconds << " " << strings->get("seconds");
 		time.setString(stream.str());
 	}
 	else
 	{
-		title.setString(strings->getDefeat());
+		title.setString(strings->get("defeat"));
 		if (!sound_buffer.loadFromFile("sounds\\game_over.wav"))
 		{
 			std::cout << "Cannot load sound game_over.wav\n";

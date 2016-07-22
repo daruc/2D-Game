@@ -19,7 +19,7 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	text_field->setDimensions(300.0f, 40.0f);
 	controls.push_back(text_field);
 
-	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->getLoad());
+	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->get("load"));
 	load_button->setCoordinates(center_x + 130.0f, center_y - 20.0f);
 	load_button->setDimensions(100.0f, 40.0f);
 	load_button->addListener([=](std::string str)->void {
@@ -47,7 +47,7 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	});
 	controls.push_back(load_button);
 
-	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->getEditor());
+	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->get("editor"));
 	editor_button->setCoordinates(20.0f, 20.0f);
 	editor_button->setDimensions(130.0f, 40.0f);
 	editor_button->addListener([this](std::string str)->void {
@@ -60,7 +60,7 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 		std::cout << "Cannot load font from file.\n";
 	}
 
-	title.setString(strings->getLoadMapTitle());
+	title.setString(strings->get("load_map_title"));
 	title.setPosition(180.0f, 20.0f);
 	title.setFont(font);
 

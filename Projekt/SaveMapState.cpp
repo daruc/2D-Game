@@ -19,7 +19,7 @@ SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	text_field->setDimensions(300.0f, 40.0f);
 	controls.push_back(text_field);
 
-	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->getSave());
+	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
 	save_button->setCoordinates(center_x + 130.0f, center_y - 20.0f);
 	save_button->setDimensions(100.0f, 40.0f);
 	save_button->addListener([=](std::string str)->void {
@@ -28,7 +28,7 @@ SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	});
 	controls.push_back(save_button);
 
-	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->getEditor());
+	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->get("editor"));
 	editor_button->setCoordinates(20.0f, 20.0f);
 	editor_button->setDimensions(130.0f, 40.0f);
 	editor_button->addListener([this](std::string str)->void {
@@ -41,7 +41,7 @@ SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 		std::cout << "Cannot load font from file.\n";
 	}
 
-	title.setString(strings->getSaveMapTitle());
+	title.setString(strings->get("save_map_title"));
 	title.setPosition(180.0f, 20.0f);
 	title.setFont(font);
 
