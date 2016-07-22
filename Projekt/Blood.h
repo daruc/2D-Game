@@ -3,8 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <memory>
-#define DROPS 50
-#define SHOW_TIME 0.8
+const std::size_t DROPS = 50;
+const float SHOW_TIME = 0.8;
 
 class Blood
 {

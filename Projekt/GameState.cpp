@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <thread>
 #include "GameState.h"
 #include "MapMenuState.h"
 #include "GameOverState.h"
@@ -8,6 +9,7 @@
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window), physics(window, map)
 {
+	done = false;
 	this->map = map;
 	textures.loadCursor();
 	textures.loadMapType(map->getType());
@@ -22,7 +24,6 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	sf::Vector2u resolution = State::window->getSize();
 	txtTime.setCharacterSize(17.0f);
 	txtTime.setPosition(resolution.x / 2, 0.0f);
-
 
 	window->setMouseCursorVisible(false);
 
@@ -41,7 +42,6 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	finish.setOrigin(sf::Vector2f(width / 2, height / 2));
 
 	view.setSize(window->getSize().x, window->getSize().y);
-
 	view.move(player.getPosition() - view.getCenter());
 
 	if (!gunshot_buffer.loadFromFile("sounds\\gunshot.wav"))
@@ -65,7 +65,23 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	knock.setVolume(50);
 	physics.setKnockSound(&knock);
 
+
+
 	clock.restart();
+
+	gui_thread = std::make_shared<std::thread>([this]() {
+		while (!done)
+		{
+			float seconds = clock.getElapsedTime().asMilliseconds() / 1000.0;
+			std::stringstream stream;
+			stream.precision(1);
+			stream << std::fixed << seconds;
+			mtx.lock();
+			txtTime.setString(stream.str());
+			mtx.unlock();
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		}
+	});
 }
 
 GameState::~GameState()
@@ -80,6 +96,8 @@ void GameState::handleEvents()
 	{
 		if (event.type == sf::Event::Closed)
 		{
+			done = true;
+			gui_thread->join();
 			window->close();
 		}
 		else if (event.type == sf::Event::KeyReleased)
@@ -87,6 +105,8 @@ void GameState::handleEvents()
 			if (event.key.code == sf::Keyboard::Escape)
 			{
 				window->setMouseCursorVisible(true);
+				done = true;
+				gui_thread->join();
 				State::nextState = std::make_shared<MapMenuState>(window);
 			}
 		}
@@ -124,6 +144,8 @@ void GameState::update()
 	if (physics.isWin())
 	{
 		window->setMouseCursorVisible(true);
+		done = true;
+		gui_thread->join();
 		State::nextState = std::make_shared<GameOverState>(window, true, clock.getElapsedTime().asSeconds());
 
 		std::cout << "win, time = " << clock.getElapsedTime().asSeconds() << std::endl;
@@ -131,6 +153,8 @@ void GameState::update()
 	if (physics.isDead())
 	{
 		window->setMouseCursorVisible(true);
+		done = true;
+		gui_thread->join();
 		State::nextState = std::make_shared<GameOverState>(window, false);
 
 		std::cout << "defeated, time = " << clock.getElapsedTime().asSeconds() << std::endl;
@@ -139,13 +163,6 @@ void GameState::update()
 	//update blood
 	map->updateBlood();
 
-
-	//new thread
-	float seconds = clock.getElapsedTime().asMilliseconds() / 1000.0;
-	std::stringstream stream;
-	stream.precision(1);
-	stream << std::fixed << seconds;
-	txtTime.setString(stream.str());
 }
 void GameState::draw()
 {
@@ -159,6 +176,10 @@ void GameState::draw()
 	window->setView(window->getDefaultView());
 	
 	window->draw(cursor);
+
+	mtx.lock();
 	window->draw(txtTime);
+	mtx.unlock();
+
 	window->display();
 };

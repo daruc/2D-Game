@@ -13,7 +13,7 @@ private:
 	int type;
 	sf::Vector2f player;
 	sf::Vector2f finish;
-	std::list<std::shared_ptr<MapShape>> shapes;
+	std::vector<std::shared_ptr<MapShape>> shapes;
 	std::list<std::shared_ptr<sf::RectangleShape>> bullets;
 	std::list<std::shared_ptr<sf::RectangleShape>> enemies;
 	std::list<std::shared_ptr<Blood>> blood;

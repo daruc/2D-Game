@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <thread>
 #include "Map.h"
 #include "SaveMapState.h"
 #include "TextField.h"
@@ -98,6 +99,7 @@ void SaveMapState::draw()
 
 	window->draw(title);
 	window->display();
+	std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }
 
 void SaveMapState::save(sf::String filename)

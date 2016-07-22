@@ -9,7 +9,7 @@ class SaveMapState : public State
 {
 private:
 	sf::RectangleShape background;
-	std::list<std::shared_ptr<Control>> controls;
+	std::vector<std::shared_ptr<Control>> controls;
 	std::shared_ptr<Map> map;
 	sf::Font font;
 	sf::Text title;

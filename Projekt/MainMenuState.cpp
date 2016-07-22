@@ -1,5 +1,6 @@
 #include <iostream>
 #include <memory>
+#include <thread>
 #include "MainManuState.h"
 #include "MapMenuState.h"
 #include "EditorState.h"
@@ -96,4 +97,5 @@ void MainMenuState::draw()
 
 	
 	window->display();
+	std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }

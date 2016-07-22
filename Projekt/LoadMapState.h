@@ -10,7 +10,7 @@ class LoadMapState : public State
 private:
 	sf::RectangleShape background;
 	std::shared_ptr<Map> prev_map;
-	std::list<std::shared_ptr<Control>> controls;
+	std::vector<std::shared_ptr<Control>> controls;
 	sf::Font font;
 	sf::Text title;
 public:

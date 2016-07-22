@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <thread>
 #include "LoadMapState.h"
 #include "TextField.h"
 #include "Button.h"
@@ -113,4 +114,5 @@ void LoadMapState::draw()
 	}
 	window->draw(title);
 	window->display();
+	std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }

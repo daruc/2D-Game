@@ -14,7 +14,7 @@ private:
 	sf::Text title;
 	sf::RectangleShape background;
 
-	std::list<std::shared_ptr<Control>> controls;
+	std::vector<std::shared_ptr<Control>> controls;
 
 	std::shared_ptr<KeyField> left_field;
 	std::shared_ptr<KeyField> right_field;

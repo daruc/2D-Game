@@ -1,5 +1,6 @@
 #include <memory>
 #include <iostream>
+#include <thread>
 #include "EditorState.h"
 #include "Button.h"
 #include "MainManuState.h"
@@ -443,4 +444,5 @@ void EditorState::draw()
 	window->draw(selected_type);
 
 	window->display();
+	std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }

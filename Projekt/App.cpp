@@ -14,11 +14,11 @@ App::~App()
 
 void App::init()
 {
-	int width = sf::VideoMode::getDesktopMode().width;
-	int height = sf::VideoMode::getDesktopMode().height;
+	int width = 800;
+	int height = 600;
 	std::string title("Gra");
 	window = std::make_shared<sf::RenderWindow>(sf::VideoMode(width, height), title,
-		sf::Style::Close | sf::Style::Titlebar | sf::Style::Fullscreen);
+		sf::Style::Close | sf::Style::Titlebar);
 	currentState = std::make_shared<MainMenuState>(window);
 	
 }

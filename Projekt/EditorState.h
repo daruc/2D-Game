@@ -12,7 +12,7 @@ class EditorState : public State
 private:
 	enum Item {GROUND, FIRE, PLAYER, FINISH, ENEMY};
 	Item selected;
-	std::list<std::shared_ptr<Control>> controls;
+	std::vector<std::shared_ptr<Control>> controls;
 	std::shared_ptr<Map> map;
 	std::list<sf::Vector2f> points;
 	sf::View view;

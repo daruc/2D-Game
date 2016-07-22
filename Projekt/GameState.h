@@ -1,7 +1,9 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 #include <memory>
+#include <thread>
 #include <SFML/Audio.hpp>
+#include <mutex>
 #include "State.h"
 #include "Map.h"
 #include "Textures.h"
@@ -29,6 +31,11 @@ private:
 	sf::Sound gunshot;
 	sf::Sound hit_enemy;
 	sf::Sound knock;
+
+	//threads
+	std::shared_ptr<std::thread> gui_thread;
+	std::mutex mtx;
+	bool done;
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~GameState();

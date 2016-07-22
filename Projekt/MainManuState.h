@@ -9,7 +9,7 @@
 class MainMenuState : public State
 {
 private:
-	std::list<std::shared_ptr<Control>> controls;
+	std::vector<std::shared_ptr<Control>> controls;
 public:
 	MainMenuState(std::shared_ptr<sf::RenderWindow> window);
 	virtual ~MainMenuState();

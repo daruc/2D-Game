@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <thread>
 #include "ControlsState.h"
 #include "KeyField.h"
 #include "Button.h"
@@ -171,4 +172,5 @@ void ControlsState::draw()
 	}
 	window->draw(title);
 	window->display();
+	std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }
