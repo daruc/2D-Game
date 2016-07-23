@@ -29,6 +29,7 @@ public:
 	void draw(sf::RenderWindow & window);
 	inline sf::Vector2f getPlayerPosition() { return player; }
 	inline sf::Vector2f getFinishPosition() { return finish; }
+	inline sf::Vector2f getViewOffset() const { return viewOffset; }
 	inline auto getGroundBegin() { return shapes.begin();  }
 	inline auto getGroundEnd() { return shapes.end(); }
 	inline auto getEnemiesBegin() { return enemies.begin(); }
@@ -37,8 +38,8 @@ public:
 	inline void setType(int type) { this->type = type; }
 	inline std::list<std::shared_ptr<sf::RectangleShape>>* getBulletsList() { return &bullets; }
 	inline std::list<std::shared_ptr<sf::RectangleShape>>* getEnenemiesList() { return &enemies; }
-	void setPlayerPosition(float x, float y);
-	void setFinishPosition(float x, float y);
+	void setPlayerPosition(float x, float y, bool offset=true);
+	void setFinishPosition(float x, float y, bool offset=true);
 	void setGroundTexture(sf::Texture * texture);
 	void addEnemy(std::shared_ptr<sf::RectangleShape> enemyRect);
 	void addBlood(int screen_x, int screen_y);

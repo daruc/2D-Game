@@ -59,16 +59,32 @@ void Map::addShape(std::list<sf::Vector2f> points, sf::Texture* texture)
 	shapes.push_back(shape);
 }
 
-void Map::setPlayerPosition(float x, float y)
+void Map::setPlayerPosition(float x, float y, bool offset)
 {
-	player.x = x + viewOffset.x;
-	player.y = y + viewOffset.y;
+	if (offset)
+	{
+		player.x = x + viewOffset.x;
+		player.y = y + viewOffset.y;
+	}
+	else
+	{
+		player.x = x;
+		player.y = y;
+	}
 }
 
-void Map::setFinishPosition(float x, float y)
+void Map::setFinishPosition(float x, float y, bool offset)
 {
-	finish.x = x + viewOffset.x;
-	finish.y = y + viewOffset.y;
+	if (offset)
+	{
+		finish.x = x + viewOffset.x;
+		finish.y = y + viewOffset.y;
+	}
+	else
+	{
+		finish.x = x;
+		finish.y = y;
+	}
 }
 
 void Map::draw(sf::RenderWindow & window)
@@ -160,7 +176,7 @@ std::pair<int, char*> Map::toBinary( ) const
 	ptr += sizeof(nShapes);
 	for (auto it = begin; it != end; ++it)
 	{
-		size_t shape_type = (int)(*it)->getType();
+		int shape_type = (int)(*it)->getType();
 		memcpy(ptr, &shape_type, sizeof(shape_type));
 		ptr += sizeof(shape_type);
 		size_t count = (*it)->getPointCount();
@@ -234,7 +250,7 @@ void Map::fromBinary(int size, char * bytes)
 
 		std::shared_ptr<MapShape> shape = std::make_shared<MapShape>();
 		shape->setPosition(position);
-		shape->setPointCount(verticles);
+		shape->setPointCount(verticles);	//error here
 		shape->setType((MapShape::Type) shape_type);
 
 		for (int j = 0; j < verticles; ++j)

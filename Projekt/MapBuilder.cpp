@@ -10,7 +10,7 @@ void MapBuilder::loadFromFile(std::wstring filename)
 {
 	char * bytes;
 	std::ifstream fin;
-	fin.open(filename);
+	fin.open(filename, std::fstream::out | std::fstream::binary);
 	if (!fin.is_open())
 	{
 		std::cout << "Cannot open map file.\n";

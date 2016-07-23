@@ -1,6 +1,7 @@
 #include <memory>
 #include <iostream>
 #include <thread>
+#include <sstream>
 #include "EditorState.h"
 #include "Button.h"
 #include "MainManuState.h"
@@ -28,6 +29,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	back_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 
+		/*
 		if (points.size() > 0)
 		{
 			points.pop_back();
@@ -35,6 +37,60 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 		else
 		{
 			map->removeLast();
+		}*/
+
+		if (!undo_stack.empty())
+		{
+			std::string str = undo_stack.top();
+			std::cout << "undo_stack: " << str << std::endl;
+			undo_stack.pop();
+
+			if (str == "remove_point")
+			{
+				points.pop_back();
+			}
+			else if (str.substr(0, 12)  == "remove_shape")
+			{
+				parseAndExecuteRemoveShape(str);
+			}
+			else if (str.substr(0, 11) == "move_player")
+			{
+				str = str.substr(12);
+				std::size_t position = str.find("|");
+				std::string coor_x = str.substr(0, position);
+				std::string coor_y = str.substr(position + 1);
+				std::stringstream stream;
+				sf::Vector2f vector;
+				stream << coor_x;
+				stream >> vector.x;
+				stream.clear();
+				stream << coor_y;
+				stream >> vector.y;
+
+				map->setPlayerPosition(vector.x, vector.y, false);
+				start.setPosition(vector.x, vector.y);
+			}
+			else if (str.substr(0, 11) == "move_finish")
+			{
+				str = str.substr(12);
+				std::size_t position = str.find("|");
+				std::string coor_x = str.substr(0, position);
+				std::string coor_y = str.substr(position + 1);
+				std::stringstream stream;
+				sf::Vector2f vector;
+				stream << coor_x;
+				stream >> vector.x;
+				stream.clear();
+				stream << coor_y;
+				stream >> vector.y;
+
+				map->setFinishPosition(vector.x, vector.y, false);
+				finish.setPosition(vector.x, vector.y);
+			}
+			else if (str == "remove_enemy")
+			{
+				map->getEnenemiesList()->pop_back();
+			}
 		}
 	});
 	controls.push_back(back_button);
@@ -81,6 +137,7 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	ground_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		selected = GROUND;
+		points.clear();
 	});
 	controls.push_back(ground_button);
 
@@ -232,6 +289,7 @@ void EditorState::handleMouseModeGround(sf::Event & event)
 			if (coor.x > 130)
 			{
 				points.push_back(sf::Vector2f(coor.x - 1, coor.y - 1));
+				undo_stack.push("remove_point");
 			}
 		}
 		else if (event.mouseButton.button == sf::Mouse::Right)
@@ -239,7 +297,21 @@ void EditorState::handleMouseModeGround(sf::Event & event)
 			if (points.size() >= 3)
 			{
 				map->addShape(points, textures.getGround());
+				
+				
+				//Removing points
+				auto begin = points.begin();
+				auto end = points.end();
+				std::stringstream strstream;
+				strstream << "remove_shape";
+				for (auto it = begin; it != end; ++it)
+				{
+					sf::Vector2f coor = *it;
+
+					strstream << "#add_point|" << coor.x << "|" << coor.y;
+				}
 				points.clear();
+				undo_stack.push(strstream.str());
 			}
 		}
 	}
@@ -256,6 +328,7 @@ void EditorState::handleMouseModeFire(sf::Event & event)
 			if (coor.x > 130)
 			{
 				points.push_back(sf::Vector2f(coor.x - 1, coor.y - 1));
+				undo_stack.push("remove_point");
 			}
 		}
 		else if (event.mouseButton.button == sf::Mouse::Right)
@@ -263,7 +336,21 @@ void EditorState::handleMouseModeFire(sf::Event & event)
 			if (points.size() >= 3)
 			{
 				map->addShape(points, nullptr);
+				
+
+				//Removing points
+				auto begin = points.begin();
+				auto end = points.end();
+				std::stringstream strstream;
+				strstream << "remove_shape";
+				for (auto it = begin; it != end; ++it)
+				{
+					sf::Vector2f coor = *it;
+
+					strstream << "#add_point|" << coor.x << "|" << coor.y;
+				}
 				points.clear();
+				undo_stack.push(strstream.str());
 			}
 		}
 	}
@@ -279,11 +366,17 @@ void EditorState::handleMouseModePlayer(sf::Event & event)
 			std::cout << "coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
 			if (coor.x > 130)
 			{
+				std::stringstream stream;
+				stream << "move_player|" << map->getPlayerPosition().x << "|" << map->getPlayerPosition().y;
+				undo_stack.push(stream.str());
+
 				map->setPlayerPosition(coor.x, coor.y);
 
 				sf::Vector2f new_coor = map->getPlayerPosition();
 				start.setPosition(new_coor.x, new_coor.y);
 			}
+
+			
 		}
 	}
 }
@@ -298,6 +391,8 @@ void EditorState::handleMouseModeEnemy(sf::Event & event)
 			std::cout << "coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
 			if (coor.x > 130)
 			{
+				undo_stack.push("remove_enemy");
+
 				std::shared_ptr<sf::RectangleShape> enemy_rect = std::make_shared<sf::RectangleShape>();
 				enemy_rect->setPosition(coor.x, coor.y);
 				enemy_rect->setFillColor(sf::Color(236, 183, 0, 255));
@@ -318,6 +413,10 @@ void EditorState::handleMouseModeFinish(sf::Event & event)
 			std::cout << "coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
 			if (coor.x > 130)
 			{
+				std::stringstream stream;
+				stream << "move_finish|" << map->getFinishPosition().x << "|" << map->getFinishPosition().y;
+				undo_stack.push(stream.str());
+
 				map->setFinishPosition(coor.x, coor.y);
 
 				sf::Vector2f new_coor = map->getFinishPosition();
@@ -445,4 +544,37 @@ void EditorState::draw()
 
 	window->display();
 	std::this_thread::sleep_for(std::chrono::milliseconds(40));
+}
+
+void EditorState::parseAndExecuteRemoveShape(std::string command)
+{
+	map->removeLast();
+	std::string tail = command.substr(12);
+	std::cout << "tail=" << tail << std::endl;
+	while (!tail.empty())
+	{
+		//#add_shape|		position	4294967295	unsigned int
+
+		tail = tail.substr(11);
+		std::size_t position = tail.find("#");
+		std::string str_coor = tail.substr(0, position);
+		
+		if (position == 4294967295)
+			tail = "";
+		else
+			tail = tail.substr(position);
+
+		position = str_coor.find("|");
+		std::string str_x = str_coor.substr(0, position);
+		std::string str_y = str_coor.substr(position + 1);
+
+		std::stringstream stream;
+		sf::Vector2f point;
+		stream << str_x;
+		stream >> point.x;
+		stream.clear();
+		stream << str_y;
+		stream >> point.y;
+		points.push_back(point);
+	}
 }

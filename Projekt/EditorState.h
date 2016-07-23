@@ -2,6 +2,7 @@
 #define EDITOR_STATE_H
 #include <list>
 #include <SFML\Graphics.hpp>
+#include <stack>
 #include "State.h"
 #include "Control.h"
 #include "Map.h"
@@ -25,6 +26,8 @@ private:
 	sf::RectangleShape start;
 	sf::RectangleShape finish;
 
+	std::stack<std::string> undo_stack;
+
 	void handleMouse(sf::Event & event);
 	void handleMouseModeGround(sf::Event & event);
 	void handleMouseModeFire(sf::Event & event);
@@ -32,6 +35,7 @@ private:
 	void handleMouseModeEnemy(sf::Event & event);
 	void handleMouseModeFinish(sf::Event & event);
 	void moveAllPoints(float x, float y);
+	void parseAndExecuteRemoveShape(std::string command);
 public:
 	EditorState(std::shared_ptr<sf::RenderWindow> window);
 	EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
