@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Textures.h"
 #include "Physics.h"
+#include "Player.h"
 
 class GameState : public State
 {
@@ -15,7 +16,7 @@ private:
 	sf::Sprite cursor;
 	std::shared_ptr<Map> map;
 	Textures textures;
-	sf::RectangleShape player;
+	Player player;
 	sf::RectangleShape finish;
 	Physics physics;
 	sf::View view;

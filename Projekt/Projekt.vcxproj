@@ -154,6 +154,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimatedSprite.cpp" />
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Blood.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -170,6 +172,7 @@
     <ClCompile Include="MapMenuState.cpp" />
     <ClCompile Include="MyContactListener.cpp" />
     <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SaveMapState.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Strings.cpp" />
@@ -178,6 +181,8 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimatedSprite.h" />
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Binary.h" />
     <ClInclude Include="Blood.h" />
@@ -196,6 +201,7 @@
     <ClInclude Include="MapShape.h" />
     <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SaveMapState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Strings.h" />

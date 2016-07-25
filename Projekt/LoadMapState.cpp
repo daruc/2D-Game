@@ -7,6 +7,7 @@
 #include "Map.h"
 #include "EditorState.h"
 #include "Strings.h"
+#include "MapBuilder.h"
 
 LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window)
@@ -25,26 +26,11 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	load_button->setDimensions(100.0f, 40.0f);
 	load_button->addListener([=](std::string str)->void {
 		std::cout << "click " << str << std::endl;
-		std::ifstream fin;
-		fin.open(text_field->getString().toAnsiString(), std::fstream::out | std::fstream::binary);
-		if (!fin.is_open())
-		{
-			std::cout << "Cannot open file.\n";
-		}
-		else
-		{
-			fin.seekg(0, fin.end);
-			int length = fin.tellg();
-			fin.seekg(0, fin.beg);
 
-			char * buffer = new char[length];
-
-			fin.read(buffer, length);
-			std::shared_ptr<Map> map = std::make_shared<Map>();
-			map->fromBinary(length, buffer);
-			this->State::nextState = std::make_shared<EditorState>(window, map);
-			delete[] buffer;
-		}		
+		MapBuilder map_builder;
+		map_builder.loadFromFile(text_field->getString().toWideString());
+		std::shared_ptr<Map> map = map_builder.get();
+		this->State::nextState = std::make_shared<EditorState>(window, map);
 	});
 	controls.push_back(load_button);
 

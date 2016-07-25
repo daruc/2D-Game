@@ -29,16 +29,6 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	back_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 
-		/*
-		if (points.size() > 0)
-		{
-			points.pop_back();
-		}
-		else
-		{
-			map->removeLast();
-		}*/
-
 		if (!undo_stack.empty())
 		{
 			std::string str = undo_stack.top();
@@ -553,8 +543,6 @@ void EditorState::parseAndExecuteRemoveShape(std::string command)
 	std::cout << "tail=" << tail << std::endl;
 	while (!tail.empty())
 	{
-		//#add_shape|		position	4294967295	unsigned int
-
 		tail = tail.substr(11);
 		std::size_t position = tail.find("#");
 		std::string str_coor = tail.substr(0, position);

@@ -3,8 +3,9 @@
 #include "Utils.h"
 #include <iostream>
 
-Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
-	: gravity(0.0f, 10.0f), world(gravity), MAX_PLAYER_SPEED(3.0f)
+Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
+	Player & player)
+	: gravity(0.0f, 10.0f), world(gravity), MAX_PLAYER_SPEED(3.0f), player(player)
 {
 	world.SetContactListener(&myContactListener);
 	this->window = window;
@@ -207,6 +208,16 @@ void Physics::goLeft()
 	{
 		player_body->ApplyForce(b2Vec2(-10000.0f, 0.f), player_body->GetWorldCenter(), true);
 	}
+
+	sf::Vector2i mouse_pos = sf::Mouse::getPosition(*window);
+	if (mouse_pos.x <= window->getSize().x / 2)
+	{
+		player.goLeft();
+	}
+	else
+	{
+		player.goLeftBack();
+	}
 }
 
 void Physics::goRight()
@@ -219,6 +230,17 @@ void Physics::goRight()
 	else if (velocity.x <= MAX_PLAYER_SPEED)
 	{
 		player_body->ApplyForce(b2Vec2(10000.0f, 0.f), player_body->GetWorldCenter(), true);
+	}
+
+	sf::Vector2i mouse_pos = sf::Mouse::getPosition(*window);
+
+	if (mouse_pos.x >= window->getSize().x / 2)
+	{
+		player.goRight();
+	}
+	else
+	{
+		player.goRightBack();
 	}
 }
 
@@ -240,14 +262,26 @@ void Physics::controls()
 	{
 		goLeft();
 	}
-	if (sf::Keyboard::isKeyPressed(key_right))
+	else if (sf::Keyboard::isKeyPressed(key_right))
 	{
 		goRight();
 
 	}
-	if (sf::Keyboard::isKeyPressed(key_jump))
+	else if (sf::Keyboard::isKeyPressed(key_jump))
 	{
 		jump();
+	}
+	else
+	{
+		sf::Vector2i mouse = sf::Mouse::getPosition(*window);
+		if (mouse.x < window->getSize().x/2)
+		{
+			player.stopLeft();
+		}
+		else
+		{
+			player.stopRight();
+		}
 	}
 }
 

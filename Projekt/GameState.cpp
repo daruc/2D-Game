@@ -7,7 +7,7 @@
 #include "Utils.h"
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
-	: State(window), physics(window, map)
+	: State(window), physics(window, map, player)
 {
 	done = false;
 	this->map = map;
@@ -28,16 +28,11 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	window->setMouseCursorVisible(false);
 
 	player.setPosition(map->getPlayerPosition());
-	player.setFillColor(sf::Color::Green);
-	float width = meters2pixels(1.0f);
-	float height = meters2pixels(2.0f);
-	player.setSize(sf::Vector2f(width, height));
-	player.setOrigin(sf::Vector2f(width / 2, height / 2));
 
 	finish.setPosition(map->getFinishPosition());
 	finish.setFillColor(sf::Color::Red);
-	width = meters2pixels(1.0f);
-	height = meters2pixels(1.0f);
+	int width = meters2pixels(1.0f);
+	int height = meters2pixels(1.0f);
 	finish.setSize(sf::Vector2f(width, height));
 	finish.setOrigin(sf::Vector2f(width / 2, height / 2));
 
@@ -128,13 +123,16 @@ void GameState::handleEvents()
 }
 void GameState::update()
 {
-	//update Cursor position
+	//update cursor position
 	sf::Vector2i mouse = sf::Mouse::getPosition(*window);
 	cursor.setPosition(sf::Vector2f(mouse.x, mouse.y));
 
 	//calculate physics
 	physics.simulate();
 
+	//player's sprite
+	
+	player.update(window);
 	player.setPosition(map->getPlayerPosition());
 
 	//set camera
@@ -167,19 +165,14 @@ void GameState::update()
 void GameState::draw()
 {
 	window->clear();
-
 	window->setView(view);
 	map->draw(*window);
-	window->draw(player);
+	player.draw(window);
 	window->draw(finish);
-	
 	window->setView(window->getDefaultView());
-	
 	window->draw(cursor);
-
 	mtx.lock();
 	window->draw(txtTime);
 	mtx.unlock();
-
 	window->display();
 };

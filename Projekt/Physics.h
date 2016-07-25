@@ -6,6 +6,7 @@
 #include <list>
 #include "Map.h"
 #include "MyContactListener.h"
+#include "Player.h"
 
 class Physics
 {
@@ -40,8 +41,11 @@ private:
 	void goRight();
 	void jump();
 	void controls();
+
+	Player & player;
 public:
-	Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
+	Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
+		Player & player);
 	Physics::~Physics();
 	void simulate();
 
