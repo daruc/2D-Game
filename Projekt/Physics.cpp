@@ -189,7 +189,11 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	finish_body = world.CreateBody(&finishBodyDef);
 	b2PolygonShape finishBox;
 	finishBox.SetAsBox(1.0f / 2, 1.0f / 2);
-	b2Fixture* finish_fixture = finish_body->CreateFixture(&finishBox, 0.0);
+
+	b2FixtureDef finishSensorFixtureDef;
+	finishSensorFixtureDef.shape = &finishBox;
+	finishSensorFixtureDef.isSensor = true;
+	b2Fixture* finish_fixture = finish_body->CreateFixture(&finishSensorFixtureDef);
 
 	myContactListener.setFinishFixture(finish_fixture);
 
@@ -258,20 +262,24 @@ void Physics::jump()
 
 void Physics::controls()
 {
+	bool rest = true;
 	if (sf::Keyboard::isKeyPressed(key_left))
 	{
 		goLeft();
+		rest = false;
 	}
-	else if (sf::Keyboard::isKeyPressed(key_right))
+	if (sf::Keyboard::isKeyPressed(key_right))
 	{
 		goRight();
+		rest = false;
 
 	}
-	else if (sf::Keyboard::isKeyPressed(key_jump))
+	if (sf::Keyboard::isKeyPressed(key_jump))
 	{
 		jump();
+		rest = false;
 	}
-	else
+	if (rest)
 	{
 		sf::Vector2i mouse = sf::Mouse::getPosition(*window);
 		if (mouse.x < window->getSize().x/2)

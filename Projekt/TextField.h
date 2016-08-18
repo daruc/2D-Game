@@ -6,9 +6,14 @@ class TextField : public Control
 {
 private:
 	sf::RectangleShape rectangle;
+	sf::RectangleShape cursor;
 	sf::Text text;
+	sf::String real_text;
+	sf::String printed_text;
 	sf::Font font;
 	bool focus;
+	bool visible_cursor;
+	sf::Clock cursor_clock;
 	void handleKeys(sf::Event & event);
 public:
 	TextField(std::shared_ptr <sf::RenderWindow> window);

@@ -39,6 +39,7 @@ Player::Player()
 	: max_bullets(10), sprite(6)
 {
 	bullets = 10;
+	health = 3;
 	if (!texture_pistol.loadFromFile("graphics\\pistol.png"))
 	{
 		std::cout << "Cannot load pistol.png\n";
@@ -163,4 +164,15 @@ void Player::goRightBack()
 		sprite.setDirection(LEFT, false);
 	}
 	sprite.stopAnimation(false);
+}
+
+bool Player::shoot()
+{
+	if (bullets > 0)
+	{
+		--bullets;
+		return true;
+	}
+
+	return false;
 }

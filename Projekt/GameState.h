@@ -14,24 +14,30 @@ class GameState : public State
 {
 private:
 	sf::Sprite cursor;
+	sf::Sprite sprite_clock;
+	sf::Sprite sprite_gun;
+	sf::Sprite health;
 	std::shared_ptr<Map> map;
 	Textures textures;
 	Player player;
-	sf::RectangleShape finish;
+	sf::Sprite finish;
 	Physics physics;
 	sf::View view;
 
 	sf::Clock clock;
 	sf::Font font;
 	sf::Text txtTime;
+	sf::Text bullets;
 
 	//sounds
 	sf::SoundBuffer gunshot_buffer;
 	sf::SoundBuffer hit_enemy_buffer;
 	sf::SoundBuffer knock_buffer;
+	sf::SoundBuffer empty_gun_buffer;
 	sf::Sound gunshot;
 	sf::Sound hit_enemy;
 	sf::Sound knock;
+	sf::Sound empty_gun;
 
 	//threads
 	std::shared_ptr<std::thread> gui_thread;

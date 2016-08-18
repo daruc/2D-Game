@@ -12,9 +12,16 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	done = false;
 	this->map = map;
 	textures.loadCursor();
+	textures.loadClock();
+	textures.loadHealth();
+	textures.loadGunGui();
+	textures.loadFinish();
 	textures.loadMapType(map->getType());
 	map->setGroundTexture(textures.getGround());
 	cursor.setTexture(*textures.getCursor(), true);
+	sprite_clock.setTexture(*textures.getClock(), true);
+	sprite_gun.setTexture(*textures.getGunGui(), true);
+	
 	cursor.setOrigin(16.0f, 16.0f);
 	cursor.setPosition(.0f, 0.0f);
 
@@ -23,17 +30,28 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	txtTime.setString("0");
 	sf::Vector2u resolution = State::window->getSize();
 	txtTime.setCharacterSize(17.0f);
-	txtTime.setPosition(resolution.x / 2, 0.0f);
+	txtTime.setPosition(resolution.x / 2, 8.0f);
+	sf::Vector2f clock_pos = txtTime.getPosition();
+	clock_pos.x -= 37.0f;
+	clock_pos.y -= 8.0f;
+	sprite_clock.setPosition(clock_pos);
+
+	bullets.setFont(font);
+	bullets.setString("10");
+	bullets.setPosition(resolution.x - 70, 8.0f);
+	bullets.setCharacterSize(17);
 
 	window->setMouseCursorVisible(false);
 
 	player.setPosition(map->getPlayerPosition());
+	health.setPosition(0.0f, 0.0f);
+	int h = player.getHealth();
+	health.setTexture(*textures.getHealth(h));
 
 	finish.setPosition(map->getFinishPosition());
-	finish.setFillColor(sf::Color::Red);
+	finish.setTexture(*textures.getFinish(), true);
 	int width = meters2pixels(1.0f);
 	int height = meters2pixels(1.0f);
-	finish.setSize(sf::Vector2f(width, height));
 	finish.setOrigin(sf::Vector2f(width / 2, height / 2));
 
 	view.setSize(window->getSize().x, window->getSize().y);
@@ -61,6 +79,14 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	physics.setKnockSound(&knock);
 
 
+	if (!empty_gun_buffer.loadFromFile("sounds\\empty_gun.wav"))
+	{
+		std::cout << "Cannnot load file emtpy_gun.wav\n";
+	}
+	empty_gun.setBuffer(empty_gun_buffer);
+	empty_gun.setVolume(50);
+
+	sprite_gun.setPosition(resolution.x - sprite_gun.getLocalBounds().width, 8.0f);
 
 	clock.restart();
 
@@ -110,13 +136,26 @@ void GameState::handleEvents()
 			if (event.key.code == sf::Mouse::Left)
 			{
 				std::cout << "click fire\n";
-				gunshot.play();
-				sf::Vector2f mouse = cursor.getPosition();
-				sf::Vector2f playerPosition = player.getPosition();
-				sf::Vector2u resolution = window->getSize();
+				if (player.shoot())
+				{
+					int blts = player.getBullets();
+					std::stringstream stream;
+					stream << blts;
+					bullets.setString(stream.str());
+					gunshot.play();
+					sf::Vector2f mouse = cursor.getPosition();
+					sf::Vector2f playerPosition = player.getPosition();
+					sf::Vector2u resolution = window->getSize();
 
-				physics.throwBullet(playerPosition.x, playerPosition.y,
-					mouse.x - resolution.x / 2, mouse.y - resolution.y / 2);
+					physics.throwBullet(playerPosition.x, playerPosition.y,
+						mouse.x - resolution.x / 2, mouse.y - resolution.y / 2);
+				}
+				else
+				{
+					empty_gun.play();
+				}
+				
+				
 			}
 		}
 	}
@@ -174,5 +213,9 @@ void GameState::draw()
 	mtx.lock();
 	window->draw(txtTime);
 	mtx.unlock();
+	window->draw(bullets);
+	window->draw(sprite_clock);
+	window->draw(sprite_gun);
+	window->draw(health);
 	window->display();
 };

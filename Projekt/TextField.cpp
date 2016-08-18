@@ -20,6 +20,9 @@ TextField::TextField(std::shared_ptr <sf::RenderWindow> window)
 	rectangle.setOutlineThickness(2.0f);
 	rectangle.setOutlineColor(sf::Color::Black);
 	focus = false;
+
+	cursor.setSize(sf::Vector2f(2.0f, 28.0f));
+	cursor.setFillColor(sf::Color::Black);
 }
 
 void TextField::handleKeys(sf::Event & event)
@@ -148,10 +151,16 @@ void TextField::handleKeys(sf::Event & event)
 	case sf::Keyboard::Space:
 		ch = ' ';
 		break;
+	case sf::Keyboard::Dash:
+		ch = '-';
+		break;
+	case sf::Keyboard::Period:
+		ch = '.';
+		break;
 	case sf::Keyboard::BackSpace:
-		sf::String str = text.getString();
+		sf::String str = real_text.toAnsiString();
 		str = str.substring(0, str.getSize() - 1);
-		text.setString(str);
+		real_text = str;
 		break;
 	}
 
@@ -164,9 +173,11 @@ void TextField::handleKeys(sf::Event & event)
 		}
 
 		std::cout << ch << std::endl;
-		sf::String str = text.getString();
+		sf::String str = real_text.toAnsiString();
 		str += ch;
-		text.setString(str);
+		real_text = str;
+
+		
 	}
 	
 }
@@ -183,6 +194,8 @@ void TextField::handleEvents(sf::Event & event)
 			&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y)
 		{
 			focus = true;
+			visible_cursor = true;
+			cursor_clock.restart();
 			rectangle.setOutlineColor(sf::Color::Yellow);
 		}
 		else
@@ -194,18 +207,56 @@ void TextField::handleEvents(sf::Event & event)
 	else if (focus && event.type == sf::Event::KeyPressed)
 	{
 		handleKeys(event);
+		printed_text = real_text;
+		text.setString(printed_text);
+		sf::FloatRect rect = text.getLocalBounds();
+		sf::Vector2f position = text.getPosition();
+		position.y += 3.0f;
+		position.x += rect.width + 2.0f;
+		cursor.setPosition(position);
+
+		sf::Vector2f size = rectangle.getSize();
+		
+		while (rect.width > size.x)
+		{
+			float difference = rect.width - size.x;
+			std::cout << "Too wide: " << difference << "\n";
+
+			printed_text = printed_text.substring(1);
+			text.setString(printed_text);
+			rect = text.getLocalBounds();
+			size = rectangle.getSize();
+
+			position = text.getPosition();
+			position.y += 3.0f;
+			position.x += rect.width + 2.0f;
+			cursor.setPosition(position);
+		}
+		
 	}
 }
 
 void TextField::update()
 {
+	sf::Time delta_time = cursor_clock.getElapsedTime();
 
+	if (delta_time.asSeconds() >= 0.5)
+	{
+		visible_cursor = !visible_cursor;
+		cursor_clock.restart();
+	}
+
+	
 }
 
 void TextField::draw()
 {
 	window->draw(rectangle);
 	window->draw(text);
+	if (focus && visible_cursor)
+	{
+		window->draw(cursor);
+	}
 }
 
 void TextField::setDimensions(float width, float height)
@@ -217,4 +268,5 @@ void TextField::setCoordinates(float x, float y)
 {
 	rectangle.setPosition(sf::Vector2f(x, y));
 	text.setPosition(sf::Vector2f(x, y));
+	cursor.setPosition(sf::Vector2f(x + 2.0f, y + 3.0f));
 }

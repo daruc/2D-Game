@@ -13,6 +13,7 @@ private:
 	sf::Texture texture;
 	sf::Texture texture_pistol;
 	unsigned int bullets;
+	unsigned int health;
 	const unsigned int max_bullets;
 
 	void configureAnimations();
@@ -29,6 +30,10 @@ public:
 	void stopRight();
 	void goLeftBack();
 	void goRightBack();
+	bool shoot();
+
+	inline int getHealth() { return health; }
+	inline int getBullets() { return bullets; }
 };
 
 #endif
