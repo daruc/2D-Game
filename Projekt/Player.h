@@ -34,6 +34,7 @@ public:
 
 	inline int getHealth() { return health; }
 	inline int getBullets() { return bullets; }
+	bool reload();
 };
 
 #endif

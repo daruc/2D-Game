@@ -34,10 +34,12 @@ private:
 	sf::SoundBuffer hit_enemy_buffer;
 	sf::SoundBuffer knock_buffer;
 	sf::SoundBuffer empty_gun_buffer;
+	sf::SoundBuffer reload_buffer;
 	sf::Sound gunshot;
 	sf::Sound hit_enemy;
 	sf::Sound knock;
 	sf::Sound empty_gun;
+	sf::Sound reload;
 
 	//threads
 	std::shared_ptr<std::thread> gui_thread;

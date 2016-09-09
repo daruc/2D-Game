@@ -86,6 +86,12 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	empty_gun.setBuffer(empty_gun_buffer);
 	empty_gun.setVolume(50);
 
+	if (!reload_buffer.loadFromFile("sounds\\reload.wav"))
+	{
+		std::cout << "Cannot load file reload.wav\n";
+	}
+	reload.setBuffer(reload_buffer);
+
 	sprite_gun.setPosition(resolution.x - sprite_gun.getLocalBounds().width, 8.0f);
 
 	clock.restart();
@@ -154,8 +160,18 @@ void GameState::handleEvents()
 				{
 					empty_gun.play();
 				}
-				
-				
+			}
+			if (event.key.code == sf::Mouse::Right)
+			{
+				std::cout << "click reload\n";
+				if (player.reload())
+				{
+					int blts = player.getBullets();
+					std::stringstream stream;
+					stream << blts;
+					bullets.setString(stream.str());
+					reload.play();
+				}
 			}
 		}
 	}

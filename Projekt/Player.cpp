@@ -176,3 +176,14 @@ bool Player::shoot()
 
 	return false;
 }
+
+bool Player::reload()
+{
+	if (bullets == 0)
+	{
+		bullets = max_bullets;
+		return true;
+	}
+
+	return false;
+}
