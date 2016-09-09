@@ -27,19 +27,38 @@ void Player::configureAnimations()
 		rect.left -= rect.width;
 	}
 
+	rect.height = 50;
+	rect.left = 0;
+	rect.top = 200;
+	for (int i = 0; i < 10; ++i)
+	{
+		sprite.addFrame(CROUCH_RIGHT, rect);
+		rect.left += rect.width;
+	}
+	rect.top = 250;
+	rect.left = 450;
+	for (int i = 0; i < 10; ++i)
+	{
+		sprite.addFrame(CROUCH_LEFT, rect);
+		rect.left -= rect.width;
+	}
+
 	sprite.setSpeed(12);
 	sprite.setRepeated(RIGHT);
 	sprite.setRepeated(LEFT);
+	sprite.setRepeated(CROUCH_RIGHT);
+	sprite.setRepeated(CROUCH_LEFT);
 
-	//test
 	sprite.selectAnimation(LEFT);
 }
 
 Player::Player()
 	: max_bullets(10), sprite(6)
 {
-	bullets = 10;
+	bullets = max_bullets;
 	health = 3;
+	crouch = false;
+
 	if (!texture_pistol.loadFromFile("graphics\\pistol.png"))
 	{
 		std::cout << "Cannot load pistol.png\n";
@@ -166,6 +185,61 @@ void Player::goRightBack()
 	sprite.stopAnimation(false);
 }
 
+void Player::goCrouchLeft()
+{
+	sprite.selectAnimation(CROUCH_LEFT);
+	if (sprite.getDirection(CROUCH_LEFT) == false)
+	{
+		sprite.setDirection(CROUCH_LEFT, true);
+	}
+	sprite.stopAnimation(false);
+}
+
+void Player::goCrouchRight()
+{
+	sprite.selectAnimation(CROUCH_RIGHT);
+	if (sprite.getDirection(CROUCH_RIGHT) == false)
+	{
+		sprite.setDirection(CROUCH_RIGHT, true);
+	}
+	sprite.stopAnimation(false);
+}
+
+void Player::stopCrouchLeft()
+{
+	sprite.selectAnimation(CROUCH_LEFT);
+	sprite.setDirection(CROUCH_LEFT, true);
+	sprite.stopAnimation(true);
+}
+
+void Player::stopCrouchRight()
+{
+	sprite.selectAnimation(CROUCH_RIGHT);
+	sprite.setDirection(CROUCH_RIGHT, true);
+	sprite.stopAnimation(true);
+}
+
+void Player::goCrouchLeftBack()
+{
+	sprite.selectAnimation(CROUCH_RIGHT);
+	if (sprite.getDirection(CROUCH_RIGHT))
+	{
+		sprite.setDirection(CROUCH_RIGHT, false);
+	}
+
+	sprite.stopAnimation(false);
+}
+
+void Player::goCrouchRightBack()
+{
+	sprite.selectAnimation(CROUCH_LEFT);
+	if (sprite.getDirection(CROUCH_LEFT))
+	{
+		sprite.setDirection(CROUCH_LEFT, false);
+	}
+	sprite.stopAnimation(false);
+}
+
 bool Player::shoot()
 {
 	if (bullets > 0)
@@ -186,4 +260,23 @@ bool Player::reload()
 	}
 
 	return false;
+}
+
+void Player::setCrouch(bool crouch)
+{
+	this->crouch = crouch;
+
+	sf::Vector2f pos;
+	if (crouch == true)
+	{
+		pos.y = pos.x = meters2pixels(1.0f) / 2.0f;
+		sprite.setOrigin(pos);
+	}
+	else
+	{
+		pos.x = meters2pixels(1.0f) / 2.0f;
+		pos.y = meters2pixels(2.0f) / 2.0f;
+		sprite.setOrigin(pos);
+	}
+	
 }

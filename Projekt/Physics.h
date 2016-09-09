@@ -26,7 +26,7 @@ private:
 	std::list<b2Body*> bullet_list;
 	std::list<b2Body*> remove_list;
 
-	const float MAX_PLAYER_SPEED;
+	float max_player_speed;
 
 	void loadMap(std::shared_ptr<Map> map);
 

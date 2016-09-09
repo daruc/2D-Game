@@ -5,8 +5,9 @@
 
 Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
 	Player & player)
-	: gravity(0.0f, 10.0f), world(gravity), MAX_PLAYER_SPEED(3.0f), player(player)
+	: gravity(0.0f, 10.0f), world(gravity), player(player)
 {
+	max_player_speed = 3.0f;
 	world.SetContactListener(&myContactListener);
 	this->window = window;
 	this->map = map;
@@ -208,7 +209,7 @@ void Physics::goLeft()
 	{
 		player_body->ApplyForce(b2Vec2(-1000.0f, 0.f), player_body->GetWorldCenter(), true);
 	}
-	else if (velocity.x >= -MAX_PLAYER_SPEED)
+	else if (velocity.x >= -max_player_speed)
 	{
 		player_body->ApplyForce(b2Vec2(-10000.0f, 0.f), player_body->GetWorldCenter(), true);
 	}
@@ -216,11 +217,25 @@ void Physics::goLeft()
 	sf::Vector2i mouse_pos = sf::Mouse::getPosition(*window);
 	if (mouse_pos.x <= window->getSize().x / 2)
 	{
-		player.goLeft();
+		if (player.getCrouch() == false)
+		{
+			player.goLeft();
+		}
+		else
+		{
+			player.goCrouchLeft();
+		}
 	}
 	else
 	{
-		player.goLeftBack();
+		if (player.getCrouch() == false)
+		{
+			player.goLeftBack();
+		}
+		else
+		{
+			player.goCrouchLeftBack();
+		}
 	}
 }
 
@@ -231,7 +246,7 @@ void Physics::goRight()
 	{
 		player_body->ApplyForce(b2Vec2(1000.0f, 0.f), player_body->GetWorldCenter(), true);
 	}
-	else if (velocity.x <= MAX_PLAYER_SPEED)
+	else if (velocity.x <= max_player_speed)
 	{
 		player_body->ApplyForce(b2Vec2(10000.0f, 0.f), player_body->GetWorldCenter(), true);
 	}
@@ -240,18 +255,32 @@ void Physics::goRight()
 
 	if (mouse_pos.x >= window->getSize().x / 2)
 	{
-		player.goRight();
+		if (player.getCrouch() == false)
+		{
+			player.goRight();
+		}
+		else
+		{
+			player.goCrouchRight();
+		}
 	}
 	else
 	{
-		player.goRightBack();
+		if (player.getCrouch() == false)
+		{
+			player.goRightBack();
+		}
+		else
+		{
+			player.goCrouchRightBack();
+		}
 	}
 }
 
 void Physics::jump()
 {
 	sf::Time time_since_last_jump = jump_clock.getElapsedTime();
-	if (myContactListener.isOnGround() && player_body->GetLinearVelocity().y < MAX_PLAYER_SPEED
+	if (myContactListener.isOnGround() && player_body->GetLinearVelocity().y < max_player_speed
 		&& time_since_last_jump.asSeconds() > 0.5f)
 	{
 		jump_clock.restart();
@@ -279,16 +308,85 @@ void Physics::controls()
 		jump();
 		rest = false;
 	}
+	if (sf::Keyboard::isKeyPressed(key_crouch))
+	{
+		if (player.getCrouch() == false)
+		{
+			std::cout << "set crouch\n";
+			player.setCrouch(true);
+			max_player_speed = 1.5;
+
+			b2Fixture* oldFixture = player_body->GetFixtureList();
+			if (oldFixture->IsSensor())
+			{
+				oldFixture = oldFixture->GetNext();
+			}
+			player_body->DestroyFixture(oldFixture);
+
+			b2PolygonShape dynamicBox;
+			dynamicBox.SetAsBox(1.0f / 2, 1.0f / 2);
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &dynamicBox;
+			fixtureDef.density = 80.0f;
+			fixtureDef.friction = 0.4f;
+			fixtureDef.restitution = 0.3f;
+			b2Fixture* player_fixture = player_body->CreateFixture(&fixtureDef);
+
+			myContactListener.setPlayerFixture(player_fixture);
+		}
+		
+	}
+	else
+	{
+		if (player.getCrouch() == true)
+		{
+			std::cout << "set crouch false\n";
+			player.setCrouch(false);
+			max_player_speed = 3.0;
+
+			b2Fixture* oldFixture = player_body->GetFixtureList();
+			if (oldFixture->IsSensor())
+			{
+				oldFixture = oldFixture->GetNext();
+			}
+			player_body->DestroyFixture(oldFixture);
+
+			b2PolygonShape dynamicBox;
+			dynamicBox.SetAsBox(1.0f / 2, 2.0f / 2);
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &dynamicBox;
+			fixtureDef.density = 40.0f;
+			fixtureDef.friction = 0.4f;
+			fixtureDef.restitution = 0.3f;
+			b2Fixture* player_fixture = player_body->CreateFixture(&fixtureDef);
+
+			myContactListener.setPlayerFixture(player_fixture);
+		}
+	}
 	if (rest)
 	{
 		sf::Vector2i mouse = sf::Mouse::getPosition(*window);
 		if (mouse.x < window->getSize().x/2)
 		{
-			player.stopLeft();
+			if (player.getCrouch() == false)
+			{
+				player.stopLeft();
+			}
+			else
+			{
+				player.stopCrouchLeft();
+			}
 		}
 		else
 		{
-			player.stopRight();
+			if (player.getCrouch() == false)
+			{
+				player.stopRight();
+			}
+			else
+			{
+				player.stopCrouchRight();
+			}
 		}
 	}
 }

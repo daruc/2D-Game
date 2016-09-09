@@ -5,7 +5,7 @@ class Player
 {
 private:
 	enum Anim {
-		RIGHT = 0, LEFT = 1
+		RIGHT = 0, LEFT = 1, CROUCH_RIGHT = 2, CROUCH_LEFT = 3
 	};
 
 	AnimatedSprite sprite;
@@ -15,6 +15,7 @@ private:
 	unsigned int bullets;
 	unsigned int health;
 	const unsigned int max_bullets;
+	bool crouch;
 
 	void configureAnimations();
 public:
@@ -30,10 +31,20 @@ public:
 	void stopRight();
 	void goLeftBack();
 	void goRightBack();
+
+	void goCrouchLeft();
+	void goCrouchRight();
+	void stopCrouchLeft();
+	void stopCrouchRight();
+	void goCrouchLeftBack();
+	void goCrouchRightBack();
+
 	bool shoot();
 
 	inline int getHealth() { return health; }
 	inline int getBullets() { return bullets; }
+	void setCrouch(bool crouch);
+	inline bool getCrouch() { return crouch; }
 	bool reload();
 };
 
