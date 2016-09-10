@@ -9,7 +9,7 @@ private:
 	std::shared_ptr<Map> map;
 public:
 	MapBuilder();
-	void loadFromFile(std::wstring filename);
+	bool loadFromFile(std::wstring filename);
 	std::shared_ptr<Map> get();
 };
 

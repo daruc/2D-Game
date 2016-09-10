@@ -14,8 +14,10 @@ private:
 	sf::Texture health_3;
 	sf::Texture gun_gui;
 	sf::Texture finish;
+	sf::Texture tick;
 public:
 	void loadCursor();
+	void loadTick();
 	void loadHealth();
 	void loadClock();
 	void loadGunGui();
@@ -26,6 +28,7 @@ public:
 	inline sf::Texture* getClock() { return &clock; }
 	inline sf::Texture* getGunGui() { return &gun_gui; }
 	inline sf::Texture* getFinish() { return &finish; }
+	inline sf::Texture* getTick() { return &tick; }
 	sf::Texture* getHealth(int n = 0);
 };
 

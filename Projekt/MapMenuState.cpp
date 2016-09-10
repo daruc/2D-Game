@@ -1,6 +1,7 @@
 #include <memory>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "MapMenuState.h"
 #include "MainManuState.h"
 #include "GameState.h"
@@ -14,58 +15,57 @@
 MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
+	textures.loadTick();
+
+	for (int i = 0; i < 18; ++i)
+	{
+		tick[i].setTexture(*textures.getTick());
+	}
+
+	std::fstream fin;
+	fin.open(L"maps.bin", std::fstream::in);
+
+	for (int i = 0; i < 18; ++i)
+	{
+		fin >> completed[i];
+	}
+
 	Strings* strings = Strings::Instance();
-	std::shared_ptr<Button> map_1 = std::make_shared<Button>(window, strings->get("map_1"));
-	map_1->setCoordinates(300.0f, 100.0f);
-	map_1->setDimensions(100.0f, 100.0f);
-	map_1->addListener([this](std::string str)->void {
-		std::cout << "Mapa 1\n";
 
-		MapBuilder mapBuilder;
-		mapBuilder.loadFromFile(L"Mapa 1");
-		std::shared_ptr<Map> map = mapBuilder.get();
-		State::nextState = std::make_shared<GameState>(State::window, map);
-	});
-	controls.push_back(map_1);
+	sf::Vector2u resolution = window->getSize();
+	float width = 100.0f * 6.0f + 20.0f * 5.0f;
+	float height = 100.0f * 3.0f + 20.0f * 2.0f;
+	float left = (resolution.x / 2.0f) - (width / 2.0f);
+	float top = (resolution.y / 2.0f) - (height / 2.0f);
+	float x, y;
 
-	std::shared_ptr<Button> map_2 = std::make_shared<Button>(window, strings->get("map_2"));
-	map_2->setCoordinates(500.0f, 100.0f);
-	map_2->setDimensions(100.0f, 100.0f);
-	map_2->addListener([this](std::string str)->void {
-		std::cout << "Mapa 2\n";
+	for (int i = 0; i < 18; ++i)
+	{
+		std::stringstream str;
+		str << "map_" << (i + 1);
+		std::shared_ptr<Button> map_button = std::make_shared<Button>(window, strings->get(str.str().c_str()));
 
-		MapBuilder mapBuilder;
-		mapBuilder.loadFromFile(L"Mapa 2");
-		std::shared_ptr<Map> map = mapBuilder.get();
-		State::nextState = std::make_shared<GameState>(State::window, map);
-	});
-	controls.push_back(map_2);
+		if (i < 6) { x = left + 120.0f * i; y = top; }
+		else if (i < 12) { x = left + 120.0f * (i - 6); y = top + 120.0f; }
+		else { x = left + 120.0f * (i - 12); y = top + 240.0f; }
 
-	std::shared_ptr<Button> map_3 = std::make_shared<Button>(window, strings->get("map_3"));
-	map_3->setCoordinates(300.0f, 300.0f);
-	map_3->setDimensions(100.0f, 100.0f);
-	map_3->addListener([this](std::string str)->void {
-		std::cout << "Mapa 3\n";
+		map_button->setCoordinates(x, y);
+		x = x + 100.0f - 36.0f;
+		y = y + 100.0f - 36.0f;
+		tick[i].setPosition(x, y);
 
-		MapBuilder mapBuilder;
-		mapBuilder.loadFromFile(L"Mapa 3");
-		std::shared_ptr<Map> map = mapBuilder.get();
-		State::nextState = std::make_shared<GameState>(State::window, map);
-	});
-	controls.push_back(map_3);
+		map_button->setDimensions(100.0f, 100.0f);
+		map_button->addListener([this](std::string str)->void {
+			std::cout << "Mapa 1\n";
 
-	std::shared_ptr<Button> map_4 = std::make_shared<Button>(window, strings->get("map_4"));
-	map_4->setCoordinates(500.0f, 300.0f);
-	map_4->setDimensions(100.0f, 100.0f);
-	map_4->addListener([this](std::string str)->void {
-		std::cout << "Mapa 4\n";
-
-		MapBuilder mapBuilder;
-		mapBuilder.loadFromFile(L"Mapa 4");
-		std::shared_ptr<Map> map = mapBuilder.get();
-		State::nextState = std::make_shared<GameState>(State::window, map);
-	});
-	controls.push_back(map_4);
+			MapBuilder mapBuilder;
+			mapBuilder.loadFromFile(L"maps\\map_1");
+			std::shared_ptr<Map> map = mapBuilder.get();
+			State::nextState = std::make_shared<GameState>(State::window, map);
+		});
+		controls.push_back(map_button);
+		
+	}
 
 	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("main_menu"));
 	back->setCoordinates(20.0f, 20.0f);
@@ -77,20 +77,26 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 	controls.push_back(back);
 
 	std::shared_ptr<TextField> text_field = std::make_shared<TextField>(window);
-	text_field->setCoordinates(300.0f, 500.0f);
-	text_field->setDimensions(200.0f, 40.0f);
+	text_field->setCoordinates( (resolution.x/2.0f) - 200.0f, resolution.y - 60.0f);
+	text_field->setDimensions(250.0f, 40.0f);
 	controls.push_back(text_field);
 
 	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->get("load"));
-	load_button->setCoordinates(520.0f, 500.0f);
+	load_button->setCoordinates((resolution.x / 2.0f) - 200.0f + 270.0f, resolution.y - 60.0f);
 	load_button->setDimensions(130.0f, 40.0f);
 	load_button->addListener([=](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 
+		std::wstringstream sstream;
+		sstream << "user_maps\\" << text_field->getString().toWideString();
+
 		MapBuilder mapBuilder;
-		mapBuilder.loadFromFile(text_field->getString().toWideString());
-		std::shared_ptr<Map> map = mapBuilder.get();
-		State::nextState = std::make_shared<GameState>(State::window, map);
+		bool exist = mapBuilder.loadFromFile(sstream.str());
+		if (exist)
+		{
+			std::shared_ptr<Map> map = mapBuilder.get();
+			State::nextState = std::make_shared<GameState>(State::window, map);
+		}
 	});
 	controls.push_back(load_button);
 
@@ -153,6 +159,14 @@ void MapMenuState::draw()
 	for (auto it = begin; it != end; ++it)
 	{
 		(*it)->draw();
+	}
+
+	for (int i = 0; i < 18; ++i)
+	{
+		if (completed[i])
+		{
+			window->draw(tick[i]);
+		}
 	}
 	
 	window->draw(title);

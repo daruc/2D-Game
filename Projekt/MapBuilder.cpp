@@ -6,7 +6,7 @@ MapBuilder::MapBuilder()
 {
 	map = std::make_shared<Map>();
 }
-void MapBuilder::loadFromFile(std::wstring filename)
+bool MapBuilder::loadFromFile(std::wstring filename)
 {
 	char * bytes;
 	std::ifstream fin;
@@ -14,6 +14,7 @@ void MapBuilder::loadFromFile(std::wstring filename)
 	if (!fin.is_open())
 	{
 		std::cout << "Cannot open map file.\n";
+		return false;
 	}
 	fin.seekg(0, fin.end);
 	int size = fin.tellg();
@@ -22,6 +23,8 @@ void MapBuilder::loadFromFile(std::wstring filename)
 	fin.read(bytes, size);
 	map->fromBinary(size, bytes);
 	delete[] bytes;
+
+	return true;
 }
 std::shared_ptr<Map> MapBuilder::get()
 {

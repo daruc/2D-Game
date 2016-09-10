@@ -58,6 +58,14 @@ void Textures::loadFinish()
 	}
 }
 
+void Textures::loadTick()
+{
+	if (!tick.loadFromFile("graphics\\tick.png"))
+	{
+		std::cout << "Cannot load tick.png image.\n";
+	}
+}
+
 void Textures::loadMapType(int type)
 {
 	sf::Image image;
