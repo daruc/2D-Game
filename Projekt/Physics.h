@@ -2,7 +2,7 @@
 #define PHYSICS_H
 #include <SFML/Graphics.hpp>
 #include <fstream>
-#include <Box2D/Box2D.h>
+#include <box2d/box2d.h>
 #include <list>
 #include "Map.h"
 #include "MyContactListener.h"

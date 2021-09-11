@@ -1,6 +1,6 @@
 #ifndef MY_CONTACT_LISTENER_H
 #define MY_CONTACT_LISTENER_H
-#include <Box2D/Box2D.h>
+#include <box2D/box2D.h>
 #include <SFML/Audio.hpp>
 #include "Map.h"
 

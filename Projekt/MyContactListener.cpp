@@ -23,15 +23,15 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	b2Fixture* fixture_a = contact->GetFixtureA();
 	b2Fixture* fixture_b = contact->GetFixtureB();
 
-	if ((int)fixture_a->GetUserData() == 3
-		|| (int) fixture_b->GetUserData() == 3)
+	if (reinterpret_cast<int&>(fixture_a->GetUserData()) == 3
+		|| reinterpret_cast<int&>(fixture_b->GetUserData()) == 3)
 	{
 		std::cout << "begin sensor\n";
 		on_ground = true;
 	}
 
-	if ((int)fixture_a->GetUserData() == 10 && fixture_b != player
-		&& (int)fixture_b->GetUserData() != 3)
+	if (reinterpret_cast<int&>(fixture_a->GetUserData()) == 10 && fixture_b != player
+		&& reinterpret_cast<int&>(fixture_b->GetUserData()) != 3)
 	{
 		auto it_1 = bullet_list->begin();
 		auto it_2 = map->getBulletsList()->begin();
@@ -58,8 +58,8 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		map->getBulletsList()->erase(it_2);
 	}
 
-	if ((int)fixture_b->GetUserData() == 10 && fixture_a != player
-		&& (int)fixture_a->GetUserData() != 3)
+	if (reinterpret_cast<int&>(fixture_b->GetUserData()) == 10 && fixture_a != player
+		&& reinterpret_cast<int&>(fixture_a->GetUserData()) != 3)
 	{
 		auto it_1 = bullet_list->begin();
 		auto it_2 = map->getBulletsList()->begin();
@@ -72,7 +72,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 			{
 				b2Vec2 position = fixture_b->GetBody()->GetPosition();
 
-				if ((int)fixture_a->GetUserData() == 20)
+				if (reinterpret_cast<int&>(fixture_a->GetUserData()) == 20)
 				{
 					map->addBlood(meters2pixels(position.x), meters2pixels(position.y));
 					ptr_hit_enemy->play();
@@ -105,7 +105,7 @@ void MyContactListener::BeginContact(b2Contact* contact)
 	{
 		bFinish = true;
 	}
-	if ((int)(fixture_a->GetUserData()) == MapShape::FIRE)
+	if (reinterpret_cast<int&>(fixture_a->GetUserData()) == MapShape::FIRE)
 	{
 		bFire = true;
 	}
@@ -137,8 +137,8 @@ void MyContactListener::EndContact(b2Contact* contact)
 	b2Fixture* fixture_a = contact->GetFixtureA();
 	b2Fixture* fixture_b = contact->GetFixtureB();
 
-	if ((int)fixture_a->GetUserData() == 3
-		|| (int)fixture_b->GetUserData() == 3)
+	if (reinterpret_cast<int&>(fixture_a->GetUserData()) == 3
+		|| reinterpret_cast<int&>(fixture_b->GetUserData()) == 3)
 	{
 		std::cout << "end sensor\n";
 		on_ground = false;

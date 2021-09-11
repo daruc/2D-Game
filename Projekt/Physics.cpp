@@ -1,7 +1,8 @@
-#include <Box2d/Box2d.h>
+#include <box2d/box2d.h>
 #include "Physics.h"
 #include "Utils.h"
 #include <iostream>
+#include <box2d/b2_fixture.h>
 
 Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
 	Player & player)
@@ -77,8 +78,8 @@ void Physics::throwBullet(float srcX, float srcY, float dstX, float dstY)
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &dynamicBox;
 	fixtureDef.isSensor = true;
+	fixtureDef.userData.pointer = 10;
 	b2Fixture* bullet_fixture = bullet->CreateFixture(&fixtureDef);
-	bullet_fixture->SetUserData((void *) 10);
 
 	bullet_list.push_back(bullet);
 
@@ -112,6 +113,7 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	{
 		b2BodyDef groundBodyDef;
 		groundBodyDef.position.Set(pixels2Meters((*it)->getPosition().x), pixels2Meters((*it)->getPosition().y));
+		groundBodyDef.userData.pointer = (*it)->getType();
 		b2Body* groundBody = world.CreateBody(&groundBodyDef);
 		b2PolygonShape groundBox;
 		std::pair<b2Vec2*, size_t> points = getPoints(*it);
@@ -119,7 +121,6 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 
 		b2Fixture* groundFixture;
 		groundFixture = groundBody->CreateFixture(&groundBox, 0.0f);
-		groundFixture->SetUserData((void*)(*it)->getType());
 		ground_list.push_back(groundBody);
 
 		delete[] points.first;
@@ -145,8 +146,8 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 		fixtureDef.density = 40.0f;
 		fixtureDef.friction = 0.4f;
 		fixtureDef.restitution = 0.3f;
+		fixtureDef.userData.pointer = 20;
 		b2Fixture* enemy_fixture = body->CreateFixture(&fixtureDef);
-		enemy_fixture->SetUserData((void*)20);
 
 		enemies_list.push_back(body);
 	}
@@ -180,8 +181,8 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	footSensorBox.SetAsBox(0.95f / 2, 0.1f / 2, b2Vec2(0, 2.0f / 2), 0);
 	footSensorFixtureDef.isSensor = true;
 	footSensorFixtureDef.shape = &footSensorBox;
+	footSensorFixtureDef.userData.pointer = 3;
 	footSensorFixture = player_body->CreateFixture(&footSensorFixtureDef);
-	footSensorFixture->SetUserData((void*)3);
 
 	//finish
 	b2BodyDef finishBodyDef;

@@ -139,25 +139,30 @@ void Map::removeLast()
 
 std::pair<int, char*> Map::toBinary( ) const
 {
-	size_t size = 24;	//type + player and finish position + nShapes
 	size_t nShapes = shapes.size();
-	size_t verticles = 0;
+
+	size_t size = sizeof(type) 
+		+ sizeof(player.x)
+		+ sizeof(player.y)
+		+ sizeof(finish.x)
+		+ sizeof(finish.y)
+		+ sizeof(nShapes);	//type + player and finish position + nShapes
+
 	auto begin = shapes.begin();
 	auto end = shapes.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		size += 16;	//number of verticles + position + type
-		size += (*it)->getPointCount() * 8;	//verticles
-		verticles += (*it)->getPointCount();
+		size += sizeof(int) + sizeof(size_t) + sizeof(float) * 2;	//number of verticles + position + type
+		size += (*it)->getPointCount() * sizeof(float) * 2;	//verticles
 	}
 
 	//number of enemies
-	size += 4;
+	size += sizeof(enemies.size());
 	auto begin_enemies = enemies.begin();
 	auto end_enemies = enemies.end();
 	for (auto it = begin_enemies; it != end_enemies; ++it)
 	{
-		size += 8;	//enemy.x + enemy.y positions
+		size += sizeof(float)*2;	//enemy.x + enemy.y positions
 	}
 
 	char * bytes = new char[size];
@@ -199,14 +204,17 @@ std::pair<int, char*> Map::toBinary( ) const
 
 	int nEnemies = enemies.size();
 	memcpy(ptr, &nEnemies, sizeof(nEnemies));
-	ptr += sizeof(nEnemies);
-	for (auto it = begin_enemies; it != end_enemies; ++it)
+	if (nEnemies > 0)
 	{
-		sf::Vector2f position = (*it)->getPosition();
-		memcpy(ptr, &position.x, sizeof(position.x));
-		ptr += sizeof(position.x);
-		memcpy(ptr, &position.y, sizeof(position.y));
-		ptr += sizeof(position.y);
+		ptr += sizeof(nEnemies);
+		for (auto it = begin_enemies; it != end_enemies; ++it)
+		{
+			sf::Vector2f position = (*it)->getPosition();
+			memcpy(ptr, &position.x, sizeof(position.x));
+			ptr += sizeof(position.x);
+			memcpy(ptr, &position.y, sizeof(position.y));
+			ptr += sizeof(position.y);
+		}
 	}
 
 	return std::pair<int, char*>(size, bytes);

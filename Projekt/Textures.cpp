@@ -75,7 +75,7 @@ void Textures::loadMapType(int type)
 		
 
 		
-		if (!image.loadFromFile("graphics/ground_1.png"));
+		if (!image.loadFromFile("graphics\\ground_1.png"));
 		{	
 			std::cout << "Cannot load ground_1.png image.\n";
 		}
@@ -86,7 +86,7 @@ void Textures::loadMapType(int type)
 	{
 		std::cout << "Textures type = 2\n";
 
-		if (!image.loadFromFile("graphics/ground_2.png"));
+		if (!image.loadFromFile("graphics\\ground_2.png"));
 		{
 			std::cout << "Cannot load ground_2.png image.\n";
 		}
@@ -97,7 +97,7 @@ void Textures::loadMapType(int type)
 	{
 		std::cout << "Textures type = 3\n";
 
-		if (!image.loadFromFile("graphics/ground_3.png"));
+		if (!image.loadFromFile("graphics\\ground_3.png"));
 		{
 			std::cout << "Cannot load ground_3.png image.\n";
 		}
@@ -108,7 +108,7 @@ void Textures::loadMapType(int type)
 	{
 		std::cout << "Textures type = 4\n";
 
-		if (!image.loadFromFile("graphics/ground_4.png"));
+		if (!image.loadFromFile("graphics\\ground_4.png"));
 		{
 			std::cout << "Cannot load ground_4.png image.\n";
 		}

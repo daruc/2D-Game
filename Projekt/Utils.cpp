@@ -1,11 +1,11 @@
 #include "Utils.h"
 
-float32 pixels2Meters(float pixels)
+float pixels2Meters(float pixels)
 {
 	return pixels / (float) FACTOR;
 }
 
-float meters2pixels(float32 meters)
+float meters2pixels(float meters)
 {
 	return meters * FACTOR;
 }
