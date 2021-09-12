@@ -1,8 +1,10 @@
 #ifndef MY_CONTACT_LISTENER_H
 #define MY_CONTACT_LISTENER_H
+
 #include <box2D/box2D.h>
 #include <SFML/Audio.hpp>
 #include "Map.h"
+
 
 class MyContactListener : public b2ContactListener
 {
@@ -20,6 +22,7 @@ private:
 	b2World* world_ptr;
 	sf::Sound* ptr_hit_enemy;
 	sf::Sound* ptr_knock;
+
 public:
 	MyContactListener();
 	void BeginContact(b2Contact* contact);

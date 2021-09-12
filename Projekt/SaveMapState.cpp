@@ -8,6 +8,7 @@
 #include "EditorState.h"
 #include "Strings.h"
 
+
 SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window)
 {
@@ -86,7 +87,7 @@ void SaveMapState::update()
 	}
 }
 
-void SaveMapState::draw()
+void SaveMapState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear(sf::Color(0, 0, 100, 255));
 	window->draw(background);
@@ -94,7 +95,7 @@ void SaveMapState::draw()
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->draw();
+		(*it)->draw(window);
 	}
 
 	window->draw(title);
@@ -106,8 +107,7 @@ void SaveMapState::save(sf::String filename)
 {
 	std::ofstream fout;
 	fout.open(filename.toAnsiString().c_str(), std::fstream::out | std::fstream::binary | std::fstream::trunc);
-	std::pair<int, char*> bytes = map->toBinary();
-	fout.write(bytes.second, bytes.first);
-	delete[] bytes.second;
+	std::vector<char> bytes = map->toBinary();
+	fout.write(bytes.data(), bytes.size());
 	fout.close();
 }

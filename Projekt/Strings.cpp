@@ -5,6 +5,7 @@
 #include <locale>
 #include <codecvt>
 
+
 Strings* Strings::instance = nullptr;
 
 Strings* Strings::Instance()

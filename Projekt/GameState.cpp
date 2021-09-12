@@ -9,7 +9,7 @@
 
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
-	: State(window), physics(window, map, player, enemies)
+	: State(window), player(window), physics(window, map, player, enemies)
 {
 	done = false;
 	this->map = map;
@@ -200,7 +200,7 @@ void GameState::update()
 
 	//player's sprite
 	
-	player.update(window);
+	player.update();
 	player.setPosition(map->getPlayerPosition());
 
 	// enemies
@@ -234,14 +234,14 @@ void GameState::update()
 	}
 
 	//update blood
-	map->updateBlood();
+	map->update();
 
 }
-void GameState::draw()
+void GameState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear();
 	window->setView(view);
-	map->draw(*window);
+	map->draw(window);
 	player.draw(window);
 
 	// enemies

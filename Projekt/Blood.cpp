@@ -2,6 +2,7 @@
 #include <ctime>
 #include "Blood.h"
 
+
 Blood::Blood(float x, float y)
 {
 	srand(time(NULL));
@@ -56,10 +57,10 @@ void Blood::update()
 	lastUpdateTime = clock.getElapsedTime();
 }
 
-void Blood::draw(sf::RenderWindow & window)
+void Blood::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	for (int i = 0; i < DROPS; ++i)
 	{
-		window.draw(*drop[i]);
+		window->draw(*drop[i]);
 	}
 }

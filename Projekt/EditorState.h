@@ -1,5 +1,6 @@
 #ifndef EDITOR_STATE_H
 #define EDITOR_STATE_H
+
 #include <list>
 #include <SFML\Graphics.hpp>
 #include <stack>
@@ -9,6 +10,8 @@
 #include "Textures.h"
 #include <vector>
 #include <memory>
+#include "Drawable.h"
+#include "Updatable.h"
 
 
 class EditorState : public State
@@ -40,13 +43,14 @@ private:
 	void handleMouseModeFinish(sf::Event & event);
 	void moveAllPoints(float x, float y);
 	void parseAndExecuteRemoveShape(std::string command);
+
 public:
 	EditorState(std::shared_ptr<sf::RenderWindow> window);
 	EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~EditorState();
 	virtual void handleEvents();
-	virtual void update();
-	virtual void draw();
+	void update() override;
+	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 
 #endif

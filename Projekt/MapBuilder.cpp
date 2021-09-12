@@ -2,6 +2,7 @@
 #include <iostream>
 #include "MapBuilder.h"
 
+
 MapBuilder::MapBuilder()
 {
 	map = std::make_shared<Map>();
@@ -26,6 +27,7 @@ bool MapBuilder::loadFromFile(std::wstring filename)
 
 	return true;
 }
+
 std::shared_ptr<Map> MapBuilder::get()
 {
 	return map;

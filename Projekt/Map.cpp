@@ -2,6 +2,7 @@
 #include <utility>
 #include <cstring>
 
+
 Map::Map()
 {
 	type = 1;
@@ -87,7 +88,7 @@ void Map::setFinishPosition(float x, float y, bool offset)
 	}
 }
 
-void Map::draw(sf::RenderWindow & window)
+void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	//draw ground
 	auto begin = shapes.begin();
@@ -95,7 +96,7 @@ void Map::draw(sf::RenderWindow & window)
 
 	for (auto it = begin; it != end; ++it)
 	{
-		window.draw(**it);
+		window->draw(**it);
 	}
 
 	//draw bullets
@@ -104,7 +105,7 @@ void Map::draw(sf::RenderWindow & window)
 
 	for (auto it = bulletsBegin; it != bulletsEnd; ++it)
 	{
-		window.draw(**it);
+		window->draw(**it);
 	}
 
 	//draw blood
@@ -128,7 +129,7 @@ void Map::removeLast()
 		shapes.pop_back();
 }
 
-std::pair<int, char*> Map::toBinary( ) const
+std::vector<char> Map::toBinary( ) const
 {
 	size_t nShapes = shapes.size();
 
@@ -156,8 +157,8 @@ std::pair<int, char*> Map::toBinary( ) const
 		size += sizeof(float)*2;	//enemy.x + enemy.y positions
 	}
 
-	char * bytes = new char[size];
-	char * ptr = bytes;
+	std::vector<char> bytes(size);
+	char * ptr = bytes.data();
 	memcpy(ptr, &type, sizeof(type));
 	ptr += sizeof(type);
 	memcpy(ptr, &player.x, sizeof(player.x));
@@ -208,7 +209,7 @@ std::pair<int, char*> Map::toBinary( ) const
 		}
 	}
 
-	return std::pair<int, char*>(size, bytes);
+	return bytes;
 }
 
 void Map::fromBinary(int size, char * bytes)
@@ -300,7 +301,7 @@ void Map::addBlood(int screen_x, int screen_y)
 	blood.push_back(new_blood);
 }
 
-void Map::updateBlood()
+void Map::update()
 {
 	auto begin = blood.begin();
 	auto end = blood.end();
@@ -331,5 +332,4 @@ void Map::removeOutOfDateBlood()
 			}
 		}
 	} while (removing);
-	
 }

@@ -149,7 +149,7 @@ void MapMenuState::update()
 	}
 }
 
-void MapMenuState::draw()
+void MapMenuState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear(sf::Color(0, 0, 100, 255));
 	window->draw(background);
@@ -158,7 +158,7 @@ void MapMenuState::draw()
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->draw();
+		(*it)->draw(window);
 	}
 
 	for (int i = 0; i < 18; ++i)

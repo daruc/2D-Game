@@ -500,7 +500,7 @@ void EditorState::update()
 	}
 }
 
-void EditorState::draw()
+void EditorState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	State::window->clear();
 
@@ -518,7 +518,7 @@ void EditorState::draw()
 
 	//map
 	window->setView(view);
-	map->draw(*window);
+	map->draw(window);
 	window->draw(start);
 
 	// enemies
@@ -537,7 +537,7 @@ void EditorState::draw()
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->draw();
+		(*it)->draw(window);
 	}
 	window->draw(selected_type);
 

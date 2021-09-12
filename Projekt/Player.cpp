@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Utils.h"
 
+
 const double pi = 3.14159265358979323846;
 
 void Player::configureAnimations()
@@ -52,12 +53,13 @@ void Player::configureAnimations()
 	sprite.selectAnimation(LEFT);
 }
 
-Player::Player()
+Player::Player(std::shared_ptr<sf::RenderWindow> window)
 	: max_bullets(10), sprite(6)
 {
 	bullets = max_bullets;
 	health = 3;
 	crouch = false;
+	this->window = window;
 
 	if (!texture_pistol.loadFromFile("graphics\\pistol.png"))
 	{
@@ -77,7 +79,7 @@ Player::Player()
 	configureAnimations();
 }
 
-void Player::update(std::shared_ptr<sf::RenderWindow> window)
+void Player::update()
 {
 	sprite.update();
 
@@ -278,5 +280,4 @@ void Player::setCrouch(bool crouch)
 		pos.y = meters2pixels(2.0f) / 2.0f;
 		sprite.setOrigin(pos);
 	}
-	
 }

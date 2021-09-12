@@ -1,10 +1,12 @@
 #ifndef MAP_MENU_STATE_H
 #define MAP_MENU_STATE_H
+
 #include <memory>
 #include <list>
 #include "State.h"
 #include "Control.h"
 #include "Textures.h"
+
 
 class MapMenuState : public State
 {
@@ -16,12 +18,13 @@ private:
 	sf::Sprite tick[18];
 	bool completed[18];
 	Textures textures;
+
 public:
 	MapMenuState(std::shared_ptr<sf::RenderWindow> window);
 	virtual ~MapMenuState();
 	virtual void handleEvents();
-	virtual void update();
-	virtual void draw();
+	void update() override;
+	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 
 #endif

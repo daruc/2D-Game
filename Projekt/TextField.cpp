@@ -4,6 +4,7 @@
 #include "TextField.h"
 #include "Control.h"
 
+
 TextField::TextField(std::shared_ptr <sf::RenderWindow> window)
 	: Control(window)
 {
@@ -249,7 +250,7 @@ void TextField::update()
 	
 }
 
-void TextField::draw()
+void TextField::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->draw(rectangle);
 	window->draw(text);

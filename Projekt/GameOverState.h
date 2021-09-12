@@ -1,9 +1,18 @@
 #ifndef GAME_OVER_STATE_H
 #define GAME_OVER_STATE_H
+
 #include <list>
 #include <SFML/Audio.hpp>
 #include "Control.h"
 #include "State.h"
+#include "Updatable.h"
+#include "Drawable.h"
+
+
+namespace sf
+{
+	class RenderWindow;
+}
 
 class GameOverState : public State
 {
@@ -17,12 +26,13 @@ private:
 
 	sf::SoundBuffer sound_buffer;
 	sf::Sound sound;
+
 public:
 	GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin, float seconds = 0.0f);
 	virtual ~GameOverState();
 	virtual void handleEvents();
-	virtual void update();
-	virtual void draw();
+	void update() override;
+	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 
 #endif

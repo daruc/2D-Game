@@ -9,6 +9,7 @@
 #include "Button.h"
 #include "Strings.h"
 
+
 MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
@@ -84,7 +85,7 @@ void MainMenuState::update()
 	}
 }
 
-void MainMenuState::draw()
+void MainMenuState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	State::window->clear(sf::Color(0, 0, 100, 255));
 
@@ -92,7 +93,7 @@ void MainMenuState::draw()
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->draw();
+		(*it)->draw(window);
 	}
 
 	

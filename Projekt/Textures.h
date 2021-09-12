@@ -1,6 +1,8 @@
 #ifndef TEXTURES_H
 #define TEXTURES_H
+
 #include <SFML/Graphics.hpp>
+
 
 class Textures
 {
@@ -15,6 +17,7 @@ private:
 	sf::Texture gun_gui;
 	sf::Texture finish;
 	sf::Texture tick;
+
 public:
 	void loadCursor();
 	void loadTick();

@@ -1,12 +1,15 @@
 #ifndef MAP_BUILDER_H
 #define MAP_BUILDER_H
+
 #include <string>
 #include "Map.h"
+
 
 class MapBuilder
 {
 private:
 	std::shared_ptr<Map> map;
+
 public:
 	MapBuilder();
 	bool loadFromFile(std::wstring filename);

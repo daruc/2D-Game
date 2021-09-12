@@ -1,5 +1,6 @@
 #include "Utils.h"
 
+
 float pixels2Meters(float pixels)
 {
 	return pixels / (float) FACTOR;

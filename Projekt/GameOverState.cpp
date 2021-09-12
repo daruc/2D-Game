@@ -6,6 +6,7 @@
 #include "GameOverState.h"
 #include "Strings.h"
 
+
 GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin, float seconds)
 	: State(window)
 {
@@ -62,6 +63,7 @@ GameOverState::~GameOverState()
 {
 
 }
+
 void GameOverState::handleEvents()
 {
 	sf::Event event;
@@ -92,7 +94,7 @@ void GameOverState::update()
 	}
 }
 
-void GameOverState::draw()
+void GameOverState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear(sf::Color(0, 0, 100, 255));
 	window->draw(background);
@@ -101,7 +103,7 @@ void GameOverState::draw()
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->draw();
+		(*it)->draw(window);
 	}
 
 	window->draw(title);

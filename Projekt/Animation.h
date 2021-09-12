@@ -1,7 +1,9 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
+
 #include <SFML/Graphics.hpp>
 #include <vector>
+
 
 class Animation
 {
@@ -10,6 +12,7 @@ private:
 	bool is_looped;
 	std::vector<sf::IntRect> frames;
 	int current_frame;
+
 public:
 	Animation();
 	void addFrame(sf::IntRect rectangle);

@@ -2,9 +2,11 @@
 #define ENEMY_H
 
 #include "AnimatedSprite.h"
+#include "Updatable.h"
+#include "Drawable.h"
 
 
-class Enemy
+class Enemy : public Updatable, public Drawable
 {
 private:
 	enum Anim {
@@ -18,8 +20,8 @@ private:
 
 public:
 	Enemy();
-	void draw(std::shared_ptr<sf::RenderWindow> window);
-	void update();
+	void draw(std::shared_ptr<sf::RenderWindow> window) override;
+	void update() override;
 	void setPosition(sf::Vector2f pos);
 };
 

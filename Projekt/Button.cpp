@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Button.h"
 
+
 Button::Button(std::shared_ptr<sf::RenderWindow> window, std::string title)
 	: Control(window)
 {
@@ -79,7 +80,7 @@ void Button::update()
 	}
 }
 
-void Button::draw()
+void Button::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->draw(rectangle);
 	window->draw(text);

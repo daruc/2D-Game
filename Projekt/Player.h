@@ -2,9 +2,11 @@
 #define PLAYER_H
 
 #include "AnimatedSprite.h"
+#include "Updatable.h"
+#include "Drawable.h"
 
 
-class Player
+class Player : public Updatable, public Drawable
 {
 private:
 	enum Anim {
@@ -19,13 +21,14 @@ private:
 	unsigned int health;
 	const unsigned int max_bullets;
 	bool crouch;
+	std::shared_ptr<sf::RenderWindow> window;
 
 	void configureAnimations();
 
 public:
-	Player();
-	void update(std::shared_ptr<sf::RenderWindow> window);
-	void draw(std::shared_ptr<sf::RenderWindow> window);
+	Player(std::shared_ptr<sf::RenderWindow> window);
+	void update() override;
+	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setPosition(sf::Vector2f pos);
 	sf::Vector2f getPosition();
 

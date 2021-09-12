@@ -3,6 +3,7 @@
 #include "MapShape.h"
 #include "Utils.h"
 
+
 MyContactListener::MyContactListener()
 {
 	player = nullptr;
@@ -13,11 +14,8 @@ MyContactListener::MyContactListener()
 	dead = false;
 }
 
-
 void MyContactListener::BeginContact(b2Contact* contact)
 {
-	//std::cout << "begin collision\n";
-	
 	touch_ground = true;
 
 	b2Fixture* fixture_a = contact->GetFixtureA();
@@ -131,7 +129,6 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 void MyContactListener::EndContact(b2Contact* contact)
 {
-	//std::cout << "end collision\n";
 	touch_ground = false;
 
 	b2Fixture* fixture_a = contact->GetFixtureA();

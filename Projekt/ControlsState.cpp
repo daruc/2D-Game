@@ -7,6 +7,7 @@
 #include "MainManuState.h"
 #include "Strings.h"
 
+
 ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
@@ -128,7 +129,6 @@ ControlsState::~ControlsState()
 
 }
 
-
 void ControlsState::handleEvents()
 {
 	sf::Event event;
@@ -160,7 +160,7 @@ void ControlsState::update()
 	}
 }
 
-void ControlsState::draw()
+void ControlsState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear(sf::Color(0, 0, 100, 255));
 	window->draw(background);
@@ -168,7 +168,7 @@ void ControlsState::draw()
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->draw();
+		(*it)->draw(window);
 	}
 	window->draw(title);
 	window->display();

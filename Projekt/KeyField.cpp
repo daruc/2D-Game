@@ -313,7 +313,8 @@ void KeyField::update()
 {
 
 }
-void KeyField::draw()
+
+void KeyField::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->draw(rectangle);
 	window->draw(text);

@@ -9,6 +9,7 @@
 #include "Strings.h"
 #include "MapBuilder.h"
 
+
 LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window)
 {
@@ -88,7 +89,8 @@ void LoadMapState::update()
 		(*it)->update();
 	}
 }
-void LoadMapState::draw()
+
+void LoadMapState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear(sf::Color(0, 0, 100, 255));
 	window->draw(background);
@@ -96,7 +98,7 @@ void LoadMapState::draw()
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->draw();
+		(*it)->draw(window);
 	}
 	window->draw(title);
 	window->display();

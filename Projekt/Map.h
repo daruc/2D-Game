@@ -7,8 +7,11 @@
 #include "Binary.h"
 #include "MapShape.h"
 #include "Blood.h"
+#include "Drawable.h"
+#include "Updatable.h"
 
-class Map : public Binary
+
+class Map : public Binary, public Updatable, public Drawable
 {
 private:
 	int type;
@@ -28,7 +31,7 @@ public:
 	void moveView(sf::Vector2f vec);
 	void addShape(std::list<sf::Vector2f> points, sf::Texture* texture);
 	void removeLast();
-	void draw(sf::RenderWindow & window);
+	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	inline sf::Vector2f getPlayerPosition() { return player; }
 	inline sf::Vector2f getFinishPosition() { return finish; }
 	inline sf::Vector2f getViewOffset() const { return viewOffset; }
@@ -45,11 +48,9 @@ public:
 	void setGroundTexture(sf::Texture * texture);
 	void addEnemy(std::shared_ptr<sf::RectangleShape> enemyRect);
 	void addBlood(int screen_x, int screen_y);
-	void updateBlood();
-	
-
-	virtual std::pair<int, char*> Map::toBinary() const;
-	virtual void fromBinary(int size, char * bytes);
+	void update() override;
+	std::vector<char> Map::toBinary() const override;
+	void fromBinary(int size, char * bytes) override;
 
 };
 

@@ -2,15 +2,6 @@
 #include "App.h"
 #include "MainManuState.h"
 
-App::App()
-{
-
-}
-
-App::~App()
-{
-
-}
 
 void App::init()
 {
@@ -29,7 +20,7 @@ void App::run()
 	{
 		currentState->handleEvents();
 		currentState->update();
-		currentState->draw();
+		currentState->draw(window);
 
 		if (currentState->getNextState() != nullptr)
 		{

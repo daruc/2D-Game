@@ -191,6 +191,7 @@
     <ClInclude Include="Binary.h" />
     <ClInclude Include="Blood.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Drawable.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GameState.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Strings.h" />
     <ClInclude Include="TextField.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Updatable.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
