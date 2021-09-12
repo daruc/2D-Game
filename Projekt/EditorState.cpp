@@ -388,6 +388,7 @@ void EditorState::handleMouseModeEnemy(sf::Event & event)
 				enemy_rect->setFillColor(sf::Color(236, 183, 0, 255));
 				enemy_rect->setSize(sf::Vector2f(50.0f, 100.0f));
 				map->addEnemy(enemy_rect);
+				enemies.push_back(enemy_rect);
 			}
 		}
 	}
@@ -519,10 +520,18 @@ void EditorState::draw()
 	window->setView(view);
 	map->draw(*window);
 	window->draw(start);
+
+	// enemies
+	for (auto enemy : enemies)
+	{
+		window->draw(*enemy);
+	}
+
 	window->draw(finish);
 	window->setView(window->getDefaultView());
 
 	window->draw(background);
+
 	//GUI
 	auto begin = controls.begin();
 	auto end = controls.end();

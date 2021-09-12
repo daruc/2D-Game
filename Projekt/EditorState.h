@@ -7,6 +7,9 @@
 #include "Control.h"
 #include "Map.h"
 #include "Textures.h"
+#include <vector>
+#include <memory>
+
 
 class EditorState : public State
 {
@@ -24,6 +27,7 @@ private:
 	sf::RectangleShape selected_type;
 
 	sf::RectangleShape start;
+	std::vector<std::shared_ptr<sf::RectangleShape>> enemies;
 	sf::RectangleShape finish;
 
 	std::stack<std::string> undo_stack;

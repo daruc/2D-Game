@@ -164,6 +164,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControlsState.cpp" />
     <ClCompile Include="EditorState.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameOverState.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="KeyField.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Binary.h" />
     <ClInclude Include="Blood.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="KeyField.h" />

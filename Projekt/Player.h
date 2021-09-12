@@ -1,6 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
+
 #include "AnimatedSprite.h"
+
+
 class Player
 {
 private:
@@ -18,6 +21,7 @@ private:
 	bool crouch;
 
 	void configureAnimations();
+
 public:
 	Player();
 	void update(std::shared_ptr<sf::RenderWindow> window);

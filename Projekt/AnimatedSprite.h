@@ -14,6 +14,7 @@ private:
 	int n_current_frame;
 
 	bool stop;
+
 public:
 	AnimatedSprite(const std::size_t animations);
 	~AnimatedSprite();

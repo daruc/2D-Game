@@ -1,5 +1,6 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
+
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <box2d/box2d.h>
@@ -7,6 +8,8 @@
 #include "Map.h"
 #include "MyContactListener.h"
 #include "Player.h"
+#include "Enemy.h"
+
 
 class Physics
 {
@@ -43,9 +46,11 @@ private:
 	void controls();
 
 	Player & player;
+	std::vector<std::shared_ptr<Enemy>> & enemies;
+
 public:
 	Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
-		Player & player);
+		Player & player, std::vector<std::shared_ptr<Enemy>>& enemies);
 	Physics::~Physics();
 	void simulate();
 

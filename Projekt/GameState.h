@@ -1,5 +1,6 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
+
 #include <memory>
 #include <thread>
 #include <SFML/Audio.hpp>
@@ -9,6 +10,8 @@
 #include "Textures.h"
 #include "Physics.h"
 #include "Player.h"
+#include "Enemy.h"
+
 
 class GameState : public State
 {
@@ -20,6 +23,7 @@ private:
 	std::shared_ptr<Map> map;
 	Textures textures;
 	Player player;
+	std::vector<std::shared_ptr<Enemy>> enemies;
 	sf::Sprite finish;
 	Physics physics;
 	sf::View view;
@@ -45,6 +49,7 @@ private:
 	std::shared_ptr<std::thread> gui_thread;
 	std::mutex mtx;
 	bool done;
+
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~GameState();

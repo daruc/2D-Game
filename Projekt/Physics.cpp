@@ -5,8 +5,8 @@
 #include <box2d/b2_fixture.h>
 
 Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
-	Player & player)
-	: gravity(0.0f, 10.0f), world(gravity), player(player)
+	Player & player, std::vector<std::shared_ptr<Enemy>>& enemies)
+	: gravity(0.0f, 10.0f), world(gravity), player(player), enemies(enemies)
 {
 	max_player_speed = 3.0f;
 	world.SetContactListener(&myContactListener);
@@ -444,8 +444,11 @@ void Physics::simulate()
 	auto endRect = map->getEnemiesEnd();
 	auto beginBody = enemies_list.begin();
 	auto endBody = enemies_list.end();
+	auto beginEnemySprite = enemies.begin();
+	auto endEnemySprite = enemies.end();
 	auto rectIt = beginRect;
 	auto bodyIt = beginBody;
+	auto enemySpriteIt = beginEnemySprite;
 
 	while (rectIt != endRect)
 	{
@@ -453,9 +456,11 @@ void Physics::simulate()
 		rectPosition.x = meters2pixels((*bodyIt)->GetPosition().x) - 25;
 		rectPosition.y = meters2pixels((*bodyIt)->GetPosition().y) - 50;
 		(*rectIt)->setPosition(rectPosition);
+		(*enemySpriteIt)->setPosition(rectPosition);
 
 		++rectIt;
 		++bodyIt;
+		++enemySpriteIt;
 	}
 }
 

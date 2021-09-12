@@ -98,15 +98,6 @@ void Map::draw(sf::RenderWindow & window)
 		window.draw(**it);
 	}
 
-	//draw enemies
-	auto enemiesBegin = enemies.begin();
-	auto enemiesEnd = enemies.end();
-
-	for (auto it = enemiesBegin; it != enemiesEnd; ++it)
-	{
-		window.draw(**it);
-	}
-
 	//draw bullets
 	auto bulletsBegin = bullets.begin();
 	auto bulletsEnd = bullets.end();

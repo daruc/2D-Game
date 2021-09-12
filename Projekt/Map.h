@@ -1,5 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
+
 #include <list>
 #include <memory>
 #include <SFML/Graphics.hpp>
@@ -20,6 +21,7 @@ private:
 	sf::Vector2f viewOffset;
 
 	void removeOutOfDateBlood();
+
 public:
 	Map();
 	inline void setViewOffset(sf::Vector2f vec) { viewOffset = vec; }

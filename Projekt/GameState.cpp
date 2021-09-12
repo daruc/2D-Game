@@ -5,9 +5,11 @@
 #include "MapMenuState.h"
 #include "GameOverState.h"
 #include "Utils.h"
+#include "Enemy.h"
+
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
-	: State(window), physics(window, map, player)
+	: State(window), physics(window, map, player, enemies)
 {
 	done = false;
 	this->map = map;
@@ -47,6 +49,17 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	health.setPosition(0.0f, 0.0f);
 	int h = player.getHealth();
 	health.setTexture(*textures.getHealth(h));
+
+	// enemies
+	auto enemiesBegin = map->getEnemiesBegin();
+	auto enemiesEnd = map->getEnemiesEnd();
+
+	for (auto enemyIt = enemiesBegin; enemyIt != enemiesEnd; ++enemyIt)
+	{
+		auto enemy = std::make_shared<Enemy>();
+		enemy->setPosition((*enemyIt)->getPosition());
+		enemies.push_back(enemy);
+	}
 
 	finish.setPosition(map->getFinishPosition());
 	finish.setTexture(*textures.getFinish(), true);
@@ -190,6 +203,13 @@ void GameState::update()
 	player.update(window);
 	player.setPosition(map->getPlayerPosition());
 
+	// enemies
+
+	for (std::shared_ptr<Enemy> enemy : enemies)
+	{
+		enemy->update();
+	}
+
 	//set camera
 	view.setCenter(player.getPosition());
 
@@ -223,6 +243,13 @@ void GameState::draw()
 	window->setView(view);
 	map->draw(*window);
 	player.draw(window);
+
+	// enemies
+	for (std::shared_ptr<Enemy> enemy : enemies)
+	{
+		enemy->draw(window);
+	}
+
 	window->draw(finish);
 	window->setView(window->getDefaultView());
 	window->draw(cursor);
