@@ -47,8 +47,8 @@ public:
 	void setFinishPosition(float x, float y, bool offset=true);
 	void setGroundTexture(sf::Texture * texture);
 	void addEnemy(std::shared_ptr<sf::RectangleShape> enemyRect);
-	void addBlood(int screen_x, int screen_y);
-	void update() override;
+	void addBlood(sf::Vector2f bloodPosition);
+	void update(float deltaSeconds) override;
 	std::vector<char> Map::toBinary() const override;
 	void fromBinary(int size, char * bytes) override;
 

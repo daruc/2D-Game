@@ -31,7 +31,7 @@ public:
 	GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin, float seconds = 0.0f);
 	virtual ~GameOverState();
 	virtual void handleEvents();
-	void update() override;
+	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 

@@ -21,7 +21,7 @@ private:
 public:
 	TextField(std::shared_ptr<sf::RenderWindow> window);
 	virtual void handleEvents(sf::Event & event);
-	void update() override;
+	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	inline sf::String getString() { return text.getString(); }
 

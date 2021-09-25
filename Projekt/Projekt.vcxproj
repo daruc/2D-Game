@@ -163,6 +163,7 @@
     <ClCompile Include="Blood.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="ControlsState.cpp" />
+    <ClCompile Include="Drop.cpp" />
     <ClCompile Include="EditorState.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameOverState.cpp" />
@@ -177,6 +178,7 @@
     <ClCompile Include="MyContactListener.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="SaveMapState.cpp" />
     <ClCompile Include="State.cpp" />
     <ClCompile Include="Strings.cpp" />
@@ -192,6 +194,7 @@
     <ClInclude Include="Blood.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Drop.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameOverState.h" />
     <ClInclude Include="GameState.h" />
@@ -208,6 +211,7 @@
     <ClInclude Include="MyContactListener.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="SaveMapState.h" />
     <ClInclude Include="State.h" />
     <ClInclude Include="Strings.h" />

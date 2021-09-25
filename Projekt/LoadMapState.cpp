@@ -80,13 +80,13 @@ void LoadMapState::handleEvents()
 		}
 	}
 }
-void LoadMapState::update()
+void LoadMapState::update(float deltaSeconds)
 {
 	auto begin = controls.begin();
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->update();
+		(*it)->update(deltaSeconds);
 	}
 }
 

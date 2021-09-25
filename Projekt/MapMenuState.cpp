@@ -139,13 +139,13 @@ void MapMenuState::handleEvents()
 	}
 }
 
-void MapMenuState::update()
+void MapMenuState::update(float deltaSeconds)
 {
 	auto begin = controls.begin();
 	auto end = controls.end();
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->update();
+		(*it)->update(deltaSeconds);
 	}
 }
 

@@ -189,7 +189,7 @@ void GameState::handleEvents()
 		}
 	}
 }
-void GameState::update()
+void GameState::update(float deltaSeconds)
 {
 	//update cursor position
 	sf::Vector2i mouse = sf::Mouse::getPosition(*window);
@@ -200,14 +200,14 @@ void GameState::update()
 
 	//player's sprite
 	
-	player.update();
+	player.update(deltaSeconds);
 	player.setPosition(map->getPlayerPosition());
 
 	// enemies
 
 	for (std::shared_ptr<Enemy> enemy : enemies)
 	{
-		enemy->update();
+		enemy->update(deltaSeconds);
 	}
 
 	//set camera
@@ -234,7 +234,7 @@ void GameState::update()
 	}
 
 	//update blood
-	map->update();
+	map->update(deltaSeconds);
 
 }
 void GameState::draw(std::shared_ptr<sf::RenderWindow> window)

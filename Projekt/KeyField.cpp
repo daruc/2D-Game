@@ -309,7 +309,8 @@ void KeyField::handleEvents(sf::Event & event)
 		rectangle.setOutlineColor(sf::Color::Black);
 	}
 }
-void KeyField::update()
+
+void KeyField::update(float deltaSeconds)
 {
 
 }

@@ -50,7 +50,7 @@ void Button::handleEvents(sf::Event & event)
 	}
 }
 
-void Button::update()
+void Button::update(float deltaSeconds)
 {
 	sf::Vector2i coor(sf::Mouse::getPosition(*window));
 	sf::Vector2f dim(rectangle.getSize());

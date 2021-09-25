@@ -23,7 +23,7 @@ public:
 	MapMenuState(std::shared_ptr<sf::RenderWindow> window);
 	virtual ~MapMenuState();
 	virtual void handleEvents();
-	void update() override;
+	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 

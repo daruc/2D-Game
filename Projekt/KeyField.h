@@ -22,7 +22,7 @@ public:
 	KeyField(std::shared_ptr<sf::RenderWindow> window);
 	KeyField(std::shared_ptr<sf::RenderWindow> window, sf::Keyboard::Key key);
 	virtual void handleEvents(sf::Event & event);
-	void update() override;
+	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setDimensions(float width, float height);
 	void setCoordinates(float x, float y);

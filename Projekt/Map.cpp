@@ -293,22 +293,21 @@ void Map::addEnemy(std::shared_ptr<sf::RectangleShape> enemyRect)
 	enemies.push_back(enemyRect);
 }
 
-void Map::addBlood(int screen_x, int screen_y)
+void Map::addBlood(sf::Vector2f bloodPosition)
 {
-	std::shared_ptr<Blood> new_blood = std::make_shared<Blood>(screen_x,
-		screen_y);
+	std::shared_ptr<Blood> new_blood = std::make_shared<Blood>(bloodPosition);
 
 	blood.push_back(new_blood);
 }
 
-void Map::update()
+void Map::update(float deltaSeconds)
 {
 	auto begin = blood.begin();
 	auto end = blood.end();
 
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->update();
+		(*it)->update(deltaSeconds);
 	}
 
 	removeOutOfDateBlood();
@@ -325,7 +324,7 @@ void Map::removeOutOfDateBlood()
 
 		for (auto it = begin; it != end; ++it)
 		{
-			if ((*it)->isOutOfDate())
+			if ((*it)->isReadyToDestroy())
 			{
 				blood.erase(it);
 				break;

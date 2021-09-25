@@ -237,7 +237,7 @@ void TextField::handleEvents(sf::Event & event)
 	}
 }
 
-void TextField::update()
+void TextField::update(float deltaSeconds)
 {
 	sf::Time delta_time = cursor_clock.getElapsedTime();
 
@@ -246,8 +246,6 @@ void TextField::update()
 		visible_cursor = !visible_cursor;
 		cursor_clock.restart();
 	}
-
-	
 }
 
 void TextField::draw(std::shared_ptr<sf::RenderWindow> window)

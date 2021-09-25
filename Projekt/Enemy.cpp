@@ -66,9 +66,9 @@ void Enemy::draw(std::shared_ptr<sf::RenderWindow> window)
 	sprite.draw(window);
 }
 
-void Enemy::update()
+void Enemy::update(float deltaSeconds)
 {
-	sprite.update();
+	sprite.update(deltaSeconds);
 }
 
 void Enemy::setPosition(sf::Vector2f pos)

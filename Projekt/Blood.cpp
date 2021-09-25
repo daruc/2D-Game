@@ -1,66 +1,44 @@
 #include <cstdlib>
 #include <ctime>
 #include "Blood.h"
+#include "Drop.h"
 
 
-Blood::Blood(float x, float y)
+Blood::Blood(sf::Vector2f position)
+	: drops(DROPS)
 {
 	srand(time(NULL));
 
-	out_of_date = false;
-	for (int i = 0; i < DROPS; ++i)
+	for (std::shared_ptr<Drop>& drop : drops)
 	{
-		int size = (rand() % 6) + 1;
-		drop[i] = std::make_shared<sf::RectangleShape>();
-		drop[i]->setFillColor(sf::Color::Red);
-		drop[i]->setSize(sf::Vector2f(size, size));
-		drop[i]->setPosition(x, y);
-
-		sf::Vector2f vec;
-		vec.x = static_cast<float> (rand()) / static_cast<float> (RAND_MAX);
-		vec.x *= 2;
-		vec.x -= 1;
-		vec.y = static_cast<float> (rand()) / static_cast<float> (RAND_MAX);
-		vec.y *= 2;
-		vec.y -= 1;
-
-		vector[i] = vec;
+		drop = std::make_shared<Drop>(position);
 	}
-
-	lastUpdateTime = sf::Time::Zero;
 }
 
-void Blood::update()
+void Blood::update(float deltaSeconds)
 {
-	float seconds = clock.getElapsedTime().asSeconds();
-	if (seconds > SHOW_TIME) out_of_date = true;
-
-	sf::Time deltaTime = clock.getElapsedTime() - lastUpdateTime;
-	float deltaMilliseconds = deltaTime.asMilliseconds();
-
-	//gravitation
-	for (int i = 0; i < DROPS; ++i)
+	for (std::shared_ptr<Drop> drop : drops)
 	{
-		vector[i].y += deltaMilliseconds / 200.0f;
+		drop->update(deltaSeconds);
 	}
-
-	float transparency = seconds / SHOW_TIME;
-	for (int i = 0; i < DROPS; ++i)
-	{
-		sf::Vector2f vec = vector[i];
-		vec.x *= deltaMilliseconds/3;
-		vec.y *= deltaMilliseconds/3;
-		drop[i]->move(vec);
-		drop[i]->setFillColor(sf::Color(255, 0, 0, 255 - 255 *transparency));
-	}
-
-	lastUpdateTime = clock.getElapsedTime();
 }
 
 void Blood::draw(std::shared_ptr<sf::RenderWindow> window)
 {
-	for (int i = 0; i < DROPS; ++i)
+	for (std::shared_ptr<Drop> drop : drops)
 	{
-		window->draw(*drop[i]);
+		drop->draw(window);
 	}
+}
+
+bool Blood::isReadyToDestroy() const
+{
+	for (std::shared_ptr<Drop> drop : drops)
+	{
+		if (!drop->isReadyToDestroy())
+		{
+			return false;
+		}
+	}
+	return true;
 }

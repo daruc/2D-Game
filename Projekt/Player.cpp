@@ -79,9 +79,9 @@ Player::Player(std::shared_ptr<sf::RenderWindow> window)
 	configureAnimations();
 }
 
-void Player::update()
+void Player::update(float deltaSeconds)
 {
-	sprite.update();
+	sprite.update(deltaSeconds);
 
 	//rotate gun
 	sf::Vector2i mouse = sf::Mouse::getPosition(*window);

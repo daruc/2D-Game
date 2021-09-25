@@ -72,7 +72,10 @@ void MyContactListener::BeginContact(b2Contact* contact)
 
 				if (reinterpret_cast<int&>(fixture_a->GetUserData()) == 20)
 				{
-					map->addBlood(meters2pixels(position.x), meters2pixels(position.y));
+					float bloodPositionX = meters2pixels(position.x);
+					float bloodPositionY = meters2pixels(position.y);
+					sf::Vector2f bloodPosition(bloodPositionX, bloodPositionY);
+					map->addBlood(bloodPosition);
 					ptr_hit_enemy->play();
 				}
 				

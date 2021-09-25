@@ -4,7 +4,7 @@
 class Updatable
 {
 public:
-	virtual void update() = 0;
+	virtual void update(float deltaSeconds) = 0;
 	~Updatable() {}
 };
 

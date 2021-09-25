@@ -49,7 +49,7 @@ public:
 	EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~EditorState();
 	virtual void handleEvents();
-	void update() override;
+	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 

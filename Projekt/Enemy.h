@@ -21,7 +21,7 @@ private:
 public:
 	Enemy();
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
-	void update() override;
+	void update(float deltaSeconds) override;
 	void setPosition(sf::Vector2f pos);
 };
 
