@@ -2,7 +2,6 @@
 #define BLOOD_H_
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <memory>
 #include "Drawable.h"
 #include "Updatable.h"
