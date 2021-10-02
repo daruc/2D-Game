@@ -5,7 +5,6 @@
 
 void App::init()
 {
-	std::string title("Gra");
 	window = std::make_shared<sf::RenderWindow>(sf::VideoMode(WIDTH, HEIGHT), TITLE,
 		sf::Style::Close | sf::Style::Titlebar);
 	currentState = std::make_shared<MainMenuState>(window);

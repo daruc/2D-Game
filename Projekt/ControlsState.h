@@ -9,6 +9,9 @@
 #include "KeyField.h"
 
 
+class Strings;
+typedef std::tuple<sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key> Keys;
+
 class ControlsState : public State
 {
 private:
@@ -24,11 +27,21 @@ private:
 	std::shared_ptr<KeyField> jump_field;
 
 	void save();
-	std::tuple<sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key>
-		load();
+	Keys load();
+
+	void initRightField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
+	void initCrouchField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
+	void initJumpField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
+	void initSaveButton(std::shared_ptr<sf::RenderWindow>& window, float center, Strings* strings);
+	void loadFont();
+	void initTitle(Strings* strings);
+	void initBackground(std::shared_ptr<sf::RenderWindow>& window);
+	void initLeftField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
+	void initBack(std::shared_ptr<sf::RenderWindow>& window, Strings* strings);
 
 public:
 	ControlsState(std::shared_ptr<sf::RenderWindow> window);
+
 	virtual ~ControlsState();
 	virtual void handleEvents();
 	void update(float deltaSeconds) override;

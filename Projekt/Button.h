@@ -7,15 +7,27 @@
 #include "Control.h"
 
 
+class ButtonState;
+
 class Button : public Control
 {
 protected:
 	sf::RectangleShape rectangle;
 	sf::Text text;
 	sf::Font font;
-	bool click;
 
+	void loadFont();
+	void initButton(sf::String title);
+	void initText(sf::String title);
+	void initBackground();
 	void setTextPosition();
+	bool isMouseButtonReleasedInsideButton(sf::Event & event);
+	bool isMouseButtonReleased(sf::Event & event);
+	bool isMouseInsideButton();
+	bool isLeftMouseButtonPressed();
+	void setPressed();
+	void setFocused();
+	void setIdle();
 
 public:
 	Button(std::shared_ptr<sf::RenderWindow> window, std::string title);

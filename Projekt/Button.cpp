@@ -3,51 +3,79 @@
 #include "Button.h"
 
 
+const char * FONT_FILE = "font.ttf";
+const unsigned int TEXT_SIZE = 25;
+const sf::Color TEXT_COLOR = sf::Color::Black;
+const sf::Color IDLE_COLOR(200, 200, 200, 255);
+const sf::Color PRESSED_COLOR = sf::Color::Red;
+const sf::Color FOCUSED_COLOR = sf::Color::Yellow;
+
 Button::Button(std::shared_ptr<sf::RenderWindow> window, std::string title)
 	: Control(window)
 {
-	if (!font.loadFromFile("font.ttf"))
+	initButton(title);
+}
+
+void Button::initButton(sf::String title)
+{
+	loadFont();
+	initText(title);
+	initBackground();
+}
+
+void Button::loadFont()
+{
+	if (!font.loadFromFile(FONT_FILE))
 	{
 		std::cout << "Cannot load font from file.\n";
 	}
+}
 
+void Button::initText(sf::String title)
+{
 	text.setFont(font);
 	text.setString(title);
-	text.setCharacterSize(25);
-	text.setColor(sf::Color::Black);
-	rectangle.setFillColor(sf::Color(200, 200, 200, 255));
+	text.setCharacterSize(TEXT_SIZE);
+	text.setColor(TEXT_COLOR);
+}
+
+void Button::initBackground()
+{
+	rectangle.setFillColor(IDLE_COLOR);
 }
 
 Button::Button(std::shared_ptr<sf::RenderWindow> window, std::wstring title)
 	: Control(window)
 {
-	if (!font.loadFromFile("font.ttf"))
-	{
-		std::cout << "Cannot load font from file.\n";
-	}
-
-	text.setFont(font);
-	text.setString(title);
-	text.setCharacterSize(25);
-	text.setColor(sf::Color::Black);
-	rectangle.setFillColor(sf::Color(200, 200, 200, 255));
+	initButton(title);
 }
 
 void Button::handleEvents(sf::Event & event)
 {
-	
-	if (event.type == sf::Event::MouseButtonReleased)
+	if (isMouseButtonReleasedInsideButton(event))
 	{
-		sf::Vector2i coor(sf::Mouse::getPosition(*window));
-		sf::Vector2f dim(rectangle.getSize());
-		sf::Vector2f rec_coor(rectangle.getPosition());
-
-		if (coor.x >= rec_coor.x && coor.x <= rec_coor.x + dim.x
-			&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y)
-		{
-			listener(text.getString());
-		}
+		listener(text.getString());
 	}
+}
+
+bool Button::isMouseButtonReleasedInsideButton(sf::Event & event)
+{
+	return isMouseButtonReleased(event) && isMouseInsideButton();
+}
+
+bool Button::isMouseButtonReleased(sf::Event& event)
+{
+	return event.type == sf::Event::MouseButtonReleased;
+}
+
+bool Button::isMouseInsideButton()
+{
+	sf::Vector2i coor(sf::Mouse::getPosition(*window));
+	sf::Vector2f dim(rectangle.getSize());
+	sf::Vector2f rec_coor(rectangle.getPosition());
+
+	return (coor.x >= rec_coor.x && coor.x <= rec_coor.x + dim.x
+		&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y);
 }
 
 void Button::update(float deltaSeconds)
@@ -56,28 +84,41 @@ void Button::update(float deltaSeconds)
 	sf::Vector2f dim(rectangle.getSize());
 	sf::Vector2f rec_coor(rectangle.getPosition());
 
-	if (coor.x >= rec_coor.x && coor.x <= rec_coor.x + dim.x
-		&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y)
+	if (isMouseInsideButton())
 	{
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+		if (isLeftMouseButtonPressed())
 		{
-			if (!click)
-			{
-				rectangle.setFillColor(sf::Color::Red);
-				click = true;
-			}
+			setPressed();
 		}
 		else
 		{
-			click = false;
-			rectangle.setFillColor(sf::Color::Yellow);
+			setFocused();
 		}
 	}
 	else
 	{
-		click = false;
-		rectangle.setFillColor(sf::Color(200, 200, 200, 255));
+		setIdle();
 	}
+}
+
+bool Button::isLeftMouseButtonPressed()
+{
+	return sf::Mouse::isButtonPressed(sf::Mouse::Button::Left);
+}
+
+void Button::setPressed()
+{
+	rectangle.setFillColor(PRESSED_COLOR);
+}
+
+void Button::setFocused()
+{
+	rectangle.setFillColor(FOCUSED_COLOR);
+}
+
+void Button::setIdle()
+{
+	rectangle.setFillColor(IDLE_COLOR);
 }
 
 void Button::draw(std::shared_ptr<sf::RenderWindow> window)
@@ -92,8 +133,8 @@ void Button::setTextPosition()
 	sf::FloatRect rect_dim = rectangle.getLocalBounds();
 	sf::Vector2f rect_position = rectangle.getPosition();
 	sf::Vector2f text_position;
-	text_position.x = (int) (rect_position.x + (rect_dim.width - text_dim.width) / 2.0f);
-	text_position.y = (int) (rect_position.y + (rect_dim.height - text_dim.height) / 2.0f - 5.0f);
+	text_position.x = static_cast<int>(rect_position.x + (rect_dim.width - text_dim.width) / 2.0f);
+	text_position.y = static_cast<int>(rect_position.y + (rect_dim.height - text_dim.height) / 2.0f - 5.0f);
 	text.setPosition(text_position);
 }
 
