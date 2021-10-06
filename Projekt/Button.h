@@ -32,7 +32,7 @@ protected:
 public:
 	Button(std::shared_ptr<sf::RenderWindow> window, std::string title);
 	Button(std::shared_ptr<sf::RenderWindow> window, std::wstring title);
-	virtual void handleEvents(sf::Event & event);
+	void handleEvents(sf::Event & event) override;
 	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setDimensions(float width, float height);
