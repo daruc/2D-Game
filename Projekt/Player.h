@@ -30,7 +30,7 @@ public:
 	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setPosition(sf::Vector2f pos);
-	sf::Vector2f getPosition();
+	sf::Vector2f getPosition() const;
 
 	void goLeft();
 	void goRight();

@@ -127,7 +127,7 @@ void Player::setPosition(sf::Vector2f pos)
 	pistol.setPosition(pistol_pos);
 }
 
-sf::Vector2f Player::getPosition()
+sf::Vector2f Player::getPosition() const
 {
 	return sprite.getPosition();
 }

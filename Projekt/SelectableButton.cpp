@@ -49,6 +49,12 @@ void SelectableButton::setDimensions(float width, float height)
 	updateSelectionIndicatorPosition();
 }
 
+void SelectableButton::setDimensions(sf::Vector2f dimensions)
+{
+	Button::setDimensions(dimensions);
+	updateSelectionIndicatorPosition();
+}
+
 void SelectableButton::setCoordinates(float x, float y)
 {
 	Button::setCoordinates(x, y);

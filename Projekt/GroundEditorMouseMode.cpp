@@ -20,7 +20,7 @@ void GroundEditorMouseMode::handleMouse(sf::Event & event)
 	}
 	else if (isRightMouseButtonPressed(event))
 	{
-		hanldeRightMouseButton();
+		handleRightMouseButton();
 	}
 }
 
@@ -35,7 +35,7 @@ void GroundEditorMouseMode::handleLeftMouseButton()
 	}
 }
 
-void GroundEditorMouseMode::hanldeRightMouseButton()
+void GroundEditorMouseMode::handleRightMouseButton()
 {
 	if (editor_state->getPointsCount() >= 3)
 	{

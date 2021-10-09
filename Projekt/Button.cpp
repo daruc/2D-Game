@@ -144,6 +144,12 @@ void Button::setDimensions(float width, float height)
 	setTextPosition();
 }
 
+void Button::setDimensions(sf::Vector2f dimensions)
+{
+	rectangle.setSize(dimensions);
+	setTextPosition();
+}
+
 void Button::setCoordinates(float x, float y)
 {
 	rectangle.setPosition(sf::Vector2f(x, y));

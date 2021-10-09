@@ -28,7 +28,7 @@ LoadMapState::LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	load_button->addListener([=](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 
-		MapBuilder map_builder;
+		MapBuilder map_builder(window);
 		map_builder.loadFromFile(text_field->getString().toWideString());
 		std::shared_ptr<Map> map = map_builder.get();
 		this->State::nextState = std::make_shared<EditorState>(window, map);

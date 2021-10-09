@@ -32,7 +32,7 @@ public:
 	void setRepeated(int n_animation, bool loop = true);
 	inline void setPosition(sf::Vector2f pos) { sf::Sprite::setPosition(pos); }
 	inline void setOrigin(sf::Vector2f origin) { sf::Sprite::setOrigin(origin); }
-	inline sf::Vector2f getPosition() {
+	inline sf::Vector2f getPosition() const {
 		return sf::Sprite::getPosition();
 	}
 

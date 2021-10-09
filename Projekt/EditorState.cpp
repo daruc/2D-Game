@@ -16,25 +16,20 @@
 #include "SelectableButton.h"
 
 
+const sf::Vector2f BUTTON_DIMENSIONS(130.0f, 40.0f);
+
 EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
-	: State(window), view(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y))
+	: State(window), editor_map(window)
 {
+	initDefaultMouseMode();
 	Strings* strings = Strings::Instance();
-	mouse_mode = std::make_shared<GroundEditorMouseMode>(window, this);
-
 	createButtons(strings);
-
-	map = std::make_shared<Map>();
-
-	background.setSize(sf::Vector2f(130.0, window->getSize().y));
-	background.setFillColor(sf::Color(0, 0, 100, 255));
-
-	initStart();
-	initFinish();
-
-	textures.loadMapType(1);
-	map->setGroundTexture(textures.getGround());
 	type1_button->select();
+}
+
+void EditorState::initDefaultMouseMode()
+{
+	mouse_mode = std::make_shared<GroundEditorMouseMode>(window, this);
 }
 
 void EditorState::createButtons(Strings* strings)
@@ -58,9 +53,10 @@ void EditorState::createSaveButton(Strings* strings)
 {
 	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
 	save_button->setCoordinates(0.0f, 90.0f);
-	save_button->setDimensions(130.0f, 40.0f);
+	save_button->setDimensions(BUTTON_DIMENSIONS);
 	save_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
+		std::shared_ptr<Map> map = editor_map.getMap();
 		State::nextState = std::make_shared<SaveMapState>(State::window, map);
 	});
 	controls.push_back(save_button);
@@ -70,9 +66,10 @@ void EditorState::createLoadButton(Strings* strings)
 {
 	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->get("load"));
 	load_button->setCoordinates(0.0f, 135.f);
-	load_button->setDimensions(130.0f, 40.0f);
+	load_button->setDimensions(BUTTON_DIMENSIONS);
 	load_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
+		std::shared_ptr<Map> map = editor_map.getMap();
 		State::nextState = std::make_shared<LoadMapState>(State::window, map);
 	});
 	controls.push_back(load_button);
@@ -82,7 +79,7 @@ void EditorState::createPlayerButton(Strings* strings)
 {
 	std::shared_ptr<Button> begin_button = std::make_shared<Button>(window, strings->get("player"));
 	begin_button->setCoordinates(0.0f, 180.0f);
-	begin_button->setDimensions(130.0f, 40.0f);
+	begin_button->setDimensions(BUTTON_DIMENSIONS);
 	begin_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		mouse_mode = std::make_shared<PlayerEditorMouseMode>(window, this);
@@ -94,7 +91,7 @@ void EditorState::createFinishButton(Strings* strings)
 {
 	std::shared_ptr<Button> finish_button = std::make_shared<Button>(window, strings->get("finish"));
 	finish_button->setCoordinates(0.0f, 225.0f);
-	finish_button->setDimensions(130.0f, 40.0f);
+	finish_button->setDimensions(BUTTON_DIMENSIONS);
 	finish_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		mouse_mode = std::make_shared<FinishEditorMouseMode>(window, this);
@@ -106,11 +103,11 @@ void EditorState::createGroundButton(Strings* strings)
 {
 	std::shared_ptr<Button> ground_button = std::make_shared<Button>(window, strings->get("ground"));
 	ground_button->setCoordinates(0.0f, 270.0f);
-	ground_button->setDimensions(130.0f, 40.0f);
+	ground_button->setDimensions(BUTTON_DIMENSIONS);
 	ground_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		mouse_mode = std::make_shared<GroundEditorMouseMode>(window, this);
-		points.clear();
+		editor_map.clearPoints();
 	});
 	controls.push_back(ground_button);
 }
@@ -119,11 +116,11 @@ void EditorState::createFireButton(Strings* strings)
 {
 	std::shared_ptr<Button> fire_button = std::make_shared<Button>(window, strings->get("fire"));
 	fire_button->setCoordinates(0.0f, 315.0f);
-	fire_button->setDimensions(130.0f, 40.0f);
+	fire_button->setDimensions(BUTTON_DIMENSIONS);
 	fire_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		mouse_mode = std::make_shared<FireEditorMouseMode>(window, this);
-		points.clear();
+		editor_map.clearPoints();
 	});
 	controls.push_back(fire_button);
 }
@@ -132,7 +129,7 @@ void EditorState::createEnemyButton(Strings* strings)
 {
 	std::shared_ptr<Button> enemy_button = std::make_shared<Button>(window, strings->get("enemy"));
 	enemy_button->setCoordinates(0.0f, 360.0f);
-	enemy_button->setDimensions(130.0f, 40.0);
+	enemy_button->setDimensions(BUTTON_DIMENSIONS);
 	enemy_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		mouse_mode = std::make_shared<EnemyEditorMouseMode>(window, this);
@@ -144,12 +141,10 @@ void EditorState::createType1Button(Strings* strings)
 {
 	type1_button = std::make_shared<SelectableButton>(window, strings->get("type_1"));
 	type1_button->setCoordinates(0.0f, 405.0f);
-	type1_button->setDimensions(130.0f, 40.0f);
+	type1_button->setDimensions(BUTTON_DIMENSIONS);
 	type1_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
-		map->setType(1);
-		textures.loadMapType(1);
-		map->setGroundTexture(textures.getGround());
+		editor_map.setMapType1();
 	});
 	controls.push_back(type1_button);
 	groundTypesButtonGroup.addSelectableButton(type1_button);
@@ -159,12 +154,10 @@ void EditorState::createType2Button(Strings* strings)
 {
 	type2_button = std::make_shared<SelectableButton>(window, strings->get("type_2"));
 	type2_button->setCoordinates(0.0f, 450.0f);
-	type2_button->setDimensions(130.0f, 40.0f);
+	type2_button->setDimensions(BUTTON_DIMENSIONS);
 	type2_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
-		map->setType(2);
-		textures.loadMapType(2);
-		map->setGroundTexture(textures.getGround());
+		editor_map.setMapType2();
 	});
 	controls.push_back(type2_button);
 	groundTypesButtonGroup.addSelectableButton(type2_button);
@@ -174,12 +167,10 @@ void EditorState::createType3Button(Strings* strings)
 {
 	type3_button = std::make_shared<SelectableButton>(window, strings->get("type_3"));
 	type3_button->setCoordinates(0.0f, 495.0f);
-	type3_button->setDimensions(130.0f, 40.0f);
+	type3_button->setDimensions(BUTTON_DIMENSIONS);
 	type3_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
-		map->setType(3);
-		textures.loadMapType(3);
-		map->setGroundTexture(textures.getGround());
+		editor_map.setMapType3();
 	});
 	controls.push_back(type3_button);
 	groundTypesButtonGroup.addSelectableButton(type3_button);
@@ -189,12 +180,10 @@ void EditorState::createType4Button(Strings* strings)
 {
 	type4_button = std::make_shared<SelectableButton>(window, strings->get("type_4"));
 	type4_button->setCoordinates(0.0f, 540.0f);
-	type4_button->setDimensions(130.0f, 40.0f);
+	type4_button->setDimensions(BUTTON_DIMENSIONS);
 	type4_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
-		map->setType(4);
-		textures.loadMapType(4);
-		map->setGroundTexture(textures.getGround());
+		editor_map.setMapType4();
 	});
 	controls.push_back(type4_button);
 	groundTypesButtonGroup.addSelectableButton(type4_button);
@@ -204,7 +193,7 @@ void EditorState::createBackButton(Strings* strings)
 {
 	std::shared_ptr<Button> back_button = std::make_shared<Button>(window, strings->get("undo"));
 	back_button->setCoordinates(0.0f, 45.0f);
-	back_button->setDimensions(130.0f, 40.0f);
+	back_button->setDimensions(BUTTON_DIMENSIONS);
 	back_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 
@@ -216,7 +205,7 @@ void EditorState::createBackButton(Strings* strings)
 
 			if (str == "remove_point")
 			{
-				points.pop_back();
+				editor_map.popPoint();
 			}
 			else if (str.substr(0, 12) == "remove_shape")
 			{
@@ -236,8 +225,7 @@ void EditorState::createBackButton(Strings* strings)
 				stream << coor_y;
 				stream >> vector.y;
 
-				map->setPlayerPosition(vector.x, vector.y, false);
-				start.setPosition(vector.x, vector.y);
+				editor_map.setPlayerPosition(vector);
 			}
 			else if (str.substr(0, 11) == "move_finish")
 			{
@@ -253,12 +241,11 @@ void EditorState::createBackButton(Strings* strings)
 				stream << coor_y;
 				stream >> vector.y;
 
-				map->setFinishPosition(vector.x, vector.y, false);
-				finish.setPosition(vector.x, vector.y);
+				editor_map.setFinishPosition(vector);
 			}
 			else if (str == "remove_enemy")
 			{
-				map->getEnenemiesList()->pop_back();
+				editor_map.popEnemy();
 			}
 		}
 	});
@@ -269,7 +256,7 @@ void EditorState::createMenuButton(Strings* strings)
 {
 	std::shared_ptr<Button> menu_button = std::make_shared<Button>(window, strings->get("menu"));
 	menu_button->setCoordinates(0.0f, 0.0f);
-	menu_button->setDimensions(130.0f, 40.0f);
+	menu_button->setDimensions(BUTTON_DIMENSIONS);
 	menu_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		State::nextState = std::make_shared<MainMenuState>(State::window);
@@ -277,51 +264,13 @@ void EditorState::createMenuButton(Strings* strings)
 	controls.push_back(menu_button);
 }
 
-void EditorState::initStart()
-{
-	start.setSize(sf::Vector2f(50.0f, 100.0f));
-	start.setFillColor(sf::Color::Green);
-	start.setPosition(map->getPlayerPosition());
-}
-
-void EditorState::initFinish()
-{
-	finish.setSize(sf::Vector2f(50.0f, 50.0f));
-	finish.setFillColor(sf::Color::Red);
-	finish.setPosition(map->getFinishPosition());
-}
-
 EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
-	:EditorState(window)
+	: State(window), editor_map(window, map)
 {
-	this->map = map;
-
-	textures.loadMapType(map->getType());
-	map->setGroundTexture(textures.getGround());
-
-	sf::Vector2f player_coor = map->getPlayerPosition();
-	start.setPosition(player_coor.x, player_coor.y);
-
-	sf::Vector2f finish_coor = map->getFinishPosition();
-	finish.setPosition(finish_coor.x, finish_coor.y);
-
-	switch (map->getType())
-	{
-	case 1:
-		type1_button->select();
-		break;
-	case 2:
-		type2_button->select();
-		break;
-	case 3:
-		type3_button->select();
-		break;
-	case 4:
-		type4_button->select();
-		break;
-	defaut:
-		std::cout << "ERROR! Undefined type of the map!\n";
-	}
+	initDefaultMouseMode();
+	Strings* strings = Strings::Instance();
+	createButtons(strings);
+	type1_button->select();
 }
 
 EditorState::~EditorState()
@@ -329,16 +278,6 @@ EditorState::~EditorState()
 
 }
 
-void EditorState::moveAllPoints(float x, float y)
-{
-	auto begin = points.begin();
-	auto end = points.end();
-	for (auto it = begin; it != end; ++it)
-	{
-		it->x += x;
-		it->y += y;
-	}
-}
 
 void EditorState::handleMouse(sf::Event & event)
 {
@@ -351,57 +290,30 @@ void EditorState::handleEvents()
 	while (window->pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
+		{
 			window->close();
-		else {
-			auto begin = controls.begin();
-			auto end = controls.end();
-			for (auto it = begin; it != end; ++it)
-			{
-				(*it)->handleEvents(event);
-			}
-			handleMouse(event);
-
-			if (event.type == sf::Event::KeyPressed)
-			{
-				switch (event.key.code)
-				{
-				case sf::Keyboard::Right:
-					view.move(50.0f, 0.0f);
-					map->moveView(sf::Vector2f(50.0f, 0.0f));
-					moveAllPoints(-50.0f, 0.0f);
-					std::cout << "view.move right\n";
-					break;
-				case sf::Keyboard::Left:
-					view.move(-50.0f, 0.0f);
-					map->moveView(sf::Vector2f(-50.0f, 0.0f));
-					moveAllPoints(50.0f, 0.0f);
-					std::cout << "view.move left\n";
-					break;
-				case sf::Keyboard::Down:
-					view.move(0.0f, 50.0f);
-					map->moveView(sf::Vector2f(0.0f, 50.0f));
-					moveAllPoints(0.0f, -50.0f);
-					std::cout << "view.move down\n";
-					break;
-				case sf::Keyboard::Up:
-					view.move(0.0f, -50.0f);
-					map->moveView(sf::Vector2f(0.0f, -50.0f));
-					moveAllPoints(0.0f, 50.0f);
-					std::cout << "view.move up\n";
-					break;
-				}
-			}
+			break;
 		}
+		
+		handleControlsEvent(event);
+		handleMouse(event);
+		editor_map.handleEvent(event);
+	}
+}
+
+void EditorState::handleControlsEvent(sf::Event & event)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->handleEvents(event);
 	}
 }
 
 void EditorState::update(float deltaSeconds)
 {
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<Control> control : controls)
 	{
-		(*it)->update(deltaSeconds);
+		control->update(deltaSeconds);
 	}
 }
 
@@ -409,40 +321,12 @@ void EditorState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	State::window->clear();
 
-	//points
-	std::list<sf::Vector2f>::iterator begin2 = points.begin();
-	std::list<sf::Vector2f>::iterator end2 = points.end();
-	sf::RectangleShape point;
-	point.setFillColor(sf::Color::Green);
-	point.setSize(sf::Vector2f(3.0f, 3.0f));
-	for (std::list<sf::Vector2f>::iterator it2 = begin2; it2 != end2; ++it2)
-	{
-		point.setPosition(*it2);
-		window->draw(point);
-	}
-
-	//map
-	window->setView(view);
-	map->draw(window);
-	window->draw(start);
-
-	// enemies
-	for (auto enemy : enemies)
-	{
-		window->draw(*enemy);
-	}
-
-	window->draw(finish);
-	window->setView(window->getDefaultView());
-
-	window->draw(background);
+	editor_map.draw(window);
 
 	//GUI
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<Control> control : controls)
 	{
-		(*it)->draw(window);
+		control->draw(window);
 	}
 
 	window->display();
@@ -451,7 +335,7 @@ void EditorState::draw(std::shared_ptr<sf::RenderWindow> window)
 
 void EditorState::parseAndExecuteRemoveShape(std::string command)
 {
-	map->removeLast();
+	editor_map.removeLast();
 	std::string tail = command.substr(12);
 	std::cout << "tail=" << tail << std::endl;
 	while (!tail.empty())
@@ -476,13 +360,13 @@ void EditorState::parseAndExecuteRemoveShape(std::string command)
 		stream.clear();
 		stream << str_y;
 		stream >> point.y;
-		points.push_back(point);
+		editor_map.addPoint(point);
 	}
 }
 
 void EditorState::addPoint(sf::Vector2f point)
 {
-	points.push_back(point);
+	editor_map.addPoint(point);
 }
 
 void EditorState::pushUndoAction(sf::String action)
@@ -492,60 +376,50 @@ void EditorState::pushUndoAction(sf::String action)
 
 size_t EditorState::getPointsCount() const
 {
-	return points.size();
+	return editor_map.getPointsCount();
 }
 
 void EditorState::addGroundShape()
 {
-	map->addShape(points, textures.getGround());
+	editor_map.addGroundShape();
 }
 
 void EditorState::addFireShape()
 {
-	map->addShape(points, nullptr);
+	editor_map.addFireShape();
 }
 
 std::list<sf::Vector2f> EditorState::getPoints() const
 {
-	return points;
+	return editor_map.getPoints();
 }
 
 void EditorState::clearPoints()
 {
-	points.clear();
+	editor_map.clearPoints();
 }
 
 sf::Vector2f EditorState::getPlayerPosition() const
 {
-	return map->getPlayerPosition();
+	return editor_map.getPlayerPosition();
 }
 
 void EditorState::setPlayerPosition(sf::Vector2f newPosition)
 {
-	map->setPlayerPosition(newPosition.x, newPosition.y);
-	sf::Vector2f new_coor = map->getPlayerPosition();
-	start.setPosition(new_coor.x, new_coor.y);
+	editor_map.setPlayerPosition(newPosition);
 }
 
 sf::Vector2f EditorState::getFinishPosition() const
 {
-	return map->getFinishPosition();
+	return editor_map.getFinishPosition();
 }
 
 void EditorState::setFinishPosition(sf::Vector2f newPosition)
 {
-	map->setFinishPosition(newPosition.x, newPosition.y);
-
-	sf::Vector2f new_coor = map->getFinishPosition();
-	finish.setPosition(new_coor.x, new_coor.y);
+	editor_map.setFinishPosition(newPosition);
 }
 
 void EditorState::addEnemy(sf::Vector2f position)
 {
-	std::shared_ptr<sf::RectangleShape> enemy_rect = std::make_shared<sf::RectangleShape>();
-	enemy_rect->setPosition(position.x, position.y);
-	enemy_rect->setFillColor(sf::Color(236, 183, 0, 255));
-	enemy_rect->setSize(sf::Vector2f(50.0f, 100.0f));
-	map->addEnemy(enemy_rect);
-	enemies.push_back(enemy_rect);
+	editor_map.addEnemy(position);
 }

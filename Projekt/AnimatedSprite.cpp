@@ -15,7 +15,7 @@ AnimatedSprite::~AnimatedSprite()
 
 void AnimatedSprite::loadTexture(const sf::Texture & texture)
 {
-	Sprite::setTexture(texture);	
+	Sprite::setTexture(texture);
 }
 
 void AnimatedSprite::draw(std::shared_ptr<sf::RenderWindow> window)

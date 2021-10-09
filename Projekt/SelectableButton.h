@@ -22,6 +22,7 @@ public:
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void handleEvents(sf::Event & event);
 	void setDimensions(float width, float height);
+	void setDimensions(sf::Vector2f dimensions);
 	void setCoordinates(float x, float y);
 	void setSelectableButtonGroup(SelectableButtonGroup* selectable_button_group);
 };

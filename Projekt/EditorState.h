@@ -15,32 +15,24 @@
 #include "Strings.h"
 #include "EditorMouseMode.h"
 #include "SelectableButtonGroup.h"
+#include "EditorMap.h"
 
 
 class EditorState : public State
 {
 private:
+	SelectableButtonGroup groundTypesButtonGroup;
 	std::shared_ptr<SelectableButton> type1_button;
 	std::shared_ptr<SelectableButton> type2_button;
 	std::shared_ptr<SelectableButton> type3_button;
 	std::shared_ptr<SelectableButton> type4_button;
 
-	SelectableButtonGroup groundTypesButtonGroup;
 	std::vector<std::shared_ptr<Control>> controls;
-	std::shared_ptr<Map> map;
-	std::list<sf::Vector2f> points;
-	sf::View view;
-
-	Textures textures;
-
-	sf::RectangleShape background;
-
-	sf::RectangleShape start;
-	std::vector<std::shared_ptr<sf::RectangleShape>> enemies;
-	sf::RectangleShape finish;
 
 	std::stack<std::string> undo_stack;
 	std::shared_ptr<EditorMouseMode> mouse_mode;
+
+	EditorMap editor_map;
 
 	void createButtons(Strings* strings);
 	void createSaveButton(Strings* strings);
@@ -56,10 +48,9 @@ private:
 	void createType4Button(Strings* strings);
 	void createBackButton(Strings* strings);
 	void createMenuButton(Strings* strings);
-	void initStart();
-	void initFinish();
+	void initDefaultMouseMode();
+	void handleControlsEvent(sf::Event& event);
 	void handleMouse(sf::Event & event);
-	void moveAllPoints(float x, float y);
 	void parseAndExecuteRemoveShape(std::string command);
 
 public:

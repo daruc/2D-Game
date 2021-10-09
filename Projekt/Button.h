@@ -36,6 +36,7 @@ public:
 	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setDimensions(float width, float height);
+	void setDimensions(sf::Vector2f dimensions);
 	void setCoordinates(float x, float y);
 };
 

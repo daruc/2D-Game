@@ -6,7 +6,7 @@
 class GroundEditorMouseMode : public EditorMouseMode
 {
 private:
-	void hanldeRightMouseButton();
+	void handleRightMouseButton();
 	void handleLeftMouseButton();
 
 public:

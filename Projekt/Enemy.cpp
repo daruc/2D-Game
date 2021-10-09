@@ -75,3 +75,8 @@ void Enemy::setPosition(sf::Vector2f pos)
 {
 	sprite.setPosition(pos);
 }
+
+sf::Vector2f Enemy::getPosition() const
+{
+	return sprite.getPosition();
+}

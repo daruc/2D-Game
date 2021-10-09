@@ -1,11 +1,14 @@
 #include "Map.h"
+#include "Enemy.h"
 #include <utility>
 #include <cstring>
 
 
-Map::Map()
+Map::Map(std::shared_ptr<sf::RenderWindow> window)
+	: window(window), player(window)
 {
 	type = 1;
+	player.update(0);
 }
 
 void Map::setGroundTexture(sf::Texture * texture)
@@ -62,30 +65,34 @@ void Map::addShape(std::list<sf::Vector2f> points, sf::Texture* texture)
 
 void Map::setPlayerPosition(float x, float y, bool offset)
 {
+	sf::Vector2f position;
 	if (offset)
 	{
-		player.x = x + viewOffset.x;
-		player.y = y + viewOffset.y;
+		position.x = x + viewOffset.x;
+		position.y = y + viewOffset.y;
 	}
 	else
 	{
-		player.x = x;
-		player.y = y;
+		position.x = x;
+		position.y = y;
 	}
+	player.setPosition(position);
 }
 
 void Map::setFinishPosition(float x, float y, bool offset)
 {
+	sf::Vector2f position;
 	if (offset)
 	{
-		finish.x = x + viewOffset.x;
-		finish.y = y + viewOffset.y;
+		position.x = x + viewOffset.x;
+		position.y = y + viewOffset.y;
 	}
 	else
 	{
-		finish.x = x;
-		finish.y = y;
+		position.x = x;
+		position.y = y;
 	}
+	finish.setPosition(position);
 }
 
 void Map::draw(std::shared_ptr<sf::RenderWindow> window)
@@ -99,6 +106,12 @@ void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 		window->draw(**it);
 	}
 
+	// draw player
+	player.draw(window);
+
+	// draw finish
+	finish.draw(window);
+
 	//draw bullets
 	auto bulletsBegin = bullets.begin();
 	auto bulletsEnd = bullets.end();
@@ -106,6 +119,12 @@ void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 	for (auto it = bulletsBegin; it != bulletsEnd; ++it)
 	{
 		window->draw(**it);
+	}
+
+	// draw enemies
+	for (std::shared_ptr<Enemy> enemy : enemies)
+	{
+		enemy->draw(window);
 	}
 
 	//draw blood
@@ -133,11 +152,13 @@ std::vector<char> Map::toBinary( ) const
 {
 	size_t nShapes = shapes.size();
 
+	sf::Vector2f player_position = player.getPosition();
+	sf::Vector2f finish_postiion = finish.getPosition();
 	size_t size = sizeof(type) 
-		+ sizeof(player.x)
-		+ sizeof(player.y)
-		+ sizeof(finish.x)
-		+ sizeof(finish.y)
+		+ sizeof(player_position.x)
+		+ sizeof(player_position.y)
+		+ sizeof(finish_postiion.x)
+		+ sizeof(finish_postiion.y)
 		+ sizeof(nShapes);	//type + player and finish position + nShapes
 
 	auto begin = shapes.begin();
@@ -161,14 +182,14 @@ std::vector<char> Map::toBinary( ) const
 	char * ptr = bytes.data();
 	memcpy(ptr, &type, sizeof(type));
 	ptr += sizeof(type);
-	memcpy(ptr, &player.x, sizeof(player.x));
-	ptr += sizeof(player.x);
-	memcpy(ptr, &player.y, sizeof(player.y));
-	ptr += sizeof(player.y);
-	memcpy(ptr, &finish.x, sizeof(finish.x));
-	ptr += sizeof(finish.x);
-	memcpy(ptr, &finish.y, sizeof(finish.y));
-	ptr += sizeof(finish.y);
+	memcpy(ptr, &player_position.x, sizeof(player_position.x));
+	ptr += sizeof(player_position.x);
+	memcpy(ptr, &player_position.y, sizeof(player_position.y));
+	ptr += sizeof(player_position.y);
+	memcpy(ptr, &finish_postiion.x, sizeof(finish_postiion.x));
+	ptr += sizeof(finish_postiion.x);
+	memcpy(ptr, &finish_postiion.y, sizeof(finish_postiion.y));
+	ptr += sizeof(finish_postiion.y);
 	memcpy(ptr, &nShapes, sizeof(nShapes));
 	ptr += sizeof(nShapes);
 	for (auto it = begin; it != end; ++it)
@@ -223,14 +244,20 @@ void Map::fromBinary(int size, char * bytes)
 	char * ptr = bytes;
 	memcpy(&map_type, ptr, sizeof(type));
 	ptr += sizeof(type);
-	memcpy(&player.x, ptr, sizeof(player.x));
-	ptr += sizeof(player.x);
-	memcpy(&player.y, ptr, sizeof(player.y));
-	ptr += sizeof(player.y);
-	memcpy(&finish.x, ptr, sizeof(finish.x));
-	ptr += sizeof(finish.x);
-	memcpy(&finish.y, ptr, sizeof(finish.y));
-	ptr += sizeof(finish.y);
+	sf::Vector2f player_position;
+	memcpy(&player_position.x, ptr, sizeof(player_position.x));
+	ptr += sizeof(player_position.x);
+	memcpy(&player_position.y, ptr, sizeof(player_position.y));
+	ptr += sizeof(player_position.y);
+	player.setPosition(player_position);
+
+	sf::Vector2f finish_position;
+	memcpy(&finish_position.x, ptr, sizeof(finish_position.x));
+	ptr += sizeof(finish_position.x);
+	memcpy(&finish_position.y, ptr, sizeof(finish_position.y));
+	ptr += sizeof(finish_position.y);
+	finish.setPosition(finish_position);
+
 	memcpy(&nShapes, ptr, sizeof(nShapes));
 	ptr += sizeof(nShapes);
 	for (int i = 0; i < nShapes; ++i)
@@ -274,29 +301,28 @@ void Map::fromBinary(int size, char * bytes)
 		memcpy(&position.y, ptr, sizeof(position.y));
 		ptr += sizeof(position.y);
 
-		std::shared_ptr<sf::RectangleShape> enemy_rect = std::make_shared<sf::RectangleShape>();
-		enemy_rect->setPosition(position.x, position.y);
-		enemy_rect->setFillColor(sf::Color(236, 183, 0, 255));
-		enemy_rect->setSize(sf::Vector2f(50.0f, 100.0f));
-		enemies.push_back(enemy_rect);
+		auto enemy = std::make_shared<Enemy>();
+		enemy->setPosition(position);
+		enemy->update(0);
+		enemies.push_back(enemy);
 	}
 
 	this->type = map_type;
 }
 
-void Map::addEnemy(std::shared_ptr<sf::RectangleShape> enemyRect)
+void Map::addEnemy(std::shared_ptr<Enemy> enemy)
 {
-	sf::Vector2f position = enemyRect->getPosition();
+	sf::Vector2f position = enemy->getPosition();
 	position.x += viewOffset.x;
 	position.y += viewOffset.y;
-	enemyRect->setPosition(position);
-	enemies.push_back(enemyRect);
+	enemy->setPosition(position);
+	enemy->update(0);
+	enemies.push_back(enemy);
 }
 
 void Map::addBlood(sf::Vector2f bloodPosition)
 {
 	std::shared_ptr<Blood> new_blood = std::make_shared<Blood>(bloodPosition);
-
 	blood.push_back(new_blood);
 }
 
@@ -331,4 +357,9 @@ void Map::removeOutOfDateBlood()
 			}
 		}
 	} while (removing);
+}
+
+void Map::popEnemy()
+{
+	enemies.pop_back();
 }

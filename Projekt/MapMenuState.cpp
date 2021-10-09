@@ -55,10 +55,10 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 		tick[i].setPosition(x, y);
 
 		map_button->setDimensions(100.0f, 100.0f);
-		map_button->addListener([this](std::string str)->void {
+		map_button->addListener([=](std::string str)->void {
 			std::cout << "Mapa 1\n";
 
-			MapBuilder mapBuilder;
+			MapBuilder mapBuilder(window);
 			mapBuilder.loadFromFile(L"maps\\map_1");
 			std::shared_ptr<Map> map = mapBuilder.get();
 			State::nextState = std::make_shared<GameState>(State::window, map);
@@ -90,7 +90,7 @@ MapMenuState::MapMenuState(std::shared_ptr<sf::RenderWindow> window)
 		std::wstringstream sstream;
 		sstream << "user_maps\\" << text_field->getString().toWideString();
 
-		MapBuilder mapBuilder;
+		MapBuilder mapBuilder(window);
 		bool exist = mapBuilder.loadFromFile(sstream.str());
 		if (exist)
 		{
