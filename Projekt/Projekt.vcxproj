@@ -18,6 +18,90 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\AnimatedSprite.h" />
+    <ClInclude Include="src\Animation.h" />
+    <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\Binary.h" />
+    <ClInclude Include="src\Blood.h" />
+    <ClInclude Include="src\ControlsState.h" />
+    <ClInclude Include="src\Drawable.h" />
+    <ClInclude Include="src\Drop.h" />
+    <ClInclude Include="src\Editor\EditorMap.h" />
+    <ClInclude Include="src\Editor\EditorMouseMode.h" />
+    <ClInclude Include="src\Editor\EditorState.h" />
+    <ClInclude Include="src\Editor\EnemyEditorMouseMode.h" />
+    <ClInclude Include="src\Editor\FinishEditorMouseMode.h" />
+    <ClInclude Include="src\Editor\FireEditorMouseMode.h" />
+    <ClInclude Include="src\Editor\GroundEditorMouseMode.h" />
+    <ClInclude Include="src\Editor\PlayerEditorMouseMode.h" />
+    <ClInclude Include="src\Enemy.h" />
+    <ClInclude Include="src\Finish.h" />
+    <ClInclude Include="src\GameOverState.h" />
+    <ClInclude Include="src\GameState.h" />
+    <ClInclude Include="src\GUI\Button.h" />
+    <ClInclude Include="src\GUI\Control.h" />
+    <ClInclude Include="src\GUI\KeyField.h" />
+    <ClInclude Include="src\GUI\SelectableButton.h" />
+    <ClInclude Include="src\GUI\SelectableButtonGroup.h" />
+    <ClInclude Include="src\GUI\TextField.h" />
+    <ClInclude Include="src\LoadMapState.h" />
+    <ClInclude Include="src\MainManuState.h" />
+    <ClInclude Include="src\Map.h" />
+    <ClInclude Include="src\MapBuilder.h" />
+    <ClInclude Include="src\MapMenuState.h" />
+    <ClInclude Include="src\MapShape.h" />
+    <ClInclude Include="src\MyContactListener.h" />
+    <ClInclude Include="src\Physics.h" />
+    <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\SaveMapState.h" />
+    <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\Strings.h" />
+    <ClInclude Include="src\Textures.h" />
+    <ClInclude Include="src\Updatable.h" />
+    <ClInclude Include="src\Utils\Random.h" />
+    <ClInclude Include="src\Utils\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AnimatedSprite.cpp" />
+    <ClCompile Include="src\Animation.cpp" />
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\Blood.cpp" />
+    <ClCompile Include="src\ControlsState.cpp" />
+    <ClCompile Include="src\Drop.cpp" />
+    <ClCompile Include="src\EditorMap.cpp" />
+    <ClCompile Include="src\Editor\EditorMouseMode.cpp" />
+    <ClCompile Include="src\Editor\EditorState.cpp" />
+    <ClCompile Include="src\Editor\EnemyEditorMouseMode.cpp" />
+    <ClCompile Include="src\Editor\FinishEditorMouseMode.cpp" />
+    <ClCompile Include="src\Editor\FireEditorMouseMode.cpp" />
+    <ClCompile Include="src\Editor\GroundEditorMouseMode.cpp" />
+    <ClCompile Include="src\Editor\PlayerEditorMouseMode.cpp" />
+    <ClCompile Include="src\Enemy.cpp" />
+    <ClCompile Include="src\Finish.cpp" />
+    <ClCompile Include="src\GameOverState.cpp" />
+    <ClCompile Include="src\GameState.cpp" />
+    <ClCompile Include="src\GUI\Button.cpp" />
+    <ClCompile Include="src\GUI\KeyField.cpp" />
+    <ClCompile Include="src\GUI\SelectableButton.cpp" />
+    <ClCompile Include="src\GUI\SelectableButtonGroup.cpp" />
+    <ClCompile Include="src\GUI\TextField.cpp" />
+    <ClCompile Include="src\LoadMapState.cpp" />
+    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\MainMenuState.cpp" />
+    <ClCompile Include="src\Map.cpp" />
+    <ClCompile Include="src\MapBuilder.cpp" />
+    <ClCompile Include="src\MapMenuState.cpp" />
+    <ClCompile Include="src\MyContactListener.cpp" />
+    <ClCompile Include="src\Physics.cpp" />
+    <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\SaveMapState.cpp" />
+    <ClCompile Include="src\State.cpp" />
+    <ClCompile Include="src\Strings.cpp" />
+    <ClCompile Include="src\Textures.cpp" />
+    <ClCompile Include="src\Utils\Random.cpp" />
+    <ClCompile Include="src\Utils\Utils.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{8AF0DCA0-7CA7-4EFF-A521-3833DC4D08C1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -109,7 +193,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\lib\box2d-2.4.1\include;C:\lib\SFML-2.5.1\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.18362.0</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\darek\source\2D-Game\Projekt\include;C:\lib\box2d-2.4.1\include;C:\lib\SFML-2.5.1\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.18362.0</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,90 +240,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="AnimatedSprite.cpp" />
-    <ClCompile Include="Animation.cpp" />
-    <ClCompile Include="App.cpp" />
-    <ClCompile Include="Blood.cpp" />
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="ControlsState.cpp" />
-    <ClCompile Include="Drop.cpp" />
-    <ClCompile Include="EditorMap.cpp" />
-    <ClCompile Include="EditorMouseMode.cpp" />
-    <ClCompile Include="EditorState.cpp" />
-    <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="EnemyEditorMouseMode.cpp" />
-    <ClCompile Include="Finish.cpp" />
-    <ClCompile Include="FinishEditorMouseMode.cpp" />
-    <ClCompile Include="FireEditorMouseMode.cpp" />
-    <ClCompile Include="GameOverState.cpp" />
-    <ClCompile Include="GameState.cpp" />
-    <ClCompile Include="GroundEditorMouseMode.cpp" />
-    <ClCompile Include="KeyField.cpp" />
-    <ClCompile Include="LoadMapState.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainMenuState.cpp" />
-    <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapBuilder.cpp" />
-    <ClCompile Include="MapMenuState.cpp" />
-    <ClCompile Include="MyContactListener.cpp" />
-    <ClCompile Include="Physics.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerEditorMouseMode.cpp" />
-    <ClCompile Include="Random.cpp" />
-    <ClCompile Include="SaveMapState.cpp" />
-    <ClCompile Include="SelectableButton.cpp" />
-    <ClCompile Include="SelectableButtonGroup.cpp" />
-    <ClCompile Include="State.cpp" />
-    <ClCompile Include="Strings.cpp" />
-    <ClCompile Include="TextField.cpp" />
-    <ClCompile Include="Textures.cpp" />
-    <ClCompile Include="Utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AnimatedSprite.h" />
-    <ClInclude Include="Animation.h" />
-    <ClInclude Include="App.h" />
-    <ClInclude Include="Binary.h" />
-    <ClInclude Include="Blood.h" />
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="EditorMap.h" />
-    <ClInclude Include="Finish.h" />
-    <ClInclude Include="SelectableButtonGroup.h" />
-    <ClInclude Include="Drawable.h" />
-    <ClInclude Include="Drop.h" />
-    <ClInclude Include="EditorMouseMode.h" />
-    <ClInclude Include="Enemy.h" />
-    <ClInclude Include="EnemyEditorMouseMode.h" />
-    <ClInclude Include="FinishEditorMouseMode.h" />
-    <ClInclude Include="FireEditorMouseMode.h" />
-    <ClInclude Include="GameOverState.h" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="GroundEditorMouseMode.h" />
-    <ClInclude Include="KeyField.h" />
-    <ClInclude Include="Control.h" />
-    <ClInclude Include="ControlsState.h" />
-    <ClInclude Include="EditorState.h" />
-    <ClInclude Include="LoadMapState.h" />
-    <ClInclude Include="MainManuState.h" />
-    <ClInclude Include="Map.h" />
-    <ClInclude Include="MapBuilder.h" />
-    <ClInclude Include="MapMenuState.h" />
-    <ClInclude Include="MapShape.h" />
-    <ClInclude Include="MyContactListener.h" />
-    <ClInclude Include="Physics.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayerEditorMouseMode.h" />
-    <ClInclude Include="Random.h" />
-    <ClInclude Include="SaveMapState.h" />
-    <ClInclude Include="SelectableButton.h" />
-    <ClInclude Include="State.h" />
-    <ClInclude Include="Strings.h" />
-    <ClInclude Include="TextField.h" />
-    <ClInclude Include="Textures.h" />
-    <ClInclude Include="Updatable.h" />
-    <ClInclude Include="Utils.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
