@@ -1,8 +1,10 @@
-#include "Editor/EditorMap.h"
-#include "Enemy.h"
-#include "Map.h"
-#include <SFML/Window.hpp>
 #include <iostream>
+
+#include <SFML/Window.hpp>
+
+#include "EditorMap.h"
+#include "../Enemy.h"
+#include "../Map.h"
 
 
 const float SCROLLING_SPEED = 50.0f;
