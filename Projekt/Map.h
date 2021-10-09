@@ -29,6 +29,7 @@ private:
 	sf::Vector2f viewOffset;
 
 	void removeOutOfDateBlood();
+	void updateBlood(float delta_seconds);
 
 public:
 	Map(std::shared_ptr<sf::RenderWindow> window);
@@ -57,7 +58,7 @@ public:
 	void update(float deltaSeconds) override;
 	std::vector<char> Map::toBinary() const override;
 	void fromBinary(int size, char * bytes) override;
-
+	Player * getPlayer();
 };
 
 #endif

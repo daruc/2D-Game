@@ -2,6 +2,7 @@
 #define BLOOD_H_
 
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <memory>
 #include "Drawable.h"
 #include "Updatable.h"
@@ -24,6 +25,10 @@ private:
 
 public:
 	Blood(sf::Vector2f position);
+	~Blood()
+	{
+		std::cout << "~Blood()\n";
+	}
 	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	bool isReadyToDestroy() const;

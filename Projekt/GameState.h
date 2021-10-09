@@ -9,7 +9,6 @@
 #include "Map.h"
 #include "Textures.h"
 #include "Physics.h"
-#include "Player.h"
 #include "Enemy.h"
 
 
@@ -22,9 +21,6 @@ private:
 	sf::Sprite health;
 	std::shared_ptr<Map> map;
 	Textures textures;
-	Player player;
-	std::vector<std::shared_ptr<Enemy>> enemies;
-	sf::Sprite finish;
 	Physics physics;
 	sf::View view;
 

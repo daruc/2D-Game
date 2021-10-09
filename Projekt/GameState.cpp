@@ -9,7 +9,7 @@
 
 
 GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
-	: State(window), player(window), physics(window, map, player, enemies)
+	: State(window), physics(window, map)
 {
 	done = false;
 	this->map = map;
@@ -45,30 +45,12 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 
 	window->setMouseCursorVisible(false);
 
-	player.setPosition(map->getPlayerPosition());
 	health.setPosition(0.0f, 0.0f);
-	int h = player.getHealth();
+	int h = map->getPlayer()->getHealth();
 	health.setTexture(*textures.getHealth(h));
 
-	// enemies
-	auto enemiesBegin = map->getEnemiesBegin();
-	auto enemiesEnd = map->getEnemiesEnd();
-
-	for (auto enemyIt = enemiesBegin; enemyIt != enemiesEnd; ++enemyIt)
-	{
-		auto enemy = std::make_shared<Enemy>();
-		enemy->setPosition((*enemyIt)->getPosition());
-		enemies.push_back(enemy);
-	}
-
-	finish.setPosition(map->getFinishPosition());
-	finish.setTexture(*textures.getFinish(), true);
-	int width = meters2pixels(1.0f);
-	int height = meters2pixels(1.0f);
-	finish.setOrigin(sf::Vector2f(width / 2, height / 2));
-
 	view.setSize(window->getSize().x, window->getSize().y);
-	view.move(player.getPosition() - view.getCenter());
+	view.move(map->getPlayer()->getPosition() - view.getCenter());
 
 	if (!gunshot_buffer.loadFromFile("sounds\\gunshot.wav"))
 	{
@@ -155,15 +137,15 @@ void GameState::handleEvents()
 			if (event.key.code == sf::Mouse::Left)
 			{
 				std::cout << "click fire\n";
-				if (player.shoot())
+				if (map->getPlayer()->shoot())
 				{
-					int blts = player.getBullets();
+					int blts = map->getPlayer()->getBullets();
 					std::stringstream stream;
 					stream << blts;
 					bullets.setString(stream.str());
 					gunshot.play();
 					sf::Vector2f mouse = cursor.getPosition();
-					sf::Vector2f playerPosition = player.getPosition();
+					sf::Vector2f playerPosition = map->getPlayer()->getPosition();
 					sf::Vector2u resolution = window->getSize();
 
 					physics.throwBullet(playerPosition.x, playerPosition.y,
@@ -177,9 +159,9 @@ void GameState::handleEvents()
 			if (event.key.code == sf::Mouse::Right)
 			{
 				std::cout << "click reload\n";
-				if (player.reload())
+				if (map->getPlayer()->reload())
 				{
-					int blts = player.getBullets();
+					int blts = map->getPlayer()->getBullets();
 					std::stringstream stream;
 					stream << blts;
 					bullets.setString(stream.str());
@@ -198,20 +180,8 @@ void GameState::update(float deltaSeconds)
 	//calculate physics
 	physics.simulate();
 
-	//player's sprite
-	
-	player.update(deltaSeconds);
-	player.setPosition(map->getPlayerPosition());
-
-	// enemies
-
-	for (std::shared_ptr<Enemy> enemy : enemies)
-	{
-		enemy->update(deltaSeconds);
-	}
-
 	//set camera
-	view.setCenter(player.getPosition());
+	view.setCenter(map->getPlayer()->getPosition());
 
 	//check if the game is over
 	if (physics.isWin())
@@ -242,15 +212,7 @@ void GameState::draw(std::shared_ptr<sf::RenderWindow> window)
 	window->clear();
 	window->setView(view);
 	map->draw(window);
-	player.draw(window);
 
-	// enemies
-	for (std::shared_ptr<Enemy> enemy : enemies)
-	{
-		enemy->draw(window);
-	}
-
-	window->draw(finish);
 	window->setView(window->getDefaultView());
 	window->draw(cursor);
 	mtx.lock();

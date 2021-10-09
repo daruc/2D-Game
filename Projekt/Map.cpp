@@ -328,38 +328,40 @@ void Map::addBlood(sf::Vector2f bloodPosition)
 
 void Map::update(float deltaSeconds)
 {
+	updateBlood(deltaSeconds);
+	player.update(deltaSeconds);
+	removeOutOfDateBlood();
+}
+
+void Map::updateBlood(float delta_seconds)
+{
+	for (std::shared_ptr<Blood> blood_item : blood)
+	{
+		blood_item->update(delta_seconds);
+	}
+}
+
+void Map::removeOutOfDateBlood()
+{
 	auto begin = blood.begin();
 	auto end = blood.end();
 
 	for (auto it = begin; it != end; ++it)
 	{
-		(*it)->update(deltaSeconds);
-	}
-
-	removeOutOfDateBlood();
-}
-
-void Map::removeOutOfDateBlood()
-{
-	bool removing = false;
-
-	do
-	{
-		auto begin = blood.begin();
-		auto end = blood.end();
-
-		for (auto it = begin; it != end; ++it)
+		if ((*it)->isReadyToDestroy())
 		{
-			if ((*it)->isReadyToDestroy())
-			{
-				blood.erase(it);
-				break;
-			}
+			blood.erase(it);
+			break;
 		}
-	} while (removing);
+	}
 }
 
 void Map::popEnemy()
 {
 	enemies.pop_back();
+}
+
+Player * Map::getPlayer()
+{
+	return &player;
 }

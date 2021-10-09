@@ -7,8 +7,6 @@
 #include <list>
 #include "Map.h"
 #include "MyContactListener.h"
-#include "Player.h"
-#include "Enemy.h"
 
 
 class Physics
@@ -45,12 +43,8 @@ private:
 	void jump();
 	void controls();
 
-	Player & player;
-	std::vector<std::shared_ptr<Enemy>> & enemies;
-
 public:
-	Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
-		Player & player, std::vector<std::shared_ptr<Enemy>>& enemies);
+	Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	Physics::~Physics();
 	void simulate();
 

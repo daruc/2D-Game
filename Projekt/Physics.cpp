@@ -2,11 +2,11 @@
 #include "Physics.h"
 #include "Utils.h"
 #include <iostream>
+#include "Enemy.h"
 #include <box2d/b2_fixture.h>
 
-Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map,
-	Player & player, std::vector<std::shared_ptr<Enemy>>& enemies)
-	: gravity(0.0f, 10.0f), world(gravity), player(player), enemies(enemies)
+Physics::Physics(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
+	: gravity(0.0f, 10.0f), world(gravity)
 {
 	max_player_speed = 3.0f;
 	world.SetContactListener(&myContactListener);
@@ -218,24 +218,24 @@ void Physics::goLeft()
 	sf::Vector2i mouse_pos = sf::Mouse::getPosition(*window);
 	if (mouse_pos.x <= window->getSize().x / 2)
 	{
-		if (player.getCrouch() == false)
+		if (map->getPlayer()->getCrouch() == false)
 		{
-			player.goLeft();
+			map->getPlayer()->goLeft();
 		}
 		else
 		{
-			player.goCrouchLeft();
+			map->getPlayer()->goCrouchLeft();
 		}
 	}
 	else
 	{
-		if (player.getCrouch() == false)
+		if (map->getPlayer()->getCrouch() == false)
 		{
-			player.goLeftBack();
+			map->getPlayer()->goLeftBack();
 		}
 		else
 		{
-			player.goCrouchLeftBack();
+			map->getPlayer()->goCrouchLeftBack();
 		}
 	}
 }
@@ -256,24 +256,24 @@ void Physics::goRight()
 
 	if (mouse_pos.x >= window->getSize().x / 2)
 	{
-		if (player.getCrouch() == false)
+		if (map->getPlayer()->getCrouch() == false)
 		{
-			player.goRight();
+			map->getPlayer()->goRight();
 		}
 		else
 		{
-			player.goCrouchRight();
+			map->getPlayer()->goCrouchRight();
 		}
 	}
 	else
 	{
-		if (player.getCrouch() == false)
+		if (map->getPlayer()->getCrouch() == false)
 		{
-			player.goRightBack();
+			map->getPlayer()->goRightBack();
 		}
 		else
 		{
-			player.goCrouchRightBack();
+			map->getPlayer()->goCrouchRightBack();
 		}
 	}
 }
@@ -311,10 +311,10 @@ void Physics::controls()
 	}
 	if (sf::Keyboard::isKeyPressed(key_crouch))
 	{
-		if (player.getCrouch() == false)
+		if (map->getPlayer()->getCrouch() == false)
 		{
 			std::cout << "set crouch\n";
-			player.setCrouch(true);
+			map->getPlayer()->setCrouch(true);
 			max_player_speed = 1.5;
 
 			b2Fixture* oldFixture = player_body->GetFixtureList();
@@ -339,10 +339,10 @@ void Physics::controls()
 	}
 	else
 	{
-		if (player.getCrouch() == true)
+		if (map->getPlayer()->getCrouch() == true)
 		{
 			std::cout << "set crouch false\n";
-			player.setCrouch(false);
+			map->getPlayer()->setCrouch(false);
 			max_player_speed = 3.0;
 
 			b2Fixture* oldFixture = player_body->GetFixtureList();
@@ -369,24 +369,24 @@ void Physics::controls()
 		sf::Vector2i mouse = sf::Mouse::getPosition(*window);
 		if (mouse.x < window->getSize().x/2)
 		{
-			if (player.getCrouch() == false)
+			if (map->getPlayer()->getCrouch() == false)
 			{
-				player.stopLeft();
+				map->getPlayer()->stopLeft();
 			}
 			else
 			{
-				player.stopCrouchLeft();
+				map->getPlayer()->stopCrouchLeft();
 			}
 		}
 		else
 		{
-			if (player.getCrouch() == false)
+			if (map->getPlayer()->getCrouch() == false)
 			{
-				player.stopRight();
+				map->getPlayer()->stopRight();
 			}
 			else
 			{
-				player.stopCrouchRight();
+				map->getPlayer()->stopCrouchRight();
 			}
 		}
 	}
@@ -444,8 +444,8 @@ void Physics::simulate()
 	auto endRect = map->getEnemiesEnd();
 	auto beginBody = enemies_list.begin();
 	auto endBody = enemies_list.end();
-	auto beginEnemySprite = enemies.begin();
-	auto endEnemySprite = enemies.end();
+	auto beginEnemySprite = map->getEnemiesBegin();
+	auto endEnemySprite = map->getEnemiesEnd();
 	auto rectIt = beginRect;
 	auto bodyIt = beginBody;
 	auto enemySpriteIt = beginEnemySprite;
