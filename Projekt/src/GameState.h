@@ -12,6 +12,7 @@
 #include "Textures.h"
 #include "Physics.h"
 #include "Enemy.h"
+#include "GUI/HealthPicture.h"
 
 
 class GameState : public State
@@ -20,7 +21,7 @@ private:
 	sf::Sprite cursor;
 	sf::Sprite sprite_clock;
 	sf::Sprite sprite_gun;
-	sf::Sprite health;
+	HealthPicture health_picture;
 	std::shared_ptr<Map> map;
 	Textures textures;
 	Physics physics;
@@ -47,6 +48,28 @@ private:
 	std::shared_ptr<std::thread> gui_thread;
 	std::mutex mtx;
 	bool done;
+
+	void loadTextures();
+	void loadSounds();
+	void loadGunshotSound();
+	void loadHitEnemySound();
+	void loadKnockSound();
+	void loadEmptyGunSound();
+	void loadReloadSound();
+	bool isClosedEvent(sf::Event & event);
+	bool isEscapeEvent(sf::Event & event);
+	bool isLeftMouseButtonEvent(sf::Event & event);
+	bool isRightMouseButtonEvent(sf::Event & event);
+	bool isGunNotEmpty();
+	void handleEvent(sf::Event & event);
+	void handleEventExit();
+	void handleEventExitToMenu();
+	void handleEventTryShot();
+	void handleEventShoot();
+	void handleEventFireEmptyGun();
+	void handleEventReload();
+	void checkWin();
+	void checkDead();
 
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);

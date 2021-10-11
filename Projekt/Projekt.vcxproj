@@ -41,6 +41,7 @@
     <ClInclude Include="src\GameState.h" />
     <ClInclude Include="src\GUI\Button.h" />
     <ClInclude Include="src\GUI\Control.h" />
+    <ClInclude Include="src\GUI\HealthPicture.h" />
     <ClInclude Include="src\GUI\KeyField.h" />
     <ClInclude Include="src\GUI\SelectableButton.h" />
     <ClInclude Include="src\GUI\SelectableButtonGroup.h" />
@@ -69,7 +70,7 @@
     <ClCompile Include="src\Blood.cpp" />
     <ClCompile Include="src\ControlsState.cpp" />
     <ClCompile Include="src\Drop.cpp" />
-    <ClCompile Include="src\EditorMap.cpp" />
+    <ClCompile Include="src\Editor\EditorMap.cpp" />
     <ClCompile Include="src\Editor\EditorMouseMode.cpp" />
     <ClCompile Include="src\Editor\EditorState.cpp" />
     <ClCompile Include="src\Editor\EnemyEditorMouseMode.cpp" />
@@ -82,6 +83,7 @@
     <ClCompile Include="src\GameOverState.cpp" />
     <ClCompile Include="src\GameState.cpp" />
     <ClCompile Include="src\GUI\Button.cpp" />
+    <ClCompile Include="src\GUI\HealthPicture.cpp" />
     <ClCompile Include="src\GUI\KeyField.cpp" />
     <ClCompile Include="src\GUI\SelectableButton.cpp" />
     <ClCompile Include="src\GUI\SelectableButtonGroup.cpp" />
