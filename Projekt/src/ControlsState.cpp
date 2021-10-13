@@ -175,29 +175,32 @@ void ControlsState::handleEvents()
 	sf::Event event;
 	while (window->pollEvent(event))
 	{
-		if (event.type == sf::Event::Closed)
-		{
-			window->close();
-		}
-		else
-		{
-			auto begin = controls.begin();
-			auto end = controls.end();
-			for (auto it = begin; it != end; ++it)
-			{
-				(*it)->handleEvents(event);
-			}
-		}
+		handleExitEvent(event);
+		handleControlsEvent(event);
+	}
+}
+
+void ControlsState::handleExitEvent(sf::Event & event)
+{
+	if (event.type == sf::Event::Closed)
+	{
+		window->close();
+	}
+}
+
+void ControlsState::handleControlsEvent(sf::Event event)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->handleEvents(event);
 	}
 }
 
 void ControlsState::update(float deltaSeconds)
 {
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<Control> control : controls)
 	{
-		(*it)->update(deltaSeconds);
+		control->update(deltaSeconds);
 	}
 }
 
@@ -205,13 +208,16 @@ void ControlsState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear(sf::Color(0, 0, 100, 255));
 	window->draw(background);
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
-	{
-		(*it)->draw(window);
-	}
+	drawControls(window);
 	window->draw(title);
 	window->display();
 	std::this_thread::sleep_for(std::chrono::milliseconds(40));
+}
+
+void ControlsState::drawControls(std::shared_ptr<sf::RenderWindow> window)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->draw(window);
+	}
 }

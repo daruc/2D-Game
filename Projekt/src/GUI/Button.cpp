@@ -157,3 +157,8 @@ void Button::setCoordinates(float x, float y)
 	rectangle.setPosition(sf::Vector2f(x, y));
 	setTextPosition();
 }
+
+void Button::setCoordinates(sf::Vector2f dimensions)
+{
+	setCoordinates(dimensions.x, dimensions.y);
+}

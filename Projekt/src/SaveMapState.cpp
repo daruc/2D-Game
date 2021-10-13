@@ -13,24 +13,47 @@
 SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
 	: State(window)
 {
-	float center_x = window->getSize().x / 2;
-	float center_y = window->getSize().y / 2;
 	Strings* strings = Strings::Instance();
 	this->map = map;
-	std::shared_ptr<TextField> text_field = std::make_shared<TextField>(window);
-	text_field->setCoordinates(center_x - 180.0f, center_y - 20.0f);
+
+	createTextField(window);
+	createSaveButton(window, strings);
+	createEditorButton(window, strings);
+	initTitle(strings);
+	initBackground(window);
+}
+
+sf::Vector2f SaveMapState::getScreenCenter(std::shared_ptr<sf::RenderWindow> window) const
+{
+	return sf::Vector2f(window->getSize()) / 2.0f;
+}
+
+void SaveMapState::createTextField(std::shared_ptr<sf::RenderWindow> window)
+{
+	sf::Vector2f centerOffset(-180.0f, -20.0f);
+
+	text_field = std::make_shared<TextField>(window);
+	text_field->setCoordinates(getScreenCenter(window) + centerOffset);
 	text_field->setDimensions(300.0f, 40.0f);
 	controls.push_back(text_field);
+}
+
+void SaveMapState::createSaveButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
+{
+	sf::Vector2f centerOffset(130.0f, -20.0f);
 
 	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
-	save_button->setCoordinates(center_x + 130.0f, center_y - 20.0f);
+	save_button->setCoordinates(getScreenCenter(window) + centerOffset);
 	save_button->setDimensions(100.0f, 40.0f);
 	save_button->addListener([=](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		save(text_field->getString());
 	});
 	controls.push_back(save_button);
+}
 
+void SaveMapState::createEditorButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
+{
 	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->get("editor"));
 	editor_button->setCoordinates(20.0f, 20.0f);
 	editor_button->setDimensions(130.0f, 40.0f);
@@ -38,7 +61,10 @@ SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 		State::nextState = std::make_shared<EditorState>(State::window, this->map);
 	});
 	controls.push_back(editor_button);
+}
 
+void SaveMapState::initTitle(Strings* strings)
+{
 	if (!font.loadFromFile("font.ttf"))
 	{
 		std::cout << "Cannot load font from file.\n";
@@ -47,7 +73,10 @@ SaveMapState::SaveMapState(std::shared_ptr<sf::RenderWindow> window, std::shared
 	title.setString(strings->get("save_map_title"));
 	title.setPosition(180.0f, 20.0f);
 	title.setFont(font);
+}
 
+void SaveMapState::initBackground(std::shared_ptr<sf::RenderWindow> window)
+{
 	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
 	background.setFillColor(sf::Color(0, 0, 80, 255));
 }
@@ -62,29 +91,32 @@ void SaveMapState::handleEvents()
 	sf::Event event;
 	while (window->pollEvent(event))
 	{
-		if (event.type == sf::Event::Closed)
-		{
-			window->close();
-		}
-		else
-		{
-			auto begin = controls.begin();
-			auto end = controls.end();
-			for (auto it = begin; it != end; ++it)
-			{
-				(*it)->handleEvents(event);
-			}
-		}
+		handleExitEvent(event);
+		handleControlsEvents(event);
+	}
+}
+
+void SaveMapState::handleExitEvent(sf::Event& event)
+{
+	if (event.type == sf::Event::Closed)
+	{
+		window->close();
+	}
+}
+
+void SaveMapState::handleControlsEvents(sf::Event& event)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->handleEvents(event);
 	}
 }
 
 void SaveMapState::update(float deltaSeconds)
 {
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<Control> control : controls)
 	{
-		(*it)->update(deltaSeconds);
+		control->update(deltaSeconds);
 	}
 }
 
@@ -92,16 +124,18 @@ void SaveMapState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	window->clear(sf::Color(0, 0, 100, 255));
 	window->draw(background);
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
-	{
-		(*it)->draw(window);
-	}
-
+	drawControls(window);
 	window->draw(title);
 	window->display();
 	std::this_thread::sleep_for(std::chrono::milliseconds(40));
+}
+
+void SaveMapState::drawControls(std::shared_ptr<sf::RenderWindow> window)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->draw(window);
+	}
 }
 
 void SaveMapState::save(sf::String filename)

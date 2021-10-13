@@ -272,3 +272,8 @@ void TextField::setCoordinates(float x, float y)
 	text.setPosition(sf::Vector2f(x, y));
 	cursor.setPosition(sf::Vector2f(x + 2.0f, y + 3.0f));
 }
+
+void TextField::setCoordinates(sf::Vector2f coordinates)
+{
+	setCoordinates(coordinates.x, coordinates.y);
+}

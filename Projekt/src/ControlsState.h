@@ -39,6 +39,9 @@ private:
 	void initBackground(std::shared_ptr<sf::RenderWindow>& window);
 	void initLeftField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
 	void initBack(std::shared_ptr<sf::RenderWindow>& window, Strings* strings);
+	void handleExitEvent(sf::Event & event);
+	void handleControlsEvent(sf::Event event);
+	void drawControls(std::shared_ptr<sf::RenderWindow> window);
 
 public:
 	ControlsState(std::shared_ptr<sf::RenderWindow> window);

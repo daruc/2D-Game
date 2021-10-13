@@ -8,18 +8,16 @@
 #include "Strings.h"
 
 
+namespace {
+	sf::Color BACKGROUND_COLOR(0, 0, 100, 255);
+}
+
+
 GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin, float seconds)
 	: State(window)
 {
 	Strings* strings = Strings::Instance();
-	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("new_game"));
-	back->setCoordinates(20.0f, 20.0f);
-	back->setDimensions(200.0f, 40.0f);
-	back->addListener([this](std::string str)->void {
-		std::cout << "back\n";
-		State::nextState = std::make_shared<MapMenuState>(State::window);
-	});
-	controls.push_back(back);
+	createBackButton(strings);
 
 	if (!font.loadFromFile("font.ttf"))
 	{
@@ -28,27 +26,13 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 
 	if (isWin)
 	{
-		title.setString(strings->get("win"));
-		if (!sound_buffer.loadFromFile("sounds\\victory.wav"))
-		{
-			std::cout << "Cannot load sound victory.wav\n";
-		}
-
-
-		std::wstringstream stream;
-		stream.precision(1);
-		stream << std::fixed;
-		stream << strings->get("your_time") << ": " << seconds << " " << strings->get("seconds");
-		time.setString(stream.str());
+		initWin(strings, seconds);
 	}
 	else
 	{
-		title.setString(strings->get("defeat"));
-		if (!sound_buffer.loadFromFile("sounds\\game_over.wav"))
-		{
-			std::cout << "Cannot load sound game_over.wav\n";
-		}
+		initDefeated(strings);
 	}
+
 	sound.setBuffer(sound_buffer);
 	title.setPosition(250.0f, 20.0f);
 	title.setFont(font);
@@ -58,6 +42,43 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
 	background.setFillColor(sf::Color(0, 0, 80, 255));
 	sound.play();
+}
+
+void GameOverState::initWin(Strings* strings, float seconds)
+{
+	title.setString(strings->get("win"));
+	if (!sound_buffer.loadFromFile("sounds\\victory.wav"))
+	{
+		std::cout << "Cannot load sound victory.wav\n";
+	}
+
+
+	std::wstringstream stream;
+	stream.precision(1);
+	stream << std::fixed;
+	stream << strings->get("your_time") << ": " << seconds << " " << strings->get("seconds");
+	time.setString(stream.str());
+}
+
+void GameOverState::initDefeated(Strings* strings)
+{
+	title.setString(strings->get("defeat"));
+	if (!sound_buffer.loadFromFile("sounds\\game_over.wav"))
+	{
+		std::cout << "Cannot load sound game_over.wav\n";
+	}
+}
+
+void GameOverState::createBackButton(Strings* strings)
+{
+	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("new_game"));
+	back->setCoordinates(20.0f, 20.0f);
+	back->setDimensions(200.0f, 40.0f);
+	back->addListener([this](std::string str)->void {
+		std::cout << "back\n";
+		State::nextState = std::make_shared<MapMenuState>(State::window);
+	});
+	controls.push_back(back);
 }
 
 GameOverState::~GameOverState()
@@ -70,44 +91,49 @@ void GameOverState::handleEvents()
 	sf::Event event;
 	while (window->pollEvent(event))
 	{
-		if (event.type == sf::Event::Closed)
-		{
-			window->close();
-		}
-		else
-		{
-			auto begin = controls.begin();
-			auto end = controls.end();
-			for (auto it = begin; it != end; ++it)
-			{
-				(*it)->handleEvents(event);
-			}
-		}
+		handleExitEvent(event);
+		handleControlsEvents(event);
 	}
 }
+
+void GameOverState::handleExitEvent(sf::Event& event)
+{
+	if (event.type == sf::Event::Closed)
+	{
+		window->close();
+	}
+}
+
+void GameOverState::handleControlsEvents(sf::Event& event)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->handleEvents(event);
+	}
+}
+
 void GameOverState::update(float deltaSeconds)
 {
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<Control> control : controls)
 	{
-		(*it)->update(deltaSeconds);
+		control->update(deltaSeconds);
 	}
 }
 
 void GameOverState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
-	window->clear(sf::Color(0, 0, 100, 255));
+	window->clear(BACKGROUND_COLOR);
 	window->draw(background);
-
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
-	{
-		(*it)->draw(window);
-	}
-
+	drawControls(window);
 	window->draw(title);
 	window->draw(time);
 	window->display();
+}
+
+void GameOverState::drawControls(std::shared_ptr<sf::RenderWindow> window)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->draw(window);
+	}
 }

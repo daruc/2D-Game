@@ -27,6 +27,7 @@ public:
 
 	void setDimensions(float width, float height);
 	void setCoordinates(float x, float y);
+	void setCoordinates(sf::Vector2f coordinates);
 };
 
 #endif

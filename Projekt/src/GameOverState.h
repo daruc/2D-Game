@@ -15,6 +15,8 @@ namespace sf
 	class RenderWindow;
 }
 
+class Strings;
+
 class GameOverState : public State
 {
 private:
@@ -27,6 +29,13 @@ private:
 
 	sf::SoundBuffer sound_buffer;
 	sf::Sound sound;
+
+	void handleExitEvent(sf::Event & event);
+	void handleControlsEvents(sf::Event & event);
+	void drawControls(std::shared_ptr<sf::RenderWindow> window);
+	void createBackButton(Strings* strings);
+	void initWin(Strings* strings, float seconds);
+	void initDefeated(Strings* strings);
 
 public:
 	GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWin, float seconds = 0.0f);

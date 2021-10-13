@@ -38,6 +38,7 @@ public:
 	void setDimensions(float width, float height);
 	void setDimensions(sf::Vector2f dimensions);
 	void setCoordinates(float x, float y);
+	void setCoordinates(sf::Vector2f dimensions);
 };
 
 #endif
