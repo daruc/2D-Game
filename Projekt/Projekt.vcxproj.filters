@@ -31,6 +31,12 @@
     <Filter Include="Header Files\Utils">
       <UniqueIdentifier>{578fbf5b-ecd5-4ad4-9d3a-86f8250395ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GameState">
+      <UniqueIdentifier>{264db07d-6ca5-4eab-9dc8-03fa44afcfe9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GameState">
+      <UniqueIdentifier>{503a48fc-f2f4-44e7-9ffe-3276aa2c5ddf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Editor\EditorMap.h">
@@ -114,9 +120,6 @@
     <ClInclude Include="src\GameOverState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GameState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\LoadMapState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -159,8 +162,17 @@
     <ClInclude Include="src\Updatable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\GUI\HealthPicture.h">
-      <Filter>Header Files\GUI</Filter>
+    <ClInclude Include="src\GameState\GameState.h">
+      <Filter>Header Files\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameState\HealthIndicator.h">
+      <Filter>Header Files\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameState\AmmunitionIndicator.h">
+      <Filter>Header Files\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameState\TimeIndicator.h">
+      <Filter>Header Files\GameState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -189,9 +201,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GameOverState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\LoadMapState.cpp">
@@ -278,8 +287,17 @@
     <ClCompile Include="src\Editor\EditorMap.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="src\GUI\HealthPicture.cpp">
-      <Filter>Source Files\GUI</Filter>
+    <ClCompile Include="src\GameState\GameState.cpp">
+      <Filter>Source Files\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameState\HealthIndicator.cpp">
+      <Filter>Source Files\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameState\AmmunitionIndicator.cpp">
+      <Filter>Source Files\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameState\TimeIndicator.cpp">
+      <Filter>Source Files\GameState</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

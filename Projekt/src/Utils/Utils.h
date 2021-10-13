@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <SFML/Config.hpp>
+#include <SFML/Graphics.hpp>
 #include <box2d/box2d.h>
 
 
@@ -9,5 +10,6 @@
 
 float pixels2Meters(float pixels);
 float meters2pixels(float meters);
+void normalizeVector(sf::Vector2f* vectorPtr);
 
 #endif

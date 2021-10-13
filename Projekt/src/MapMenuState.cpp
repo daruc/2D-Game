@@ -5,7 +5,7 @@
 
 #include "MapMenuState.h"
 #include "MainManuState.h"
-#include "GameState.h"
+#include "GameState/GameState.h"
 #include "GUI/TextField.h"
 #include "GUI/Button.h"
 #include "Map.h"

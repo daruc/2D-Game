@@ -65,7 +65,7 @@ std::pair<b2Vec2*, size_t> Physics::getPoints(std::shared_ptr<sf::ConvexShape> s
 	return std::pair<b2Vec2*, size_t>(points, size);
 }
 
-void Physics::throwBullet(float srcX, float srcY, float dstX, float dstY)
+void Physics::throwBullet(sf::Vector2f source, sf::Vector2f direction)
 {
 	//Creates physics object.
 	b2BodyDef bodyDef;
@@ -73,7 +73,7 @@ void Physics::throwBullet(float srcX, float srcY, float dstX, float dstY)
 	bodyDef.fixedRotation = true;
 	bodyDef.bullet = true;
 
-	bodyDef.position.Set(pixels2Meters(srcX), pixels2Meters(srcY));
+	bodyDef.position.Set(pixels2Meters(source.x), pixels2Meters(source.y));
 	b2Body* bullet = world.CreateBody(&bodyDef);
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(0.04f / 2, 0.04f / 2);
@@ -87,10 +87,7 @@ void Physics::throwBullet(float srcX, float srcY, float dstX, float dstY)
 	bullet_list.push_back(bullet);
 
 	//Set velocity
-	b2Vec2 vec(dstX, dstY);
-	float len = vec.Length();
-	vec.x /= len;
-	vec.y /= len;
+	b2Vec2 vec(direction.x, direction.y);
 
 	const int BULLET_SPEED = 20;
 	vec.x *= BULLET_SPEED;
@@ -102,7 +99,7 @@ void Physics::throwBullet(float srcX, float srcY, float dstX, float dstY)
 	//Add bullet to map
 	std::shared_ptr<sf::RectangleShape> bulletShape = std::make_shared<sf::RectangleShape>();
 	bulletShape->setSize(sf::Vector2f(meters2pixels(0.04f), meters2pixels(0.04f)));
-	bulletShape->setPosition(pixels2Meters(srcX), pixels2Meters(srcY));
+	bulletShape->setPosition(pixels2Meters(source.x), pixels2Meters(source.y));
 	map->getBulletsList()->push_back(bulletShape);
 }
 

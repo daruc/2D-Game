@@ -9,7 +9,7 @@
 
 class Player;
 
-class HealthPicture : public Drawable, public Updatable
+class HealthIndicator : public Drawable, public Updatable
 {
 private:
 	Player * player;
@@ -17,7 +17,7 @@ private:
 	Textures textures;
 
 public:
-	HealthPicture(Player * player);
+	HealthIndicator(Player * player);
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void update(float delta_seconds) override;
 };

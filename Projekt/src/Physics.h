@@ -63,7 +63,7 @@ public:
 		myContactListener.setKnockSound(knock_sound);
 	}
 
-	void throwBullet(float srcX, float srcY, float dstX, float dstY);
+	void throwBullet(sf::Vector2f source, sf::Vector2f direction);
 };
 
 #endif

@@ -7,30 +7,29 @@
 
 #include <SFML/Audio.hpp>
 
-#include "State.h"
-#include "Map.h"
-#include "Textures.h"
-#include "Physics.h"
-#include "Enemy.h"
-#include "GUI/HealthPicture.h"
+#include "../State.h"
+#include "../Map.h"
+#include "../Textures.h"
+#include "../Physics.h"
+#include "../Enemy.h"
+#include "HealthIndicator.h"
+#include "AmmunitionIndicator.h"
+#include "TimeIndicator.h"
 
 
 class GameState : public State
 {
 private:
+	// GUI
+	TimeIndicator time_indicator;
+	HealthIndicator health_indicator;
+	AmmunitionIndicator ammunition_indicator;
+
 	sf::Sprite cursor;
-	sf::Sprite sprite_clock;
-	sf::Sprite sprite_gun;
-	HealthPicture health_picture;
 	std::shared_ptr<Map> map;
 	Textures textures;
 	Physics physics;
 	sf::View view;
-
-	sf::Clock clock;
-	sf::Font font;
-	sf::Text txtTime;
-	sf::Text bullets;
 
 	//sounds
 	sf::SoundBuffer gunshot_buffer;
@@ -44,12 +43,11 @@ private:
 	sf::Sound empty_gun;
 	sf::Sound reload;
 
-	//threads
-	std::shared_ptr<std::thread> gui_thread;
-	std::mutex mtx;
 	bool done;
 
 	void loadTextures();
+	void loadCursorTextureAndSetOrigin();
+	void initView();
 	void loadSounds();
 	void loadGunshotSound();
 	void loadHitEnemySound();
@@ -66,6 +64,8 @@ private:
 	void handleEventExitToMenu();
 	void handleEventTryShot();
 	void handleEventShoot();
+	sf::Vector2f calculateBulletSource() const;
+	sf::Vector2f calculateBulletDirection() const;
 	void handleEventFireEmptyGun();
 	void handleEventReload();
 	void checkWin();
