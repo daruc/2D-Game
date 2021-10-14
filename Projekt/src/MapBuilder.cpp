@@ -7,7 +7,7 @@ MapBuilder::MapBuilder(std::shared_ptr<sf::RenderWindow> window)
 {
 	map = std::make_shared<Map>(window);
 }
-bool MapBuilder::loadFromFile(std::wstring filename)
+bool MapBuilder::loadFromFile(std::string filename)
 {
 	char * bytes;
 	std::ifstream fin;

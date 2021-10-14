@@ -10,8 +10,8 @@
 
 
 namespace {
-	float BULLET_SOURCE_OFFSET_RADIUS = 27.0f;
-	float BULLET_SOURCE_VERTICAL_OFFSET = -7.0f;
+	const float BULLET_SOURCE_OFFSET_RADIUS = 27.0f;
+	const float BULLET_SOURCE_VERTICAL_OFFSET = -7.0f;
 }
 
 
@@ -28,6 +28,12 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 	window->setMouseCursorVisible(false);
 	initView();
 	loadSounds();
+}
+
+GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map, size_t map_index)
+	: GameState(window, map)
+{
+	this->map_index = map_index;
 }
 
 void GameState::loadTextures()
@@ -274,9 +280,39 @@ void GameState::checkWin()
 		window->setMouseCursorVisible(true);
 		done = true;
 		State::nextState = std::make_shared<GameOverState>(window, true, time_indicator.getElapsedSeconds());
-
+		if (isNotUserMap())
+		{
+			markMapAsCompleted();
+		}
 		std::cout << "win, time = " << time_indicator.getElapsedSeconds() << std::endl;
 	}
+}
+
+bool GameState::isNotUserMap() const
+{
+	return map_index.has_value();
+}
+
+void GameState::markMapAsCompleted()
+{
+	std::ifstream ifstream("maps.bin", std::ios::binary);
+	bool maps[18];
+	for (int i = 0; i < 18; ++i)
+	{
+		char ch;
+		ifstream >> ch;
+		maps[i] = static_cast<bool>(ch);
+	}
+	ifstream.close();
+
+	maps[map_index.value()] = true;
+
+	std::ofstream ofstream("maps.bin", std::ios::binary | std::ios::trunc);
+	for (int i = 0; i < 18; ++i)
+	{
+		ofstream << static_cast<char>(maps[i]);
+	}
+	ofstream.close();
 }
 
 void GameState::checkDead()

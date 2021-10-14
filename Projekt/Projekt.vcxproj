@@ -44,7 +44,9 @@
     <ClInclude Include="src\GameState\TimeIndicator.h" />
     <ClInclude Include="src\GUI\Button.h" />
     <ClInclude Include="src\GUI\Control.h" />
+    <ClInclude Include="src\GUI\GridLayout.h" />
     <ClInclude Include="src\GUI\KeyField.h" />
+    <ClInclude Include="src\GUI\MapButton.h" />
     <ClInclude Include="src\GUI\SelectableButton.h" />
     <ClInclude Include="src\GUI\SelectableButtonGroup.h" />
     <ClInclude Include="src\GUI\TextField.h" />
@@ -88,7 +90,10 @@
     <ClCompile Include="src\GameState\HealthIndicator.cpp" />
     <ClCompile Include="src\GameState\TimeIndicator.cpp" />
     <ClCompile Include="src\GUI\Button.cpp" />
+    <ClCompile Include="src\GUI\Control.cpp" />
+    <ClCompile Include="src\GUI\GridLayout.cpp" />
     <ClCompile Include="src\GUI\KeyField.cpp" />
+    <ClCompile Include="src\GUI\MapButton.cpp" />
     <ClCompile Include="src\GUI\SelectableButton.cpp" />
     <ClCompile Include="src\GUI\SelectableButtonGroup.cpp" />
     <ClCompile Include="src\GUI\TextField.cpp" />
@@ -200,6 +205,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Users\darek\source\2D-Game\Projekt\include;C:\lib\box2d-2.4.1\include;C:\lib\SFML-2.5.1\include;C:\Program Files %28x86%29\Windows Kits\10\Include\10.0.18362.0</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

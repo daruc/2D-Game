@@ -53,7 +53,7 @@ void EditorState::createButtons(Strings* strings)
 void EditorState::createSaveButton(Strings* strings)
 {
 	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
-	save_button->setCoordinates(0.0f, 90.0f);
+	save_button->setPosition(sf::Vector2f(0.0f, 90.0f));
 	save_button->setDimensions(BUTTON_DIMENSIONS);
 	save_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -66,7 +66,7 @@ void EditorState::createSaveButton(Strings* strings)
 void EditorState::createLoadButton(Strings* strings)
 {
 	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->get("load"));
-	load_button->setCoordinates(0.0f, 135.f);
+	load_button->setPosition(sf::Vector2f(0.0f, 135.f));
 	load_button->setDimensions(BUTTON_DIMENSIONS);
 	load_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -79,7 +79,7 @@ void EditorState::createLoadButton(Strings* strings)
 void EditorState::createPlayerButton(Strings* strings)
 {
 	std::shared_ptr<Button> begin_button = std::make_shared<Button>(window, strings->get("player"));
-	begin_button->setCoordinates(0.0f, 180.0f);
+	begin_button->setPosition(sf::Vector2f(0.0f, 180.0f));
 	begin_button->setDimensions(BUTTON_DIMENSIONS);
 	begin_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -91,7 +91,7 @@ void EditorState::createPlayerButton(Strings* strings)
 void EditorState::createFinishButton(Strings* strings)
 {
 	std::shared_ptr<Button> finish_button = std::make_shared<Button>(window, strings->get("finish"));
-	finish_button->setCoordinates(0.0f, 225.0f);
+	finish_button->setPosition(sf::Vector2f(0.0f, 225.0f));
 	finish_button->setDimensions(BUTTON_DIMENSIONS);
 	finish_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -103,7 +103,7 @@ void EditorState::createFinishButton(Strings* strings)
 void EditorState::createGroundButton(Strings* strings)
 {
 	std::shared_ptr<Button> ground_button = std::make_shared<Button>(window, strings->get("ground"));
-	ground_button->setCoordinates(0.0f, 270.0f);
+	ground_button->setPosition(sf::Vector2f(0.0f, 270.0f));
 	ground_button->setDimensions(BUTTON_DIMENSIONS);
 	ground_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -116,7 +116,7 @@ void EditorState::createGroundButton(Strings* strings)
 void EditorState::createFireButton(Strings* strings)
 {
 	std::shared_ptr<Button> fire_button = std::make_shared<Button>(window, strings->get("fire"));
-	fire_button->setCoordinates(0.0f, 315.0f);
+	fire_button->setPosition(sf::Vector2f(0.0f, 315.0f));
 	fire_button->setDimensions(BUTTON_DIMENSIONS);
 	fire_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -129,7 +129,7 @@ void EditorState::createFireButton(Strings* strings)
 void EditorState::createEnemyButton(Strings* strings)
 {
 	std::shared_ptr<Button> enemy_button = std::make_shared<Button>(window, strings->get("enemy"));
-	enemy_button->setCoordinates(0.0f, 360.0f);
+	enemy_button->setPosition(sf::Vector2f(0.0f, 360.0f));
 	enemy_button->setDimensions(BUTTON_DIMENSIONS);
 	enemy_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -141,7 +141,7 @@ void EditorState::createEnemyButton(Strings* strings)
 void EditorState::createType1Button(Strings* strings)
 {
 	type1_button = std::make_shared<SelectableButton>(window, strings->get("type_1"));
-	type1_button->setCoordinates(0.0f, 405.0f);
+	type1_button->setPosition(sf::Vector2f(0.0f, 405.0f));
 	type1_button->setDimensions(BUTTON_DIMENSIONS);
 	type1_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -154,7 +154,7 @@ void EditorState::createType1Button(Strings* strings)
 void EditorState::createType2Button(Strings* strings)
 {
 	type2_button = std::make_shared<SelectableButton>(window, strings->get("type_2"));
-	type2_button->setCoordinates(0.0f, 450.0f);
+	type2_button->setPosition(sf::Vector2f(0.0f, 450.0f));
 	type2_button->setDimensions(BUTTON_DIMENSIONS);
 	type2_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -167,7 +167,7 @@ void EditorState::createType2Button(Strings* strings)
 void EditorState::createType3Button(Strings* strings)
 {
 	type3_button = std::make_shared<SelectableButton>(window, strings->get("type_3"));
-	type3_button->setCoordinates(0.0f, 495.0f);
+	type3_button->setPosition(sf::Vector2f(0.0f, 495.0f));
 	type3_button->setDimensions(BUTTON_DIMENSIONS);
 	type3_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -180,7 +180,7 @@ void EditorState::createType3Button(Strings* strings)
 void EditorState::createType4Button(Strings* strings)
 {
 	type4_button = std::make_shared<SelectableButton>(window, strings->get("type_4"));
-	type4_button->setCoordinates(0.0f, 540.0f);
+	type4_button->setPosition(sf::Vector2f(0.0f, 540.0f));
 	type4_button->setDimensions(BUTTON_DIMENSIONS);
 	type4_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -193,7 +193,7 @@ void EditorState::createType4Button(Strings* strings)
 void EditorState::createBackButton(Strings* strings)
 {
 	std::shared_ptr<Button> back_button = std::make_shared<Button>(window, strings->get("undo"));
-	back_button->setCoordinates(0.0f, 45.0f);
+	back_button->setPosition(sf::Vector2f(0.0f, 45.0f));
 	back_button->setDimensions(BUTTON_DIMENSIONS);
 	back_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
@@ -256,7 +256,7 @@ void EditorState::createBackButton(Strings* strings)
 void EditorState::createMenuButton(Strings* strings)
 {
 	std::shared_ptr<Button> menu_button = std::make_shared<Button>(window, strings->get("menu"));
-	menu_button->setCoordinates(0.0f, 0.0f);
+	menu_button->setPosition(sf::Vector2f(0.0f, 0.0f));
 	menu_button->setDimensions(BUTTON_DIMENSIONS);
 	menu_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;

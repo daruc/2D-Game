@@ -13,13 +13,14 @@
 class Control : public Updatable, public Drawable
 {
 protected:
-	std::shared_ptr <sf::RenderWindow> window;
+	std::shared_ptr<sf::RenderWindow> window;
 	std::function<void(std::string)> listener;
 
 public:
-	Control(std::shared_ptr <sf::RenderWindow> window) { this->window = window; }
+	Control(std::shared_ptr<sf::RenderWindow> window);
 	virtual void handleEvents(sf::Event & event) = 0;
-	inline void addListener(std::function<void(std::string)> listener) { this->listener = listener; }
+	void addListener(std::function<void(std::string)> listener);
+	virtual void setPosition(sf::Vector2f position) = 0;
 };
 
 #endif

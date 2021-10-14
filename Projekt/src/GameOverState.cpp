@@ -72,8 +72,8 @@ void GameOverState::initDefeated(Strings* strings)
 void GameOverState::createBackButton(Strings* strings)
 {
 	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("new_game"));
-	back->setCoordinates(20.0f, 20.0f);
-	back->setDimensions(200.0f, 40.0f);
+	back->setPosition(sf::Vector2f(20.0f, 20.0f));
+	back->setDimensions(sf::Vector2f(200.0f, 40.0f));
 	back->addListener([this](std::string str)->void {
 		std::cout << "back\n";
 		State::nextState = std::make_shared<MapMenuState>(State::window);

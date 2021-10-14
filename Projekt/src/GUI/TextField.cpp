@@ -266,14 +266,9 @@ void TextField::setDimensions(float width, float height)
 	rectangle.setSize(sf::Vector2f(width, height));
 }
 
-void TextField::setCoordinates(float x, float y)
+void TextField::setPosition(sf::Vector2f position)
 {
-	rectangle.setPosition(sf::Vector2f(x, y));
-	text.setPosition(sf::Vector2f(x, y));
-	cursor.setPosition(sf::Vector2f(x + 2.0f, y + 3.0f));
-}
-
-void TextField::setCoordinates(sf::Vector2f coordinates)
-{
-	setCoordinates(coordinates.x, coordinates.y);
+	rectangle.setPosition(position);
+	text.setPosition(position);
+	cursor.setPosition(position + sf::Vector2f(2.0f, 3.0f));
 }

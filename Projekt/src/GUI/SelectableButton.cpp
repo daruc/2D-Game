@@ -43,21 +43,15 @@ void SelectableButton::handleEvents(sf::Event& event)
 	}
 }
 
-void SelectableButton::setDimensions(float width, float height)
-{
-	Button::setDimensions(width, height);
-	updateSelectionIndicatorPosition();
-}
-
 void SelectableButton::setDimensions(sf::Vector2f dimensions)
 {
 	Button::setDimensions(dimensions);
 	updateSelectionIndicatorPosition();
 }
 
-void SelectableButton::setCoordinates(float x, float y)
+void SelectableButton::setPosition(sf::Vector2f position)
 {
-	Button::setCoordinates(x, y);
+	Button::setPosition(position);
 	updateSelectionIndicatorPosition();
 }
 

@@ -140,11 +140,6 @@ void Button::setTextPosition()
 	text.setPosition(text_position);
 }
 
-void Button::setDimensions(float width, float height)
-{
-	rectangle.setSize(sf::Vector2f(width, height));
-	setTextPosition();
-}
 
 void Button::setDimensions(sf::Vector2f dimensions)
 {
@@ -152,13 +147,18 @@ void Button::setDimensions(sf::Vector2f dimensions)
 	setTextPosition();
 }
 
-void Button::setCoordinates(float x, float y)
+void Button::setPosition(sf::Vector2f position)
 {
-	rectangle.setPosition(sf::Vector2f(x, y));
+	rectangle.setPosition(position);
 	setTextPosition();
 }
 
-void Button::setCoordinates(sf::Vector2f dimensions)
+sf::Vector2f Button::getDimensions() const
 {
-	setCoordinates(dimensions.x, dimensions.y);
+	return rectangle.getSize();
+}
+
+sf::Vector2f Button::getCoordinates() const
+{
+	return rectangle.getPosition();
 }

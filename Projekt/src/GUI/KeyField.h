@@ -26,7 +26,7 @@ public:
 	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setDimensions(float width, float height);
-	void setCoordinates(float x, float y);
+	void setPosition(sf::Vector2f position) override;
 	void setDescription(std::wstring str);
 	inline sf::Keyboard::Key getKey() const { return key; }
 };

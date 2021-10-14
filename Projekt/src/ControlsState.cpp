@@ -32,8 +32,8 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 void ControlsState::initBack(std::shared_ptr<sf::RenderWindow>& window, Strings* strings)
 {
 	std::shared_ptr<Button> back = std::make_shared<Button>(window, strings->get("main_menu"));
-	back->setCoordinates(20.0f, 20.0f);
-	back->setDimensions(200.0f, 40.0f);
+	back->setPosition(sf::Vector2f(20.0f, 20.0f));
+	back->setDimensions(sf::Vector2f(200.0f, 40.0f));
 	back->addListener([this](std::string str)->void {
 		std::cout << "back\n";
 		State::nextState = std::make_shared<MainMenuState>(State::window);
@@ -45,7 +45,7 @@ void ControlsState::initRightField(std::shared_ptr<sf::RenderWindow>& window, Ke
 {
 	right_field = std::make_shared<KeyField>(window, std::get<1>(keys));
 	right_field->setDimensions(120.0f, 40.0f);
-	right_field->setCoordinates(center - 60.0f, 150.0f);
+	right_field->setPosition(sf::Vector2f(center - 60.0f, 150.0f));
 	right_field->setDescription(strings->get("turn_right"));
 	controls.push_back(right_field);
 }
@@ -55,7 +55,7 @@ void ControlsState::initLeftField(std::shared_ptr<sf::RenderWindow>& window, Key
 {
 	left_field = std::make_shared<KeyField>(window, std::get<0>(keys));
 	left_field->setDimensions(120.0f, 40.0f);
-	left_field->setCoordinates(center - 60.0f, 100.0f);
+	left_field->setPosition(sf::Vector2f(center - 60.0f, 100.0f));
 	left_field->setDescription(strings->get("turn_left"));
 	controls.push_back(left_field);
 }
@@ -64,7 +64,7 @@ void ControlsState::initCrouchField(std::shared_ptr<sf::RenderWindow>& window, K
 {
 	crouch_field = std::make_shared<KeyField>(window, std::get<2>(keys));
 	crouch_field->setDimensions(120.0f, 40.0f);
-	crouch_field->setCoordinates(center - 60.0f, 200.0f);
+	crouch_field->setPosition(sf::Vector2f(center - 60.0f, 200.0f));
 	crouch_field->setDescription(strings->get("crouch"));
 	controls.push_back(crouch_field);
 }
@@ -73,7 +73,7 @@ void ControlsState::initJumpField(std::shared_ptr<sf::RenderWindow>& window, Key
 {
 	jump_field = std::make_shared<KeyField>(window, std::get<3>(keys));
 	jump_field->setDimensions(120.0f, 40.0f);
-	jump_field->setCoordinates(center - 60.0f, 250.0f);
+	jump_field->setPosition(sf::Vector2f(center - 60.0f, 250.0f));
 	jump_field->setDescription(strings->get("jump"));
 	controls.push_back(jump_field);
 }
@@ -81,8 +81,8 @@ void ControlsState::initJumpField(std::shared_ptr<sf::RenderWindow>& window, Key
 void ControlsState::initSaveButton(std::shared_ptr<sf::RenderWindow>& window, float center, Strings* strings)
 {
 	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
-	save_button->setDimensions(100.0f, 40.0f);
-	save_button->setCoordinates(center - 50.0f, 400.0f);
+	save_button->setDimensions(sf::Vector2f(100.0f, 40.0f));
+	save_button->setPosition(sf::Vector2f(center - 50.0f, 400.0f));
 	save_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		save();

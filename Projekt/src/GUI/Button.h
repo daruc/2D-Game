@@ -35,10 +35,10 @@ public:
 	void handleEvents(sf::Event & event) override;
 	void update(float deltaSeconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
-	void setDimensions(float width, float height);
 	void setDimensions(sf::Vector2f dimensions);
-	void setCoordinates(float x, float y);
-	void setCoordinates(sf::Vector2f dimensions);
+	void setPosition(sf::Vector2f position) override;
+	sf::Vector2f getDimensions() const;
+	sf::Vector2f getCoordinates() const;
 };
 
 #endif

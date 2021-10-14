@@ -10,41 +10,71 @@
 #include "Strings.h"
 
 
+namespace
+{
+	const sf::Vector2f BUTTON_DIMENSIONS(200.0f, 50.0f);
+}
+
 MainMenuState::MainMenuState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
-	float center = window->getSize().x / 2;
 	Strings* strings = Strings::Instance();
+	createNewGameButton(window, strings);
+	createControlsButton(window, strings);
+	createEditorButton(window, strings);
+	createExitButton(window, strings);
+}
+
+sf::Vector2f MainMenuState::getScreenCenter(std::shared_ptr<sf::RenderWindow> window) const
+{
+	return sf::Vector2f(window->getSize()) / 2.0f;
+}
+
+void MainMenuState::createNewGameButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
+{
+	sf::Vector2f centerOffset(-100.0f, -200.0f);
 	std::shared_ptr<Button> new_game_button = std::make_shared<Button>(window, strings->get("new_game"));
-	new_game_button->setCoordinates(center - 100.0f, 100.0f);
-	new_game_button->setDimensions(200.0f, 50.0f);
+	new_game_button->setPosition(getScreenCenter(window) + centerOffset);
+	new_game_button->setDimensions(BUTTON_DIMENSIONS);
 	new_game_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		State::nextState = std::make_shared<MapMenuState>(State::window);
 	});
 	controls.push_back(new_game_button);
+}
 
+void MainMenuState::createControlsButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
+{
+	sf::Vector2f centerOffset(-100.0f, -100.0f);
 	std::shared_ptr<Button> controls_button = std::make_shared<Button>(window, strings->get("controls"));
-	controls_button->setCoordinates(center - 100.0f, 200.0f);
-	controls_button->setDimensions(200.0f, 50.0f);
+	controls_button->setPosition(getScreenCenter(window) + centerOffset);
+	controls_button->setDimensions(BUTTON_DIMENSIONS);
 	controls_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		State::nextState = std::make_shared<ControlsState>(State::window);
 	});
 	controls.push_back(controls_button);
+}
 
+void MainMenuState::createEditorButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
+{
+	sf::Vector2f centerOffset(-100.0f, 0.0f);
 	std::shared_ptr<Button> edit_button = std::make_shared<Button>(window, strings->get("editor"));
-	edit_button->setCoordinates(center - 100.0f, 300.0f);
-	edit_button->setDimensions(200.0f, 50.0f);
+	edit_button->setPosition(getScreenCenter(window) + centerOffset);
+	edit_button->setDimensions(BUTTON_DIMENSIONS);
 	edit_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		State::nextState = std::make_shared<EditorState>(State::window);
 	});
 	controls.push_back(edit_button);
+}
 
+void MainMenuState::createExitButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
+{
+	sf::Vector2f centerOffset(-100.0f, 100.0f);
 	std::shared_ptr<Button> exit_button = std::make_shared<Button>(window, strings->get("exit"));
-	exit_button->setCoordinates(center - 100.0f, 400.0f);
-	exit_button->setDimensions(200.0f, 50.0f);
+	exit_button->setPosition(getScreenCenter(window) + centerOffset);
+	exit_button->setDimensions(BUTTON_DIMENSIONS);
 	exit_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		this->window->close();
@@ -62,41 +92,47 @@ void MainMenuState::handleEvents()
 	sf::Event event;
 	while (window->pollEvent(event))
 	{
-		if (event.type == sf::Event::Closed)
-			window->close();
-		else {
-			auto begin = controls.begin();
-			auto end = controls.end();
-			for (auto it = begin; it != end; ++it)
-			{
-				(*it)->handleEvents(event);
-			}
-		}
+		handleExitEvent(event);
+		handleControlsEvent(event);
+	}
+}
+
+void MainMenuState::handleExitEvent(sf::Event& event)
+{
+	if (event.type == sf::Event::Closed)
+	{
+		window->close();
+	}
+}
+
+void MainMenuState::handleControlsEvent(sf::Event& event)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->handleEvents(event);
 	}
 }
 
 void MainMenuState::update(float deltaSeconds)
 {
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<Control> control : controls)
 	{
-		(*it)->update(deltaSeconds);
+		control->update(deltaSeconds);
 	}
 }
 
 void MainMenuState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	State::window->clear(sf::Color(0, 0, 100, 255));
-
-	auto begin = controls.begin();
-	auto end = controls.end();
-	for (auto it = begin; it != end; ++it)
-	{
-		(*it)->draw(window);
-	}
-
-	
+	drawControls(window);
 	window->display();
 	std::this_thread::sleep_for(std::chrono::milliseconds(40));
+}
+
+void MainMenuState::drawControls(std::shared_ptr<sf::RenderWindow> window)
+{
+	for (std::shared_ptr<Control> control : controls)
+	{
+		control->draw(window);
+	}
 }

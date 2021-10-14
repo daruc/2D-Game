@@ -33,7 +33,7 @@ void SaveMapState::createTextField(std::shared_ptr<sf::RenderWindow> window)
 	sf::Vector2f centerOffset(-180.0f, -20.0f);
 
 	text_field = std::make_shared<TextField>(window);
-	text_field->setCoordinates(getScreenCenter(window) + centerOffset);
+	text_field->setPosition(getScreenCenter(window) + centerOffset);
 	text_field->setDimensions(300.0f, 40.0f);
 	controls.push_back(text_field);
 }
@@ -43,8 +43,8 @@ void SaveMapState::createSaveButton(std::shared_ptr<sf::RenderWindow> window, St
 	sf::Vector2f centerOffset(130.0f, -20.0f);
 
 	std::shared_ptr<Button> save_button = std::make_shared<Button>(window, strings->get("save"));
-	save_button->setCoordinates(getScreenCenter(window) + centerOffset);
-	save_button->setDimensions(100.0f, 40.0f);
+	save_button->setPosition(getScreenCenter(window) + centerOffset);
+	save_button->setDimensions(sf::Vector2f(100.0f, 40.0f));
 	save_button->addListener([=](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 		save(text_field->getString());
@@ -55,8 +55,8 @@ void SaveMapState::createSaveButton(std::shared_ptr<sf::RenderWindow> window, St
 void SaveMapState::createEditorButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
 {
 	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->get("editor"));
-	editor_button->setCoordinates(20.0f, 20.0f);
-	editor_button->setDimensions(130.0f, 40.0f);
+	editor_button->setPosition(sf::Vector2f(20.0f, 20.0f));
+	editor_button->setDimensions(sf::Vector2f(130.0f, 40.0f));
 	editor_button->addListener([this](std::string str)->void {
 		State::nextState = std::make_shared<EditorState>(State::window, this->map);
 	});

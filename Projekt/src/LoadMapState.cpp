@@ -29,7 +29,7 @@ void LoadMapState::createTextField(std::shared_ptr<sf::RenderWindow> window)
 	sf::Vector2f centerOffset(-180.0f, -20.0f);
 
 	text_field = std::make_shared<TextField>(window);
-	text_field->setCoordinates(getScreenCenter(window) + centerOffset);
+	text_field->setPosition(getScreenCenter(window) + centerOffset);
 	text_field->setDimensions(300.0f, 40.0f);
 	controls.push_back(text_field);
 }
@@ -38,13 +38,13 @@ void LoadMapState::createLoadButton(std::shared_ptr<sf::RenderWindow> window, St
 {
 	sf::Vector2f centerOffset(130.0f, -20.0f);
 	std::shared_ptr<Button> load_button = std::make_shared<Button>(window, strings->get("load"));
-	load_button->setCoordinates(getScreenCenter(window) + centerOffset);
-	load_button->setDimensions(100.0f, 40.0f);
+	load_button->setPosition(getScreenCenter(window) + centerOffset);
+	load_button->setDimensions(sf::Vector2f(100.0f, 40.0f));
 	load_button->addListener([=](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 
 		MapBuilder map_builder(window);
-		map_builder.loadFromFile(text_field->getString().toWideString());
+		map_builder.loadFromFile(text_field->getString());
 		std::shared_ptr<Map> map = map_builder.get();
 		this->State::nextState = std::make_shared<EditorState>(window, map);
 	});
@@ -54,8 +54,8 @@ void LoadMapState::createLoadButton(std::shared_ptr<sf::RenderWindow> window, St
 void LoadMapState::createEditorButton(std::shared_ptr<sf::RenderWindow> window, Strings* strings)
 {
 	std::shared_ptr<Button> editor_button = std::make_shared<Button>(window, strings->get("editor"));
-	editor_button->setCoordinates(20.0f, 20.0f);
-	editor_button->setDimensions(130.0f, 40.0f);
+	editor_button->setPosition(sf::Vector2f(20.0f, 20.0f));
+	editor_button->setDimensions(sf::Vector2f(130.0f, 40.0f));
 	editor_button->addListener([this](std::string str)->void {
 		State::nextState = std::make_shared<EditorState>(State::window, prev_map);
 	});

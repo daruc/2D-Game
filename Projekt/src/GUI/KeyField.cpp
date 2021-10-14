@@ -328,8 +328,8 @@ void KeyField::setDimensions(float width, float height)
 	rectangle.setSize(sf::Vector2f(width, height));
 }
 
-void KeyField::setCoordinates(float x, float y)
+void KeyField::setPosition(sf::Vector2f position)
 {
-	rectangle.setPosition(sf::Vector2f(x, y));
-	text.setPosition(sf::Vector2f(x, y));
+	rectangle.setPosition(position);
+	text.setPosition(position);
 }

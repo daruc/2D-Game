@@ -26,8 +26,7 @@ public:
 	inline sf::String getString() { return text.getString(); }
 
 	void setDimensions(float width, float height);
-	void setCoordinates(float x, float y);
-	void setCoordinates(sf::Vector2f coordinates);
+	void setPosition(sf::Vector2f coordinates) override;
 };
 
 #endif

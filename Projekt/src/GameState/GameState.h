@@ -4,6 +4,7 @@
 #include <memory>
 #include <thread>
 #include <mutex>
+#include <optional>
 
 #include <SFML/Audio.hpp>
 
@@ -20,6 +21,8 @@
 class GameState : public State
 {
 private:
+	std::optional<size_t> map_index;
+
 	// GUI
 	TimeIndicator time_indicator;
 	HealthIndicator health_indicator;
@@ -69,10 +72,13 @@ private:
 	void handleEventFireEmptyGun();
 	void handleEventReload();
 	void checkWin();
+	bool isNotUserMap() const;
+	void markMapAsCompleted();
 	void checkDead();
 
 public:
 	GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
+	GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map, size_t map_index);
 	virtual ~GameState();
 	virtual void handleEvents();
 	void update(float deltaSeconds) override;

@@ -19,7 +19,7 @@ private:
 
 public:
 	MapBuilder(std::shared_ptr<sf::RenderWindow> window);
-	bool loadFromFile(std::wstring filename);
+	bool loadFromFile(std::string filename);
 	std::shared_ptr<Map> get();
 };
 
