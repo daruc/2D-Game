@@ -1,6 +1,7 @@
 #include "Drop.h"
 #include "Utils/Random.h"
 
+
 Drop::Drop(sf::Vector2f position)
 	: COLOR(sf::Color::Red)
 {

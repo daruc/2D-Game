@@ -16,7 +16,16 @@ private:
 	sf::Font font;
 	bool focus;
 
+	void initRectangle();
+	void initKeyText();
+	void initDescription();
 	void handleKeys(sf::Event & event);
+	bool isMouseButtonReleased(sf::Event& event) const;
+	void setFocus();
+	void unsetFocus();
+	bool isMouseInsideRectangle() const;
+	bool isFocusedKeyPressed(sf::Event& event) const;
+	void assignKey(sf::Event& event);
 	void setTextPosition();
 
 public:

@@ -27,6 +27,13 @@
     <ClInclude Include="src\ControlsState.h" />
     <ClInclude Include="src\Drawable.h" />
     <ClInclude Include="src\Drop.h" />
+    <ClInclude Include="src\Editor\CommandAddEnemy.h" />
+    <ClInclude Include="src\Editor\CommandAddFireShape.h" />
+    <ClInclude Include="src\Editor\CommandAddGroundShape.h" />
+    <ClInclude Include="src\Editor\CommandAddPoint.h" />
+    <ClInclude Include="src\Editor\CommandMoveFinish.h" />
+    <ClInclude Include="src\Editor\CommandMovePlayer.h" />
+    <ClInclude Include="src\Editor\EditorCommand.h" />
     <ClInclude Include="src\Editor\EditorMap.h" />
     <ClInclude Include="src\Editor\EditorMouseMode.h" />
     <ClInclude Include="src\Editor\EditorState.h" />
@@ -74,6 +81,12 @@
     <ClCompile Include="src\Blood.cpp" />
     <ClCompile Include="src\ControlsState.cpp" />
     <ClCompile Include="src\Drop.cpp" />
+    <ClCompile Include="src\Editor\CommandAddEnemy.cpp" />
+    <ClCompile Include="src\Editor\CommandAddFireShape.cpp" />
+    <ClCompile Include="src\Editor\CommandAddGroundShape.cpp" />
+    <ClCompile Include="src\Editor\CommandAddPoint.cpp" />
+    <ClCompile Include="src\Editor\CommandMoveFinish.cpp" />
+    <ClCompile Include="src\Editor\CommandMovePlayer.cpp" />
     <ClCompile Include="src\Editor\EditorMap.cpp" />
     <ClCompile Include="src\Editor\EditorMouseMode.cpp" />
     <ClCompile Include="src\Editor\EditorState.cpp" />

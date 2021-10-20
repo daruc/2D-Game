@@ -5,6 +5,7 @@
 
 #include "PlayerEditorMouseMode.h"
 #include "EditorState.h"
+#include "CommandMovePlayer.h"
 
 
 PlayerEditorMouseMode::PlayerEditorMouseMode(std::shared_ptr<sf::RenderWindow> window,
@@ -21,11 +22,9 @@ void PlayerEditorMouseMode::handleMouse(sf::Event & event)
 		std::cout << "coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
 		if (coor.x > 130)
 		{
-			sf::Vector2f player_position = editor_state->getPlayerPosition();
-			std::stringstream stream;
-			stream << "move_player|" << player_position.x << "|" << player_position.y;
-			editor_state->pushUndoAction(stream.str());
-			editor_state->setPlayerPosition(sf::Vector2f(coor));
+			sf::Vector2f position(coor);
+			auto command = std::make_shared<CommandMovePlayer>(editor_state->getEditorMapPtr(), position);
+			editor_state->executeCommand(command);
 		}
 	}
 }

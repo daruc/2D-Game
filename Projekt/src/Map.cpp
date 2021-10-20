@@ -13,22 +13,29 @@ Map::Map(std::shared_ptr<sf::RenderWindow> window)
 
 void Map::setGroundTexture(sf::Texture * texture)
 {
-	auto begin = shapes.begin();
-	auto end = shapes.end();
-
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<MapShape> shape : shapes)
 	{
-		if ((*it)->getType() == MapShape::GROUND)
+		if (shape->getType() == MapShape::GROUND)
 		{
-			(*it)->setTexture(texture);
-			sf::FloatRect local_bounds = (*it)->getLocalBounds();
-			(*it)->setTextureRect(sf::IntRect(0, 0, local_bounds.width, local_bounds.height));
+			setGroundTexture(shape, texture);
 		}
-		else if ((*it)->getType() == MapShape::FIRE)
+		else if (shape->getType() == MapShape::FIRE)
 		{
-			(*it)->setFillColor(sf::Color::Yellow);
+			setFireTexture(shape, texture);
 		}
 	}
+}
+
+void Map::setGroundTexture(std::shared_ptr<MapShape> shape, sf::Texture* texture)
+{
+	shape->setTexture(texture);
+	sf::FloatRect local_bounds = shape->getLocalBounds();
+	shape->setTextureRect(sf::IntRect(0, 0, local_bounds.width, local_bounds.height));
+}
+
+void Map::setFireTexture(std::shared_ptr<MapShape> shape, sf::Texture* texture)
+{
+	shape->setFillColor(sf::Color::Yellow);
 }
 
 void Map::addShape(std::list<sf::Vector2f> points, sf::Texture* texture)
@@ -63,47 +70,28 @@ void Map::addShape(std::list<sf::Vector2f> points, sf::Texture* texture)
 	shapes.push_back(shape);
 }
 
-void Map::setPlayerPosition(float x, float y, bool offset)
+void Map::setPlayerPosition(float x, float y)
 {
 	sf::Vector2f position;
-	if (offset)
-	{
-		position.x = x + viewOffset.x;
-		position.y = y + viewOffset.y;
-	}
-	else
-	{
-		position.x = x;
-		position.y = y;
-	}
+	position.x = x;
+	position.y = y;
 	player.setPosition(position);
 }
 
-void Map::setFinishPosition(float x, float y, bool offset)
+void Map::setFinishPosition(float x, float y)
 {
 	sf::Vector2f position;
-	if (offset)
-	{
-		position.x = x + viewOffset.x;
-		position.y = y + viewOffset.y;
-	}
-	else
-	{
-		position.x = x;
-		position.y = y;
-	}
+	position.x = x;
+	position.y = y;
 	finish.setPosition(position);
 }
 
 void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 {
 	//draw ground
-	auto begin = shapes.begin();
-	auto end = shapes.end();
-
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<MapShape> shape : shapes)
 	{
-		window->draw(**it);
+		window->draw(*shape);
 	}
 
 	// draw player
@@ -113,12 +101,9 @@ void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 	finish.draw(window);
 
 	//draw bullets
-	auto bulletsBegin = bullets.begin();
-	auto bulletsEnd = bullets.end();
-
-	for (auto it = bulletsBegin; it != bulletsEnd; ++it)
+	for (std::shared_ptr<sf::RectangleShape> bullet : bullets)
 	{
-		window->draw(**it);
+		window->draw(*bullet);
 	}
 
 	// draw enemies
@@ -128,12 +113,9 @@ void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 	}
 
 	//draw blood
-	auto bloodBegin = blood.begin();
-	auto bloodEnd = blood.end();
-
-	for (auto it = bloodBegin; it != bloodEnd; ++it)
+	for (std::shared_ptr<Blood> blood_item : blood)
 	{
-		(*it)->draw(window);
+		blood_item->draw(window);
 	}
 }
 
@@ -144,8 +126,10 @@ void Map::moveView(sf::Vector2f vec)
 
 void Map::removeLast()
 {
-	if (shapes.size() > 0)
+	if (!shapes.empty())
+	{
 		shapes.pop_back();
+	}
 }
 
 std::vector<char> Map::toBinary( ) const

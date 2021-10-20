@@ -6,6 +6,8 @@
 #include "../State.h"
 #include "GroundEditorMouseMode.h"
 #include "EditorState.h"
+#include "CommandAddPoint.h"
+#include "CommandAddGroundShape.h"
 
 
 GroundEditorMouseMode::GroundEditorMouseMode(std::shared_ptr<sf::RenderWindow> window, 
@@ -32,8 +34,9 @@ void GroundEditorMouseMode::handleLeftMouseButton()
 	std::cout << "coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
 	if (coor.x > 130)
 	{
-		editor_state->addPoint(sf::Vector2f(coor.x - 1, coor.y - 1));
-		editor_state->pushUndoAction("remove_point");
+		sf::Vector2f position(coor.x - 1, coor.y - 1);
+		auto command = std::make_shared<CommandAddPoint>(editor_state->getEditorMapPtr(), position);
+		editor_state->executeCommand(command);
 	}
 }
 
@@ -41,16 +44,7 @@ void GroundEditorMouseMode::handleRightMouseButton()
 {
 	if (editor_state->getPointsCount() >= 3)
 	{
-		editor_state->addGroundShape();
-
-		//Removing points
-		std::stringstream strstream;
-		strstream << "remove_shape";
-		for (sf::Vector2f point : editor_state->getPoints())
-		{
-			strstream << "#add_point|" << point.x << "|" << point.y;
-		}
-		editor_state->clearPoints();
-		editor_state->pushUndoAction(strstream.str());
+		auto command = std::make_shared<CommandAddGroundShape>(editor_state->getEditorMapPtr());
+		editor_state->executeCommand(command);
 	}
 }

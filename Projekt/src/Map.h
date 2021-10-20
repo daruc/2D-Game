@@ -32,6 +32,8 @@ private:
 
 	void removeOutOfDateBlood();
 	void updateBlood(float delta_seconds);
+	void setGroundTexture(std::shared_ptr<MapShape> shape, sf::Texture* texture);
+	void setFireTexture(std::shared_ptr<MapShape> shape, sf::Texture* texture);
 
 public:
 	Map(std::shared_ptr<sf::RenderWindow> window);
@@ -51,8 +53,8 @@ public:
 	inline void setType(int type) { this->type = type; }
 	inline std::list<std::shared_ptr<sf::RectangleShape>>* getBulletsList() { return &bullets; }
 	inline std::list<std::shared_ptr<Enemy>>* getEnenemiesList() { return &enemies; }
-	void setPlayerPosition(float x, float y, bool offset=true);
-	void setFinishPosition(float x, float y, bool offset=true);
+	void setPlayerPosition(float x, float y);
+	void setFinishPosition(float x, float y);
 	void setGroundTexture(sf::Texture * texture);
 	void addEnemy(std::shared_ptr<Enemy> enemy);
 	void popEnemy();

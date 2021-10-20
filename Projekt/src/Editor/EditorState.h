@@ -20,6 +20,9 @@
 #include "EditorMap.h"
 
 
+class EditorCommand;
+
+
 class EditorState : public State
 {
 private:
@@ -30,10 +33,8 @@ private:
 	std::shared_ptr<SelectableButton> type4_button;
 
 	std::vector<std::shared_ptr<Control>> controls;
-
-	std::stack<std::string> undo_stack;
+	std::stack<std::shared_ptr<EditorCommand>> executed_commands;
 	std::shared_ptr<EditorMouseMode> mouse_mode;
-
 	EditorMap editor_map;
 
 	void createButtons(Strings* strings);
@@ -53,7 +54,6 @@ private:
 	void initDefaultMouseMode();
 	void handleControlsEvent(sf::Event& event);
 	void handleMouse(sf::Event & event);
-	void parseAndExecuteRemoveShape(std::string command);
 
 public:
 	EditorState(std::shared_ptr<sf::RenderWindow> window);
@@ -74,6 +74,8 @@ public:
 	sf::Vector2f getFinishPosition() const;
 	void setFinishPosition(sf::Vector2f newPosition);
 	void addEnemy(sf::Vector2f position);
+	void executeCommand(std::shared_ptr<EditorCommand> editor_command);
+	EditorMap* getEditorMapPtr();
 };
 
 #endif

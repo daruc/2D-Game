@@ -4,6 +4,7 @@
 
 #include "EnemyEditorMouseMode.h"
 #include "EditorState.h"
+#include "CommandAddEnemy.h"
 
 
 EnemyEditorMouseMode::EnemyEditorMouseMode(std::shared_ptr<sf::RenderWindow> window,
@@ -20,8 +21,9 @@ void EnemyEditorMouseMode::handleMouse(sf::Event & event)
 		std::cout << "coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
 		if (coor.x > 130)
 		{
-			editor_state->pushUndoAction("remove_enemy");
-			editor_state->addEnemy(sf::Vector2f(coor));
+			sf::Vector2f position(coor);
+			auto command = std::make_shared<CommandAddEnemy>(editor_state->getEditorMapPtr(), position);
+			editor_state->executeCommand(command);
 		}
 	}
 }

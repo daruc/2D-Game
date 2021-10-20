@@ -180,6 +180,27 @@
     <ClInclude Include="src\GUI\GridLayout.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Editor\EditorCommand.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\CommandAddPoint.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\CommandAddGroundShape.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\CommandMovePlayer.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\CommandMoveFinish.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\CommandAddEnemy.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\CommandAddFireShape.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AnimatedSprite.cpp">
@@ -313,6 +334,24 @@
     </ClCompile>
     <ClCompile Include="src\GUI\GridLayout.cpp">
       <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\CommandAddPoint.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\CommandAddGroundShape.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\CommandMovePlayer.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\CommandMoveFinish.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\CommandAddEnemy.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\CommandAddFireShape.cpp">
+      <Filter>Source Files\Editor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

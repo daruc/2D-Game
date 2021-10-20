@@ -15,6 +15,7 @@
 #include "FinishEditorMouseMode.h"
 #include "EnemyEditorMouseMode.h"
 #include "FireEditorMouseMode.h"
+#include "EditorCommand.h"
 
 
 const sf::Vector2f BUTTON_DIMENSIONS(130.0f, 40.0f);
@@ -198,56 +199,10 @@ void EditorState::createBackButton(Strings* strings)
 	back_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
 
-		if (!undo_stack.empty())
+		if (!executed_commands.empty())
 		{
-			std::string str = undo_stack.top();
-			std::cout << "undo_stack: " << str << std::endl;
-			undo_stack.pop();
-
-			if (str == "remove_point")
-			{
-				editor_map.popPoint();
-			}
-			else if (str.substr(0, 12) == "remove_shape")
-			{
-				parseAndExecuteRemoveShape(str);
-			}
-			else if (str.substr(0, 11) == "move_player")
-			{
-				str = str.substr(12);
-				std::size_t position = str.find("|");
-				std::string coor_x = str.substr(0, position);
-				std::string coor_y = str.substr(position + 1);
-				std::stringstream stream;
-				sf::Vector2f vector;
-				stream << coor_x;
-				stream >> vector.x;
-				stream.clear();
-				stream << coor_y;
-				stream >> vector.y;
-
-				editor_map.setPlayerPosition(vector);
-			}
-			else if (str.substr(0, 11) == "move_finish")
-			{
-				str = str.substr(12);
-				std::size_t position = str.find("|");
-				std::string coor_x = str.substr(0, position);
-				std::string coor_y = str.substr(position + 1);
-				std::stringstream stream;
-				sf::Vector2f vector;
-				stream << coor_x;
-				stream >> vector.x;
-				stream.clear();
-				stream << coor_y;
-				stream >> vector.y;
-
-				editor_map.setFinishPosition(vector);
-			}
-			else if (str == "remove_enemy")
-			{
-				editor_map.popEnemy();
-			}
+			executed_commands.top()->undo();
+			executed_commands.pop();
 		}
 	});
 	controls.push_back(back_button);
@@ -334,45 +289,9 @@ void EditorState::draw(std::shared_ptr<sf::RenderWindow> window)
 	std::this_thread::sleep_for(std::chrono::milliseconds(40));
 }
 
-void EditorState::parseAndExecuteRemoveShape(std::string command)
-{
-	editor_map.removeLast();
-	std::string tail = command.substr(12);
-	std::cout << "tail=" << tail << std::endl;
-	while (!tail.empty())
-	{
-		tail = tail.substr(11);
-		std::size_t position = tail.find("#");
-		std::string str_coor = tail.substr(0, position);
-		
-		if (position == 4294967295)
-			tail = "";
-		else
-			tail = tail.substr(position);
-
-		position = str_coor.find("|");
-		std::string str_x = str_coor.substr(0, position);
-		std::string str_y = str_coor.substr(position + 1);
-
-		std::stringstream stream;
-		sf::Vector2f point;
-		stream << str_x;
-		stream >> point.x;
-		stream.clear();
-		stream << str_y;
-		stream >> point.y;
-		editor_map.addPoint(point);
-	}
-}
-
 void EditorState::addPoint(sf::Vector2f point)
 {
 	editor_map.addPoint(point);
-}
-
-void EditorState::pushUndoAction(sf::String action)
-{
-	undo_stack.push(action);
 }
 
 size_t EditorState::getPointsCount() const
@@ -423,4 +342,15 @@ void EditorState::setFinishPosition(sf::Vector2f newPosition)
 void EditorState::addEnemy(sf::Vector2f position)
 {
 	editor_map.addEnemy(position);
+}
+
+void EditorState::executeCommand(std::shared_ptr<EditorCommand> editor_command)
+{
+	editor_command->execute();
+	executed_commands.push(editor_command);
+}
+
+EditorMap* EditorState::getEditorMapPtr()
+{
+	return &editor_map;
 }

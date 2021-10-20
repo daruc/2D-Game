@@ -2,28 +2,45 @@
 #include "KeyField.h"
 
 
+const float OUTLINE_THICKNESS = 3.0f;
+const size_t FONT_SIZE = 25;
+
 KeyField::KeyField(std::shared_ptr<sf::RenderWindow> window)
 	: Control(window)
 {
-	rectangle.setFillColor(sf::Color::White);
-	rectangle.setOutlineThickness(3.0f);
-	rectangle.setOutlineColor(sf::Color::Black);
+	initRectangle();
+	initKeyText();
+	initDescription();
 
+	focus = false;
+}
+
+void KeyField::initRectangle()
+{
+	rectangle.setFillColor(sf::Color::White);
+	rectangle.setOutlineThickness(OUTLINE_THICKNESS);
+	rectangle.setOutlineColor(sf::Color::Black);
+}
+
+void KeyField::initKeyText()
+{
 	if (!font.loadFromFile("font.ttf"))
 	{
 		std::cout << "Cannot load font from file.\n";
 	}
 
 	text.setFont(font);
-	text.setCharacterSize(25);
+	text.setCharacterSize(FONT_SIZE);
 	text.setColor(sf::Color::Black);
-
-	description.setFont(font);
-	description.setCharacterSize(25);
-	description.setColor(sf::Color::White);
-
-	focus = false;
 }
+
+void KeyField::initDescription()
+{
+	description.setFont(font);
+	description.setCharacterSize(FONT_SIZE);
+	description.setColor(sf::Color::White);
+}
+
 KeyField::KeyField(std::shared_ptr<sf::RenderWindow> window, sf::Keyboard::Key key)
 	: KeyField(window)
 {
@@ -283,32 +300,62 @@ void KeyField::setTextPosition()
 
 void KeyField::handleEvents(sf::Event & event)
 {
-	if (event.type == sf::Event::MouseButtonReleased)
+	if (isMouseButtonReleased(event))
 	{
-		sf::Vector2i coor(sf::Mouse::getPosition(*window));
-		sf::Vector2f dim(rectangle.getSize());
-		sf::Vector2f rec_coor(rectangle.getPosition());
-
-		if (coor.x >= rec_coor.x && coor.x <= rec_coor.x + dim.x
-			&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y)
+		if (isMouseInsideRectangle())
 		{
-			text.setString("");
-			focus = true;
-			rectangle.setOutlineColor(sf::Color::Yellow);
+			setFocus();
 		}
 		else
 		{
-			focus = false;
-			rectangle.setOutlineColor(sf::Color::Black);
+			unsetFocus();
 		}
 	}
-	else if (focus && event.type == sf::Event::KeyPressed)
+	else if (isFocusedKeyPressed(event))
 	{
-		handleKeys(event);
-		setTextPosition();
-		focus = false;
-		rectangle.setOutlineColor(sf::Color::Black);
+		assignKey(event);
 	}
+}
+
+bool KeyField::isMouseButtonReleased(sf::Event& event) const
+{
+	return (event.type == sf::Event::MouseButtonReleased);
+}
+
+bool KeyField::isMouseInsideRectangle() const
+{
+	sf::Vector2i coor(sf::Mouse::getPosition(*window));
+	sf::Vector2f dim(rectangle.getSize());
+	sf::Vector2f rec_coor(rectangle.getPosition());
+
+	return (coor.x >= rec_coor.x && coor.x <= rec_coor.x + dim.x
+		&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y);
+}
+
+void KeyField::setFocus()
+{
+	text.setString("");
+	focus = true;
+	rectangle.setOutlineColor(sf::Color::Yellow);
+}
+
+void KeyField::unsetFocus()
+{
+	focus = false;
+	rectangle.setOutlineColor(sf::Color::Black);
+}
+
+bool KeyField::isFocusedKeyPressed(sf::Event& event) const
+{
+	return (focus && event.type == sf::Event::KeyPressed);
+}
+
+void KeyField::assignKey(sf::Event& event)
+{
+	handleKeys(event);
+	setTextPosition();
+	focus = false;
+	rectangle.setOutlineColor(sf::Color::Black);
 }
 
 void KeyField::update(float deltaSeconds)

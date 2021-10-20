@@ -1,8 +1,10 @@
-#include "FireEditorMouseMode.h"
-#include <SFML/Graphics.hpp>
 #include <sstream>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 #include "EditorState.h"
+#include "FireEditorMouseMode.h"
+#include "CommandAddFireShape.h"
+#include "CommandAddPoint.h"
 
 
 FireEditorMouseMode::FireEditorMouseMode(std::shared_ptr<sf::RenderWindow> window, 
@@ -29,8 +31,9 @@ void FireEditorMouseMode::handleLeftMouseButton()
 	std::cout << "fire, coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
 	if (coor.x > 130)
 	{
-		editor_state->addPoint(sf::Vector2f(coor.x - 1, coor.y - 1));
-		editor_state->pushUndoAction("remove_point");
+		sf::Vector2f position(coor.x - 1, coor.y - 1);
+		auto command = std::make_shared<CommandAddPoint>(editor_state->getEditorMapPtr(), position);
+		editor_state->executeCommand(command);
 	}
 }
 
@@ -38,16 +41,7 @@ void FireEditorMouseMode::handleRightMouseButton()
 {
 	if (editor_state->getPointsCount() >= 3)
 	{
-		editor_state->addFireShape();
-
-		//Removing points
-		std::stringstream strstream;
-		strstream << "remove_shape";
-		for (sf::Vector2f point : editor_state->getPoints())
-		{
-			strstream << "#add_point|" << point.x << "|" << point.y;
-		}
-		editor_state->clearPoints();
-		editor_state->pushUndoAction(strstream.str());
+		auto command = std::make_shared<CommandAddFireShape>(editor_state->getEditorMapPtr());
+		editor_state->executeCommand(command);
 	}
 }

@@ -120,11 +120,24 @@ void EditorMap::scrollUp()
 	std::cout << "view.move up\n";
 }
 
-void EditorMap::addPoint(sf::Vector2f point)
+sf::Vector2f EditorMap::convertScreenToMap(sf::Vector2f position) const
 {
-	points.push_back(point);
+	return position + map->getViewOffset();
 }
 
+sf::Vector2f EditorMap::convertMapToScreen(sf::Vector2f position) const
+{
+	return position - map->getViewOffset();
+}
+
+void EditorMap::addPoint(sf::Vector2f point, Space space)
+{
+	if (space == Space::MAP)
+	{
+		point = convertMapToScreen(point);
+	}
+	points.push_back(point);
+}
 
 size_t EditorMap::getPointsCount() const
 {
@@ -151,27 +164,42 @@ void EditorMap::clearPoints()
 	points.clear();
 }
 
-sf::Vector2f EditorMap::getPlayerPosition() const
+sf::Vector2f EditorMap::getPlayerPosition(Space space) const
 {
-	return map->getPlayerPosition();
+	sf::Vector2f position = map->getPlayerPosition();
+	if (space == Space::SCREEN)
+	{
+		position = convertMapToScreen(position);
+	}
+	return position;
 }
 
-void EditorMap::setPlayerPosition(sf::Vector2f newPosition)
+void EditorMap::setPlayerPosition(sf::Vector2f newPosition, Space space)
 {
+	if (space == Space::SCREEN)
+	{
+		newPosition = convertScreenToMap(newPosition);
+	}
 	map->setPlayerPosition(newPosition.x, newPosition.y);
 }
 
-sf::Vector2f EditorMap::getFinishPosition() const
+sf::Vector2f EditorMap::getFinishPosition(Space space) const
 {
-	return map->getFinishPosition();
+	sf::Vector2f position = map->getFinishPosition();
+	if (space == Space::SCREEN)
+	{
+		position = convertMapToScreen(position);
+	}
+	return position;
 }
 
-void EditorMap::setFinishPosition(sf::Vector2f newPosition)
+void EditorMap::setFinishPosition(sf::Vector2f newPosition, Space space)
 {
+	if (space == Space::SCREEN)
+	{
+		newPosition = convertScreenToMap(newPosition);
+	}
 	map->setFinishPosition(newPosition.x, newPosition.y);
-
-	sf::Vector2f new_coor = map->getFinishPosition();
-	finish.setPosition(new_coor.x, new_coor.y);
 }
 
 void EditorMap::addEnemy(sf::Vector2f position)
@@ -214,9 +242,17 @@ void EditorMap::setMapType4()
 	map->setGroundTexture(textures.getGround());
 }
 
-void EditorMap::popPoint()
+sf::Vector2f EditorMap::popPoint(Space space)
 {
+	sf::Vector2f point = *points.rbegin();
 	points.pop_back();
+
+	if (space == Space::MAP)
+	{
+		point = convertScreenToMap(point);
+	}
+
+	return point;
 }
 
 void EditorMap::popEnemy()
