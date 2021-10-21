@@ -11,5 +11,7 @@
 float pixels2Meters(float pixels);
 float meters2pixels(float meters);
 void normalizeVector(sf::Vector2f* vectorPtr);
+sf::Vector2f rectDimensions(sf::FloatRect rect);
+float rad2Deg(float rad);
 
 #endif

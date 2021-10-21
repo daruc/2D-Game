@@ -20,9 +20,9 @@ void MapButton::handleEvents(sf::Event& event)
 	Button::handleEvents(event);
 }
 
-void MapButton::update(float deltaSeconds)
+void MapButton::update(float delta_seconds)
 {
-	Button::update(deltaSeconds);
+	Button::update(delta_seconds);
 }
 
 void MapButton::draw(std::shared_ptr<sf::RenderWindow> window)

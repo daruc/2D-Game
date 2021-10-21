@@ -80,7 +80,7 @@ bool Button::isMouseInsideButton()
 		&& coor.y >= rec_coor.y && coor.y <= rec_coor.y + dim.y);
 }
 
-void Button::update(float deltaSeconds)
+void Button::update(float delta_seconds)
 {
 	sf::Vector2i coor(sf::Mouse::getPosition(*window));
 	sf::Vector2f dim(rectangle.getSize());

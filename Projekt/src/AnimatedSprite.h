@@ -25,7 +25,7 @@ public:
 	~AnimatedSprite();
 	void loadTexture(const sf::Texture & texture);
 	inline void selectAnimation(int n_animation) { selected_animation = n_animation; }
-	void update(float deltaSeconds) override;
+	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void addFrame(int n_animation, sf::IntRect frame);
 	void setDirection(int n_animation, bool play_forward);

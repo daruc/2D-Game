@@ -353,5 +353,8 @@
     <ClCompile Include="src\Editor\CommandAddFireShape.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="src\MapShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

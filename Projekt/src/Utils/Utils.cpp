@@ -2,6 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
+namespace
+{
+	const float PI = 3.14159;
+}
 
 float pixels2Meters(float pixels)
 {
@@ -20,4 +24,14 @@ void normalizeVector(sf::Vector2f* vectorPtr)
 
 	float length = sqrt((x * x) + (y * y));
 	*vectorPtr /= length;
+}
+
+sf::Vector2f rectDimensions(sf::FloatRect rect)
+{
+	return sf::Vector2f(rect.width, rect.height);
+}
+
+float rad2Deg(float rad)
+{
+	return rad * 180 / PI;
 }

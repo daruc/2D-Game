@@ -9,7 +9,6 @@ MapBuilder::MapBuilder(std::shared_ptr<sf::RenderWindow> window)
 }
 bool MapBuilder::loadFromFile(std::string filename)
 {
-	char * bytes;
 	std::ifstream fin;
 	fin.open(filename, std::fstream::out | std::fstream::binary);
 	if (!fin.is_open())
@@ -20,10 +19,9 @@ bool MapBuilder::loadFromFile(std::string filename)
 	fin.seekg(0, fin.end);
 	int size = fin.tellg();
 	fin.seekg(0, fin.beg);
-	bytes = new char[size];
-	fin.read(bytes, size);
-	map->fromBinary(size, bytes);
-	delete[] bytes;
+	std::vector<char> bytes(size);
+	fin.read(bytes.data(), size);
+	map->fromBinary(bytes.data());
 
 	return true;
 }

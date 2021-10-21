@@ -40,13 +40,13 @@ private:
 	void handleExitEvent(sf::Event& event);
 	void handleControlsEvent(sf::Event& event);
 	void drawControls(std::shared_ptr<sf::RenderWindow> window);
-	void updateControls(float deltaSeconds);
+	void updateControls(float delta_seconds);
 
 public:
 	MapMenuState(std::shared_ptr<sf::RenderWindow> window);
 	virtual ~MapMenuState();
 	virtual void handleEvents();
-	void update(float deltaSeconds) override;
+	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 

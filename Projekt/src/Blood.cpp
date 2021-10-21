@@ -15,11 +15,11 @@ Blood::Blood(sf::Vector2f position)
 	}
 }
 
-void Blood::update(float deltaSeconds)
+void Blood::update(float delta_seconds)
 {
 	for (std::shared_ptr<Drop> drop : drops)
 	{
-		drop->update(deltaSeconds);
+		drop->update(delta_seconds);
 	}
 }
 

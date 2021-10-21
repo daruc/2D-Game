@@ -20,7 +20,7 @@ private:
 	const std::string TITLE = "Gra";
 
 	std::shared_ptr<sf::RenderWindow> window;
-	std::shared_ptr<State> currentState;
+	std::shared_ptr<State> current_state;
 
 	void changeCurrentState();
 

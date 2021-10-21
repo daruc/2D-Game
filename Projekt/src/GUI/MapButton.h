@@ -20,7 +20,7 @@ public:
 	MapButton(std::shared_ptr<sf::RenderWindow> window, std::string title);
 	MapButton(std::shared_ptr<sf::RenderWindow> window, std::wstring title);
 	void handleEvents(sf::Event& event) override;
-	void update(float deltaSeconds) override;
+	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setDimensions(sf::Vector2f dimensions);
 	void setPosition(sf::Vector2f position) override;

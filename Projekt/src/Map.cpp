@@ -132,92 +132,43 @@ void Map::removeLast()
 	}
 }
 
-std::vector<char> Map::toBinary( ) const
+std::vector<char> Map::toBinary() const
 {
-	size_t nShapes = shapes.size();
-
-	sf::Vector2f player_position = player.getPosition();
-	sf::Vector2f finish_postiion = finish.getPosition();
-	size_t size = sizeof(type) 
-		+ sizeof(player_position.x)
-		+ sizeof(player_position.y)
-		+ sizeof(finish_postiion.x)
-		+ sizeof(finish_postiion.y)
-		+ sizeof(nShapes);	//type + player and finish position + nShapes
-
-	auto begin = shapes.begin();
-	auto end = shapes.end();
-	for (auto it = begin; it != end; ++it)
-	{
-		size += sizeof(int) + sizeof(size_t) + sizeof(float) * 2;	//number of verticles + position + type
-		size += (*it)->getPointCount() * sizeof(float) * 2;	//verticles
-	}
-
-	//number of enemies
-	size += sizeof(enemies.size());
-	auto begin_enemies = enemies.begin();
-	auto end_enemies = enemies.end();
-	for (auto it = begin_enemies; it != end_enemies; ++it)
-	{
-		size += sizeof(float)*2;	//enemy.x + enemy.y positions
-	}
-
-	std::vector<char> bytes(size);
+	std::vector<char> bytes(binarySize());
 	char * ptr = bytes.data();
 	memcpy(ptr, &type, sizeof(type));
 	ptr += sizeof(type);
-	memcpy(ptr, &player_position.x, sizeof(player_position.x));
-	ptr += sizeof(player_position.x);
-	memcpy(ptr, &player_position.y, sizeof(player_position.y));
-	ptr += sizeof(player_position.y);
-	memcpy(ptr, &finish_postiion.x, sizeof(finish_postiion.x));
-	ptr += sizeof(finish_postiion.x);
-	memcpy(ptr, &finish_postiion.y, sizeof(finish_postiion.y));
-	ptr += sizeof(finish_postiion.y);
+
+	writeAndIncrement(ptr, player);
+	writeAndIncrement(ptr, finish);
+
+	size_t nShapes = shapes.size();
 	memcpy(ptr, &nShapes, sizeof(nShapes));
 	ptr += sizeof(nShapes);
-	for (auto it = begin; it != end; ++it)
+	for (std::shared_ptr<MapShape> map_shape : shapes)
 	{
-		int shape_type = (int)(*it)->getType();
-		memcpy(ptr, &shape_type, sizeof(shape_type));
-		ptr += sizeof(shape_type);
-		size_t count = (*it)->getPointCount();
-		memcpy(ptr, &count, sizeof(count));
-		ptr += sizeof(count);
-		sf::Vector2f shape_position = (*it)->getPosition();
-		memcpy(ptr, &shape_position.x, sizeof(shape_position.x));
-		ptr += sizeof(shape_position.x);
-		memcpy(ptr, &shape_position.y, sizeof(shape_position.y));
-		ptr += sizeof(shape_position.y);
-		for (size_t j = 0; j < count; ++j)
-		{
-			sf::Vector2f point = (*it)->getPoint(j);
-			memcpy(ptr, &point.x, sizeof(point.x));
-			ptr += sizeof(point.x);
-			memcpy(ptr, &point.y, sizeof(point.y));
-			ptr += sizeof(point.y);
-		}
+		writeAndIncrement(ptr, *map_shape);
 	}
 
 	int nEnemies = enemies.size();
 	memcpy(ptr, &nEnemies, sizeof(nEnemies));
-	if (nEnemies > 0)
+	ptr += sizeof(nEnemies);
+	for (std::shared_ptr<Enemy> enemy : enemies)
 	{
-		ptr += sizeof(nEnemies);
-		for (auto it = begin_enemies; it != end_enemies; ++it)
-		{
-			sf::Vector2f position = (*it)->getPosition();
-			memcpy(ptr, &position.x, sizeof(position.x));
-			ptr += sizeof(position.x);
-			memcpy(ptr, &position.y, sizeof(position.y));
-			ptr += sizeof(position.y);
-		}
+		writeAndIncrement(ptr, *enemy);
 	}
-
+	
 	return bytes;
 }
 
-void Map::fromBinary(int size, char * bytes)
+void Map::writeAndIncrement(char*& destination, const Binary& source) const
+{
+	std::vector<char> bytes = source.toBinary();
+	memcpy(destination, bytes.data(), bytes.size());
+	destination += bytes.size();
+}
+
+void Map::fromBinary(char* bytes)
 {
 	shapes.clear();
 	size_t nShapes;
@@ -228,70 +179,54 @@ void Map::fromBinary(int size, char * bytes)
 	char * ptr = bytes;
 	memcpy(&map_type, ptr, sizeof(type));
 	ptr += sizeof(type);
-	sf::Vector2f player_position;
-	memcpy(&player_position.x, ptr, sizeof(player_position.x));
-	ptr += sizeof(player_position.x);
-	memcpy(&player_position.y, ptr, sizeof(player_position.y));
-	ptr += sizeof(player_position.y);
-	player.setPosition(player_position);
 
-	sf::Vector2f finish_position;
-	memcpy(&finish_position.x, ptr, sizeof(finish_position.x));
-	ptr += sizeof(finish_position.x);
-	memcpy(&finish_position.y, ptr, sizeof(finish_position.y));
-	ptr += sizeof(finish_position.y);
-	finish.setPosition(finish_position);
+	player.fromBinary(ptr);
+	ptr += player.binarySize();
+	finish.fromBinary(ptr);
+	ptr += finish.binarySize();
 
 	memcpy(&nShapes, ptr, sizeof(nShapes));
 	ptr += sizeof(nShapes);
 	for (int i = 0; i < nShapes; ++i)
 	{
-		int shape_type;
-		memcpy(&shape_type, ptr, sizeof(type));
-		ptr += sizeof(type);
-
-		memcpy(&verticles, ptr, sizeof(verticles));
-		ptr += sizeof(verticles);
-
-		memcpy(&position.x, ptr, sizeof(position.x));
-		ptr += sizeof(position.x);
-
-		memcpy(&position.y, ptr, sizeof(position.y));
-		ptr += sizeof(position.y);
-
-		std::shared_ptr<MapShape> shape = std::make_shared<MapShape>();
-		shape->setPosition(position);
-		shape->setPointCount(verticles);	//error here
-		shape->setType((MapShape::Type) shape_type);
-
-		for (int j = 0; j < verticles; ++j)
-		{
-			sf::Vector2f vex;
-			memcpy(&vex.x, ptr, sizeof(vex.x));
-			ptr += sizeof(vex.x);
-			memcpy(&vex.y, ptr, sizeof(vex.y));
-			ptr += sizeof(vex.y);
-			shape->setPoint(j, vex);
-		}
+		auto shape = std::make_shared<MapShape>();
+		shape->fromBinary(ptr);
+		ptr += shape->binarySize();
 		shapes.push_back(shape);
-		
 	}
 	memcpy(&nEnemies, ptr, sizeof(nEnemies));
 	ptr += sizeof(nEnemies);
 	for (int i = 0; i < nEnemies; ++i)
 	{
-		memcpy(&position.x, ptr, sizeof(position.x));
-		ptr += sizeof(position.x);
-		memcpy(&position.y, ptr, sizeof(position.y));
-		ptr += sizeof(position.y);
-
 		auto enemy = std::make_shared<Enemy>();
-		enemy->setPosition(position);
-		enemy->update(0);
+		enemy->fromBinary(ptr);
+		ptr += enemy->binarySize();
 		enemies.push_back(enemy);
 	}
 
 	this->type = map_type;
+}
+
+size_t Map::binarySize() const
+{
+	size_t size = sizeof(type)
+		+ player.binarySize()
+		+ finish.binarySize()
+		+ sizeof(shapes.size());	//type + player and finish position + nShapes
+
+	for (std::shared_ptr<MapShape> map_shape : shapes)
+	{
+		size += map_shape->binarySize();
+	}
+
+	//number of enemies
+	size += sizeof(enemies.size());
+	for (std::shared_ptr<Enemy> enemy : enemies)
+	{
+		size += enemy->binarySize();
+	}
+
+	return size;
 }
 
 void Map::addEnemy(std::shared_ptr<Enemy> enemy)
@@ -310,10 +245,10 @@ void Map::addBlood(sf::Vector2f bloodPosition)
 	blood.push_back(new_blood);
 }
 
-void Map::update(float deltaSeconds)
+void Map::update(float delta_seconds)
 {
-	updateBlood(deltaSeconds);
-	player.update(deltaSeconds);
+	updateBlood(delta_seconds);
+	player.update(delta_seconds);
 	removeOutOfDateBlood();
 }
 

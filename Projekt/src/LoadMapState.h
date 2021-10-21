@@ -38,7 +38,7 @@ public:
 	LoadMapState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~LoadMapState();
 	virtual void handleEvents();
-	void update(float deltaSeconds) override;
+	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 };
 

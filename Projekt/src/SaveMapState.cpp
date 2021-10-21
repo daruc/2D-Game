@@ -112,11 +112,11 @@ void SaveMapState::handleControlsEvents(sf::Event& event)
 	}
 }
 
-void SaveMapState::update(float deltaSeconds)
+void SaveMapState::update(float delta_seconds)
 {
 	for (std::shared_ptr<Control> control : controls)
 	{
-		control->update(deltaSeconds);
+		control->update(delta_seconds);
 	}
 }
 

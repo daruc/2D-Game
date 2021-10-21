@@ -113,11 +113,11 @@ void MainMenuState::handleControlsEvent(sf::Event& event)
 	}
 }
 
-void MainMenuState::update(float deltaSeconds)
+void MainMenuState::update(float delta_seconds)
 {
 	for (std::shared_ptr<Control> control : controls)
 	{
-		control->update(deltaSeconds);
+		control->update(delta_seconds);
 	}
 }
 

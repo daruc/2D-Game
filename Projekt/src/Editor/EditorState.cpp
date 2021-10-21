@@ -226,7 +226,26 @@ EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_p
 	initDefaultMouseMode();
 	Strings* strings = Strings::Instance();
 	createButtons(strings);
-	type1_button->select();
+	selectMapTypeButton(map);
+}
+
+void EditorState::selectMapTypeButton(std::shared_ptr<Map> map)
+{
+	switch (map->getType())
+	{
+	case 1:
+		type1_button->select();
+		break;
+	case 2:
+		type2_button->select();
+		break;
+	case 3:
+		type3_button->select();
+		break;
+	case 4:
+		type4_button->select();
+		break;
+	}
 }
 
 EditorState::~EditorState()
@@ -265,11 +284,11 @@ void EditorState::handleControlsEvent(sf::Event & event)
 	}
 }
 
-void EditorState::update(float deltaSeconds)
+void EditorState::update(float delta_seconds)
 {
 	for (std::shared_ptr<Control> control : controls)
 	{
-		control->update(deltaSeconds);
+		control->update(delta_seconds);
 	}
 }
 

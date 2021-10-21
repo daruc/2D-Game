@@ -248,7 +248,7 @@ void GameState::handleEventReload()
 	}
 }
 
-void GameState::update(float deltaSeconds)
+void GameState::update(float delta_seconds)
 {
 	//update cursor position
 	sf::Vector2i mouse = sf::Mouse::getPosition(*window);
@@ -265,12 +265,12 @@ void GameState::update(float deltaSeconds)
 	checkDead();
 
 	//update blood
-	map->update(deltaSeconds);
+	map->update(delta_seconds);
 
 	// GUI
-	health_indicator.update(deltaSeconds);
-	ammunition_indicator.update(deltaSeconds);
-	time_indicator.update(deltaSeconds);
+	health_indicator.update(delta_seconds);
+	ammunition_indicator.update(delta_seconds);
+	time_indicator.update(delta_seconds);
 }
 
 void GameState::checkWin()

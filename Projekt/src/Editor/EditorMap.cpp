@@ -24,8 +24,7 @@ EditorMap::EditorMap(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 {
 	this->map = map;
 	initBackground();
-	textures.loadMapType(1);
-	map->setGroundTexture(textures.getGround());
+	reloadMapTypeTextures();
 }
 
 void EditorMap::initBackground()
@@ -217,28 +216,30 @@ std::shared_ptr<Map> EditorMap::getMap()
 void EditorMap::setMapType1()
 {
 	map->setType(1);
-	textures.loadMapType(1);
-	map->setGroundTexture(textures.getGround());
+	reloadMapTypeTextures();
 }
 
 void EditorMap::setMapType2()
 {
 	map->setType(2);
-	textures.loadMapType(2);
-	map->setGroundTexture(textures.getGround());
+	reloadMapTypeTextures();
 }
 
 void EditorMap::setMapType3()
 {
 	map->setType(3);
-	textures.loadMapType(3);
-	map->setGroundTexture(textures.getGround());
+	reloadMapTypeTextures();
 }
 
 void EditorMap::setMapType4()
 {
 	map->setType(4);
-	textures.loadMapType(4);
+	reloadMapTypeTextures();
+}
+
+void EditorMap::reloadMapTypeTextures()
+{
+	textures.loadMapType(map->getType());
 	map->setGroundTexture(textures.getGround());
 }
 

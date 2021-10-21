@@ -28,7 +28,7 @@ void AnimatedSprite::addFrame(int n_animation, sf::IntRect frame)
 	animation[n_animation].addFrame(frame);
 }
 
-void AnimatedSprite::update(float deltaSeconds)
+void AnimatedSprite::update(float delta_seconds)
 {
 	if (!stop)
 	{

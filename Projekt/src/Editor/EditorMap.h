@@ -43,6 +43,7 @@ private:
 	void scrollUp();
 	sf::Vector2f convertScreenToMap(sf::Vector2f position) const;
 	sf::Vector2f convertMapToScreen(sf::Vector2f position) const;
+	void reloadMapTypeTextures();
 
 public:
 	EditorMap(std::shared_ptr<sf::RenderWindow> window);

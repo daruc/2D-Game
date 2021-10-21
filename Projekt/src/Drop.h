@@ -24,14 +24,14 @@ private:
 
 	sf::Vector2f getRandomSize() const;
 	sf::Vector2f getRandomVelocity() const;
-	void updateSecondsToDestroy(float deltaSeconds);
-	void updateGravitation(float deltaSeconds);
+	void updateSecondsToDestroy(float delta_seconds);
+	void updateGravitation(float delta_seconds);
 	void updateTransparency();
 
 public:
 	Drop(sf::Vector2f position);
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
-	void update(float deltaSeconds) override;
+	void update(float delta_seconds) override;
 	bool isReadyToDestroy();
 };
 

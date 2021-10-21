@@ -1,9 +1,20 @@
 #include <iostream>
 #include "KeyField.h"
+#include "../Utils/Utils.h"
 
 
-const float OUTLINE_THICKNESS = 3.0f;
-const size_t FONT_SIZE = 25;
+namespace
+{
+	const float OUTLINE_THICKNESS = 3.0f;
+	const size_t FONT_SIZE = 25;
+	const sf::Color FILL_COLOR(sf::Color::White);
+	const sf::Color OUTLINE_COLOR(sf::Color::Black);
+	const sf::Color TEXT_COLOR(sf::Color::Black);
+	const sf::Color DESCRIPTION_COLOR(sf::Color::White);
+	const char* FONT_FILE = "font.ttf";
+	const sf::Vector2f TEXT_POSITION_OFFSET(0.0f, -9.0f);
+	const sf::Vector2f DESCRIPTION_POSITION_OFFSET(-7.0f, -9.0f);
+}
 
 KeyField::KeyField(std::shared_ptr<sf::RenderWindow> window)
 	: Control(window)
@@ -17,28 +28,28 @@ KeyField::KeyField(std::shared_ptr<sf::RenderWindow> window)
 
 void KeyField::initRectangle()
 {
-	rectangle.setFillColor(sf::Color::White);
+	rectangle.setFillColor(FILL_COLOR);
 	rectangle.setOutlineThickness(OUTLINE_THICKNESS);
-	rectangle.setOutlineColor(sf::Color::Black);
+	rectangle.setOutlineColor(OUTLINE_COLOR);
 }
 
 void KeyField::initKeyText()
 {
-	if (!font.loadFromFile("font.ttf"))
+	if (!font.loadFromFile(FONT_FILE))
 	{
 		std::cout << "Cannot load font from file.\n";
 	}
 
 	text.setFont(font);
 	text.setCharacterSize(FONT_SIZE);
-	text.setColor(sf::Color::Black);
+	text.setColor(TEXT_COLOR);
 }
 
 void KeyField::initDescription()
 {
 	description.setFont(font);
 	description.setCharacterSize(FONT_SIZE);
-	description.setColor(sf::Color::White);
+	description.setColor(DESCRIPTION_COLOR);
 }
 
 KeyField::KeyField(std::shared_ptr<sf::RenderWindow> window, sf::Keyboard::Key key)
@@ -275,6 +286,81 @@ void KeyField::handleKeys(sf::Event & event)
 	case sf::Keyboard::F12:
 		ch = "F12";
 		break;
+	case sf::Keyboard::Enter:
+		ch = "Enter";
+		break;
+	case sf::Keyboard::Equal:
+		ch = "=";
+		break;
+	case sf::Keyboard::SemiColon:
+		ch = ";";
+		break;
+	case sf::Keyboard::Hyphen:
+		ch = "-";
+		break;
+	case sf::Keyboard::LBracket:
+		ch = "[";
+		break;
+	case sf::Keyboard::RBracket:
+		ch = "]";
+		break;
+	case sf::Keyboard::Period:
+		ch = ".";
+		break;
+	case sf::Keyboard::LSystem:
+		ch = "LWindow";
+		break;
+	case sf::Keyboard::RSystem:
+		ch = "RWindow";
+		break;
+	case sf::Keyboard::Insert:
+		ch = "Insert";
+		break;
+	case sf::Keyboard::Delete:
+		ch = "Delete";
+		break;
+	case sf::Keyboard::Add:
+		ch = "+";
+		break;
+	case sf::Keyboard::Subtract:
+		ch = "Num -";
+		break;
+	case sf::Keyboard::Multiply:
+		ch = "*";
+		break;
+	case sf::Keyboard::Divide:
+		ch = "/";
+		break;
+	case sf::Keyboard::Pause:
+		ch = "Pause";
+		break;
+	case sf::Keyboard::Quote:
+		ch = "'";
+		break;
+	case sf::Keyboard::Tilde:
+		ch = "~";
+		break;
+	case sf::Keyboard::Home:
+		ch = "Home";
+		break;
+	case sf::Keyboard::End:
+		ch = "End";
+		break;
+	case sf::Keyboard::Slash:
+		ch = "/";
+		break;
+	case sf::Keyboard::BackSlash:
+		ch = "\\";
+		break;
+	case sf::Keyboard::Menu:
+		ch = "Menu";
+		break;
+	case sf::Keyboard::Escape:
+		ch = "Escape";
+		break;
+	case sf::Keyboard::Comma:
+		ch = ",";
+		break;
 	}
 
 	key = event.key.code;
@@ -283,20 +369,22 @@ void KeyField::handleKeys(sf::Event & event)
 
 void KeyField::setTextPosition()
 {
-	sf::FloatRect text_dim = text.getLocalBounds();
-	sf::FloatRect desc_dim = description.getLocalBounds();
-	sf::FloatRect rect_dim = rectangle.getLocalBounds();
+	sf::Vector2f text_dim = rectDimensions(text.getLocalBounds());
+	sf::Vector2f desc_dim = rectDimensions(description.getLocalBounds());
+	sf::Vector2f rect_dim = rectDimensions(rectangle.getLocalBounds());
 	sf::Vector2f rect_position = rectangle.getPosition();
-	sf::Vector2f text_position;
-	sf::Vector2f desc_position;
-	text_position.x = (int)(rect_position.x + (rect_dim.width - text_dim.width) / 2.0f);
-	text_position.y = (int)(rect_position.y + (rect_dim.height - text_dim.height) / 2.0f - 9.0f);
-	desc_position.y = (int)(rect_position.y + (rect_dim.height - desc_dim.height) / 2.0f - 9.0f);
-	desc_position.x = (int) (rect_position.x - desc_dim.width - 7.0f);
+
+	sf::Vector2f text_center_in_rect = (rect_dim - text_dim) / 2.0f;
+	sf::Vector2f text_position = rect_position + text_center_in_rect + TEXT_POSITION_OFFSET;
+
+	float desc_y_center = (rect_dim.y - desc_dim.y) / 2.0f;
+	sf::Vector2f desc_position = rect_position + DESCRIPTION_POSITION_OFFSET;
+	desc_position.x -= desc_dim.x;
+	desc_position.y += desc_y_center;
+
 	text.setPosition(text_position);
 	description.setPosition(desc_position);
 }
-
 
 void KeyField::handleEvents(sf::Event & event)
 {
@@ -358,7 +446,7 @@ void KeyField::assignKey(sf::Event& event)
 	rectangle.setOutlineColor(sf::Color::Black);
 }
 
-void KeyField::update(float deltaSeconds)
+void KeyField::update(float delta_seconds)
 {
 
 }

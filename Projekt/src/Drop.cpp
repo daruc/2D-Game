@@ -35,28 +35,28 @@ void Drop::draw(std::shared_ptr<sf::RenderWindow> window)
 	window->draw(shape);
 }
 
-void Drop::update(float deltaSeconds)
+void Drop::update(float delta_seconds)
 {
 	if (isReadyToDestroy())
 	{
 		return;
 	}
 
-	updateSecondsToDestroy(deltaSeconds);
-	updateGravitation(deltaSeconds);
+	updateSecondsToDestroy(delta_seconds);
+	updateGravitation(delta_seconds);
 	updateTransparency();
 }
 
-void Drop::updateSecondsToDestroy(float deltaSeconds)
+void Drop::updateSecondsToDestroy(float delta_seconds)
 {
-	secondsToDestroy -= deltaSeconds;
+	secondsToDestroy -= delta_seconds;
 }
 
-void Drop::updateGravitation(float deltaSeconds)
+void Drop::updateGravitation(float delta_seconds)
 {
-	velocity.y += deltaSeconds * GRAVITATION;
+	velocity.y += delta_seconds * GRAVITATION;
 	sf::Vector2f positionOffset = velocity;
-	positionOffset *= deltaSeconds / SPEED;
+	positionOffset *= delta_seconds / SPEED;
 	shape.move(positionOffset);
 }
 

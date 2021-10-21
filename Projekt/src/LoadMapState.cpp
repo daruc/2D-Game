@@ -116,11 +116,11 @@ void LoadMapState::handleControlsEvents(sf::Event& event)
 	}
 }
 
-void LoadMapState::update(float deltaSeconds)
+void LoadMapState::update(float delta_seconds)
 {
 	for (std::shared_ptr<Control> control : controls)
 	{
-		control->update(deltaSeconds);
+		control->update(delta_seconds);
 	}
 }
 

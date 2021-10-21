@@ -196,11 +196,11 @@ void ControlsState::handleControlsEvent(sf::Event event)
 	}
 }
 
-void ControlsState::update(float deltaSeconds)
+void ControlsState::update(float delta_seconds)
 {
 	for (std::shared_ptr<Control> control : controls)
 	{
-		control->update(deltaSeconds);
+		control->update(delta_seconds);
 	}
 }
 

@@ -112,11 +112,11 @@ void GameOverState::handleControlsEvents(sf::Event& event)
 	}
 }
 
-void GameOverState::update(float deltaSeconds)
+void GameOverState::update(float delta_seconds)
 {
 	for (std::shared_ptr<Control> control : controls)
 	{
-		control->update(deltaSeconds);
+		control->update(delta_seconds);
 	}
 }
 

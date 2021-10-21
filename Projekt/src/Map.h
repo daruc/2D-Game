@@ -3,6 +3,7 @@
 
 #include <list>
 #include <memory>
+#include <vector>
 
 #include <SFML/Graphics.hpp>
 
@@ -34,6 +35,7 @@ private:
 	void updateBlood(float delta_seconds);
 	void setGroundTexture(std::shared_ptr<MapShape> shape, sf::Texture* texture);
 	void setFireTexture(std::shared_ptr<MapShape> shape, sf::Texture* texture);
+	void writeAndIncrement(char*& destination, const Binary& source) const;
 
 public:
 	Map(std::shared_ptr<sf::RenderWindow> window);
@@ -59,9 +61,10 @@ public:
 	void addEnemy(std::shared_ptr<Enemy> enemy);
 	void popEnemy();
 	void addBlood(sf::Vector2f bloodPosition);
-	void update(float deltaSeconds) override;
+	void update(float delta_seconds) override;
 	std::vector<char> Map::toBinary() const override;
-	void fromBinary(int size, char * bytes) override;
+	void fromBinary(char* bytes) override;
+	size_t binarySize() const override;
 	Player * getPlayer();
 };
 

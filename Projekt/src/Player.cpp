@@ -4,8 +4,6 @@
 #include "Utils/Utils.h"
 
 
-const double pi = 3.14159265358979323846;
-
 void Player::configureAnimations()
 {
 	sf::IntRect rect;
@@ -79,9 +77,9 @@ Player::Player(std::shared_ptr<sf::RenderWindow> window)
 	configureAnimations();
 }
 
-void Player::update(float deltaSeconds)
+void Player::update(float delta_seconds)
 {
-	sprite.update(deltaSeconds);
+	sprite.update(delta_seconds);
 
 	//rotate gun
 	sf::Vector2i mouse = sf::Mouse::getPosition(*window);
@@ -90,7 +88,7 @@ void Player::update(float deltaSeconds)
 	int height = mouse.y - center.y;
 
 	double rad_angle = atan2(height, width);
-	double deg_angle = rad_angle * 180 / pi;
+	double deg_angle = rad2Deg(rad_angle);
 
 	pistol.setRotation(deg_angle);
 
@@ -280,4 +278,25 @@ void Player::setCrouch(bool crouch)
 		pos.y = meters2pixels(2.0f) / 2.0f;
 		sprite.setOrigin(pos);
 	}
+}
+
+std::vector<char> Player::toBinary() const
+{
+	sf::Vector2f position = getPosition();
+	std::vector<char> buffer(binarySize());
+	memcpy(buffer.data(), &position, sizeof(position));
+
+	return buffer;
+}
+
+void Player::fromBinary(char* bytes)
+{
+	sf::Vector2f position;
+	memcpy(&position, bytes, sizeof(position));
+	setPosition(position);
+}
+
+size_t Player::binarySize() const
+{
+	return sizeof(getPosition());
 }

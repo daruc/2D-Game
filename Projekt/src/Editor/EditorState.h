@@ -54,13 +54,14 @@ private:
 	void initDefaultMouseMode();
 	void handleControlsEvent(sf::Event& event);
 	void handleMouse(sf::Event & event);
+	void selectMapTypeButton(std::shared_ptr<Map> map);
 
 public:
 	EditorState(std::shared_ptr<sf::RenderWindow> window);
 	EditorState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map);
 	virtual ~EditorState();
 	virtual void handleEvents();
-	void update(float deltaSeconds) override;
+	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void addPoint(sf::Vector2f point);
 	size_t getPointsCount() const;

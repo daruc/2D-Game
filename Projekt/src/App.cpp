@@ -7,7 +7,7 @@ void App::init()
 {
 	window = std::make_shared<sf::RenderWindow>(sf::VideoMode(WIDTH, HEIGHT), TITLE,
 		sf::Style::Close | sf::Style::Titlebar);
-	currentState = std::make_shared<MainMenuState>(window);
+	current_state = std::make_shared<MainMenuState>(window);
 }
 
 void App::run()
@@ -16,19 +16,19 @@ void App::run()
 
 	while (window->isOpen())
 	{
-		currentState->handleEvents();
-		float deltaSeconds = clock.getElapsedTime().asSeconds();
+		current_state->handleEvents();
+		float delta_seconds = clock.getElapsedTime().asSeconds();
 		clock.restart();
-		currentState->update(deltaSeconds);
-		currentState->draw(window);
+		current_state->update(delta_seconds);
+		current_state->draw(window);
 		changeCurrentState();
 	}
 }
 
 void App::changeCurrentState()
 {
-	if (currentState->getNextState() != nullptr)
+	if (current_state->getNextState() != nullptr)
 	{
-		currentState = currentState->getNextState();
+		current_state = current_state->getNextState();
 	}
 }

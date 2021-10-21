@@ -207,17 +207,17 @@ void MapMenuState::handleControlsEvent(sf::Event& event)
 	}
 }
 
-void MapMenuState::update(float deltaSeconds)
+void MapMenuState::update(float delta_seconds)
 {
-	updateControls(deltaSeconds);
+	updateControls(delta_seconds);
 }
 
-void MapMenuState::updateControls(float deltaSeconds)
+void MapMenuState::updateControls(float delta_seconds)
 {
-	grid_layout.update(deltaSeconds);
+	grid_layout.update(delta_seconds);
 	for (std::shared_ptr<Control> control : controls)
 	{
-		control->update(deltaSeconds);
+		control->update(delta_seconds);
 	}
 }
 
