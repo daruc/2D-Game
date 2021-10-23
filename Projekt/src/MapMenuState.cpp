@@ -13,6 +13,8 @@
 #include "MapBuilder.h"
 #include "GUI/MapButton.h"
 #include "GUI/TextField.h"
+#include "GUI/GUIConstants.h"
+#include "FontSingleton.h"
 
 
 namespace
@@ -142,20 +144,15 @@ void MapMenuState::createLoadMapButton(Strings* strings)
 
 void MapMenuState::initTitle(Strings* strings)
 {
-	if (!font.loadFromFile("font.ttf"))
-	{
-		std::cout << "Cannot load font from file.\n";
-	}
-
 	title.setString(strings->get("map_menu_title"));
 	title.setPosition(250.0f, 20.0f);
-	title.setFont(font);
+	title.setFont(FontSingleton::getInstance()->getFont());
 }
 
 void MapMenuState::initBackground()
 {
-	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
-	background.setFillColor(sf::Color(0, 0, 80, 255));
+	background.setSize(sf::Vector2f(window->getSize().x, GUIConstants::HEADER_HEIGHT));
+	background.setFillColor(GUIConstants::HEADER_COLOR);
 }
 
 sf::Vector2f MapMenuState::calculateScreenCenter() const
@@ -223,7 +220,7 @@ void MapMenuState::updateControls(float delta_seconds)
 
 void MapMenuState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
-	window->clear(sf::Color(0, 0, 100, 255));
+	window->clear(GUIConstants::BACKGROUND_COLOR);
 	window->draw(background);
 	window->draw(title);
 	drawControls(window);

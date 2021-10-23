@@ -16,7 +16,6 @@ typedef std::tuple<sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::
 class ControlsState : public State
 {
 private:
-	sf::Font font;
 	sf::Text title;
 	sf::RectangleShape background;
 
@@ -34,7 +33,6 @@ private:
 	void initCrouchField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
 	void initJumpField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
 	void initSaveButton(std::shared_ptr<sf::RenderWindow>& window, float center, Strings* strings);
-	void loadFont();
 	void initTitle(Strings* strings);
 	void initBackground(std::shared_ptr<sf::RenderWindow>& window);
 	void initLeftField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);

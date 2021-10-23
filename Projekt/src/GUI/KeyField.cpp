@@ -1,17 +1,15 @@
 #include <iostream>
 #include "KeyField.h"
 #include "../Utils/Utils.h"
+#include "../FontSingleton.h"
+#include "GUIConstants.h"
 
 
 namespace
 {
 	const float OUTLINE_THICKNESS = 3.0f;
-	const size_t FONT_SIZE = 25;
 	const sf::Color FILL_COLOR(sf::Color::White);
 	const sf::Color OUTLINE_COLOR(sf::Color::Black);
-	const sf::Color TEXT_COLOR(sf::Color::Black);
-	const sf::Color DESCRIPTION_COLOR(sf::Color::White);
-	const char* FONT_FILE = "font.ttf";
 	const sf::Vector2f TEXT_POSITION_OFFSET(0.0f, -9.0f);
 	const sf::Vector2f DESCRIPTION_POSITION_OFFSET(-7.0f, -9.0f);
 }
@@ -35,21 +33,16 @@ void KeyField::initRectangle()
 
 void KeyField::initKeyText()
 {
-	if (!font.loadFromFile(FONT_FILE))
-	{
-		std::cout << "Cannot load font from file.\n";
-	}
-
-	text.setFont(font);
-	text.setCharacterSize(FONT_SIZE);
-	text.setColor(TEXT_COLOR);
+	text.setFont(FontSingleton::getInstance()->getFont());
+	text.setCharacterSize(GUIConstants::BUTTON_TEXT_SIZE);
+	text.setColor(GUIConstants::BUTTON_TEXT_COLOR);
 }
 
 void KeyField::initDescription()
 {
-	description.setFont(font);
-	description.setCharacterSize(FONT_SIZE);
-	description.setColor(DESCRIPTION_COLOR);
+	description.setFont(FontSingleton::getInstance()->getFont());
+	description.setCharacterSize(GUIConstants::BUTTON_TEXT_SIZE);
+	description.setColor(GUIConstants::LABEL_TEXT_COLOR);
 }
 
 KeyField::KeyField(std::shared_ptr<sf::RenderWindow> window, sf::Keyboard::Key key)

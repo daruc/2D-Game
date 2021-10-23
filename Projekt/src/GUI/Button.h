@@ -14,9 +14,8 @@ class Button : public Control
 protected:
 	sf::RectangleShape rectangle;
 	sf::Text text;
-	sf::Font font;
 
-	void loadFont();
+	const sf::Font& getFont() const;
 	void initButton(sf::String title);
 	void initText(sf::String title);
 	void initBackground();

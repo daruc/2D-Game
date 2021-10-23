@@ -10,7 +10,6 @@
 
 #include "../State.h"
 #include "../Map.h"
-#include "../Textures.h"
 #include "../Physics.h"
 #include "../Enemy.h"
 #include "HealthIndicator.h"
@@ -30,7 +29,6 @@ private:
 
 	sf::Sprite cursor;
 	std::shared_ptr<Map> map;
-	Textures textures;
 	Physics physics;
 	sf::View view;
 

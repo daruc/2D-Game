@@ -22,7 +22,6 @@ class GameOverState : public State
 private:
 	std::list<std::shared_ptr<Control>> controls;
 	sf::RectangleShape background;
-	sf::Font font;
 	sf::Text title;
 	sf::Text result;
 	sf::Text time;

@@ -156,9 +156,6 @@
     <ClInclude Include="src\Strings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Updatable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -200,6 +197,18 @@
     </ClInclude>
     <ClInclude Include="src\Editor\CommandAddFireShape.h">
       <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TexturesSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditorConstants.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUI\GUIConstants.h">
+      <Filter>Source Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -264,9 +273,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Strings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Textures.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\EditorMouseMode.cpp">
@@ -354,6 +360,12 @@
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
     <ClCompile Include="src\MapShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FontSingleton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TexturesSingleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

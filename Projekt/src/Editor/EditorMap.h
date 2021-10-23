@@ -4,7 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <list>
 #include <memory>
-#include "../Textures.h"
 #include "../Drawable.h"
 #include "EditorMap.h"
 
@@ -30,7 +29,6 @@ private:
 	std::shared_ptr<Map> map;
 	std::list<sf::Vector2f> points;
 
-	Textures textures;
 	sf::RectangleShape background;
 	sf::RectangleShape finish;
 

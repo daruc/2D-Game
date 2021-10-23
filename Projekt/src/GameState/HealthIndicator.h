@@ -3,7 +3,6 @@
 
 #include "../Drawable.h"
 #include "../Updatable.h"
-#include "../Textures.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -14,7 +13,6 @@ class HealthIndicator : public Drawable, public Updatable
 private:
 	Player * player;
 	sf::Sprite sprite;
-	Textures textures;
 
 public:
 	HealthIndicator(Player * player);

@@ -3,14 +3,9 @@
 #include <SFML/Window.hpp>
 
 #include "Button.h"
+#include "../FontSingleton.h"
+#include "GUIConstants.h"
 
-
-const char * FONT_FILE = "font.ttf";
-const unsigned int TEXT_SIZE = 25;
-const sf::Color TEXT_COLOR = sf::Color::Black;
-const sf::Color IDLE_COLOR(200, 200, 200, 255);
-const sf::Color PRESSED_COLOR = sf::Color::Red;
-const sf::Color FOCUSED_COLOR = sf::Color::Yellow;
 
 Button::Button(std::shared_ptr<sf::RenderWindow> window, std::string title)
 	: Control(window)
@@ -20,30 +15,26 @@ Button::Button(std::shared_ptr<sf::RenderWindow> window, std::string title)
 
 void Button::initButton(sf::String title)
 {
-	loadFont();
 	initText(title);
 	initBackground();
 }
 
-void Button::loadFont()
+const sf::Font& Button::getFont() const
 {
-	if (!font.loadFromFile(FONT_FILE))
-	{
-		std::cout << "Cannot load font from file.\n";
-	}
+	return FontSingleton::getInstance()->getFont();
 }
 
 void Button::initText(sf::String title)
 {
-	text.setFont(font);
+	text.setFont(getFont());
 	text.setString(title);
-	text.setCharacterSize(TEXT_SIZE);
-	text.setColor(TEXT_COLOR);
+	text.setCharacterSize(GUIConstants::BUTTON_TEXT_SIZE);
+	text.setColor(GUIConstants::BUTTON_TEXT_COLOR);
 }
 
 void Button::initBackground()
 {
-	rectangle.setFillColor(IDLE_COLOR);
+	rectangle.setFillColor(GUIConstants::BUTTON_IDLE_COLOR);
 }
 
 Button::Button(std::shared_ptr<sf::RenderWindow> window, std::wstring title)
@@ -110,17 +101,17 @@ bool Button::isLeftMouseButtonPressed()
 
 void Button::setPressed()
 {
-	rectangle.setFillColor(PRESSED_COLOR);
+	rectangle.setFillColor(GUIConstants::BUTTON_PRESSED_COLOR);
 }
 
 void Button::setFocused()
 {
-	rectangle.setFillColor(FOCUSED_COLOR);
+	rectangle.setFillColor(GUIConstants::BUTTON_FOCUSED_COLOR);
 }
 
 void Button::setIdle()
 {
-	rectangle.setFillColor(IDLE_COLOR);
+	rectangle.setFillColor(GUIConstants::BUTTON_IDLE_COLOR);
 }
 
 void Button::draw(std::shared_ptr<sf::RenderWindow> window)

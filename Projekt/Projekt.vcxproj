@@ -34,6 +34,7 @@
     <ClInclude Include="src\Editor\CommandMoveFinish.h" />
     <ClInclude Include="src\Editor\CommandMovePlayer.h" />
     <ClInclude Include="src\Editor\EditorCommand.h" />
+    <ClInclude Include="src\Editor\EditorConstants.h" />
     <ClInclude Include="src\Editor\EditorMap.h" />
     <ClInclude Include="src\Editor\EditorMouseMode.h" />
     <ClInclude Include="src\Editor\EditorState.h" />
@@ -44,6 +45,7 @@
     <ClInclude Include="src\Editor\PlayerEditorMouseMode.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\Finish.h" />
+    <ClInclude Include="src\FontSingleton.h" />
     <ClInclude Include="src\GameOverState.h" />
     <ClInclude Include="src\GameState\AmmunitionIndicator.h" />
     <ClInclude Include="src\GameState\GameState.h" />
@@ -52,6 +54,7 @@
     <ClInclude Include="src\GUI\Button.h" />
     <ClInclude Include="src\GUI\Control.h" />
     <ClInclude Include="src\GUI\GridLayout.h" />
+    <ClInclude Include="src\GUI\GUIConstants.h" />
     <ClInclude Include="src\GUI\KeyField.h" />
     <ClInclude Include="src\GUI\MapButton.h" />
     <ClInclude Include="src\GUI\SelectableButton.h" />
@@ -69,7 +72,7 @@
     <ClInclude Include="src\SaveMapState.h" />
     <ClInclude Include="src\State.h" />
     <ClInclude Include="src\Strings.h" />
-    <ClInclude Include="src\Textures.h" />
+    <ClInclude Include="src\TexturesSingleton.h" />
     <ClInclude Include="src\Updatable.h" />
     <ClInclude Include="src\Utils\Random.h" />
     <ClInclude Include="src\Utils\Utils.h" />
@@ -97,6 +100,7 @@
     <ClCompile Include="src\Editor\PlayerEditorMouseMode.cpp" />
     <ClCompile Include="src\Enemy.cpp" />
     <ClCompile Include="src\Finish.cpp" />
+    <ClCompile Include="src\FontSingleton.cpp" />
     <ClCompile Include="src\GameOverState.cpp" />
     <ClCompile Include="src\GameState\AmmunitionIndicator.cpp" />
     <ClCompile Include="src\GameState\GameState.cpp" />
@@ -123,7 +127,7 @@
     <ClCompile Include="src\SaveMapState.cpp" />
     <ClCompile Include="src\State.cpp" />
     <ClCompile Include="src\Strings.cpp" />
-    <ClCompile Include="src\Textures.cpp" />
+    <ClCompile Include="src\TexturesSingleton.cpp" />
     <ClCompile Include="src\Utils\Random.cpp" />
     <ClCompile Include="src\Utils\Utils.cpp" />
   </ItemGroup>

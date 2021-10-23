@@ -13,7 +13,6 @@ private:
 	sf::RectangleShape rectangle;
 	sf::Text text;
 	sf::Text description;
-	sf::Font font;
 	bool focus;
 
 	void initRectangle();

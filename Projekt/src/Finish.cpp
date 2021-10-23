@@ -1,12 +1,14 @@
 #include "Finish.h"
 #include "Utils/Utils.h"
+#include "TexturesSingleton.h"
 
 
 Finish::Finish()
 {
-	textures.loadFinish();
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadFinish();
 
-	sprite.setTexture(*textures.getFinish(), true);
+	sprite.setTexture(*textures->getFinish(), true);
 	int width = meters2pixels(1.0f);
 	int height = meters2pixels(1.0f);
 	sprite.setOrigin(sf::Vector2f(width, height) / 2.0f);

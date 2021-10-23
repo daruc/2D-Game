@@ -1,5 +1,6 @@
 #include "HealthIndicator.h"
 #include "../Player.h"
+#include "../TexturesSingleton.h"
 
 
 namespace {
@@ -9,14 +10,16 @@ namespace {
 HealthIndicator::HealthIndicator(Player * player)
 	: player(player)
 {
-	textures.loadHealth();
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadHealth();
 	sprite.setPosition(POSITION);
 }
 
 void HealthIndicator::update(float delta_seconds)
 {
 	int health = player->getHealth();
-	sprite.setTexture(*textures.getHealth(health));
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	sprite.setTexture(*textures->getHealth(health));
 }
 
 void HealthIndicator::draw(std::shared_ptr<sf::RenderWindow> window)

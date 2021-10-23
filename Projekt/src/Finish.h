@@ -4,14 +4,12 @@
 #include <SFML/Graphics.hpp>
 
 #include "Drawable.h"
-#include "Textures.h"
 #include "Binary.h"
 
 
 class Finish : public Drawable, public Binary
 {
 private:
-	Textures textures;
 	sf::Sprite sprite;
 
 public:

@@ -8,6 +8,8 @@
 #include "ControlsState.h"
 #include "MainManuState.h"
 #include "Strings.h"
+#include "FontSingleton.h"
+#include "GUI/GUIConstants.h"
 
 
 ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
@@ -24,7 +26,6 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 	initCrouchField(window, keys, center, strings);
 	initJumpField(window, keys, center, strings);
 	initSaveButton(window, center, strings);
-	loadFont();
 	initTitle(strings);
 	initBackground(window);
 }
@@ -90,24 +91,16 @@ void ControlsState::initSaveButton(std::shared_ptr<sf::RenderWindow>& window, fl
 	controls.push_back(save_button);
 }
 
-void ControlsState::loadFont()
-{
-	if (!font.loadFromFile("font.ttf"))
-	{
-		std::cout << "Cannot load font from file.\n";
-	}
-}
-
 void ControlsState::initTitle(Strings* strings)
 {
 	title.setString(strings->get("controls_title"));
 	title.setPosition(250.0f, 20.0f);
-	title.setFont(font);
+	title.setFont(FontSingleton::getInstance()->getFont());
 }
 
 void ControlsState::initBackground(std::shared_ptr<sf::RenderWindow>& window)
 {
-	background.setFillColor(sf::Color(0, 0, 80, 255));
+	background.setFillColor(GUIConstants::HEADER_COLOR);
 	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
 }
 
@@ -206,7 +199,7 @@ void ControlsState::update(float delta_seconds)
 
 void ControlsState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
-	window->clear(sf::Color(0, 0, 100, 255));
+	window->clear(GUIConstants::BACKGROUND_COLOR);
 	window->draw(background);
 	drawControls(window);
 	window->draw(title);

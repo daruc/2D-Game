@@ -8,6 +8,7 @@
 #include "Control.h"
 #include "GUI/Button.h"
 #include "Strings.h"
+#include "GUI/GUIConstants.h"
 
 
 namespace
@@ -123,7 +124,7 @@ void MainMenuState::update(float delta_seconds)
 
 void MainMenuState::draw(std::shared_ptr<sf::RenderWindow> window)
 {
-	State::window->clear(sf::Color(0, 0, 100, 255));
+	State::window->clear(GUIConstants::BACKGROUND_COLOR);
 	drawControls(window);
 	window->display();
 	std::this_thread::sleep_for(std::chrono::milliseconds(40));

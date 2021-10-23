@@ -12,7 +12,6 @@ private:
 	sf::Text text;
 	sf::String real_text;
 	sf::String printed_text;
-	sf::Font font;
 	bool focus;
 	bool visible_cursor;
 	float seconds_to_change_cursor_visibility;

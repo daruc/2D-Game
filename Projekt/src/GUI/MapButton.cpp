@@ -1,18 +1,21 @@
 #include "MapButton.h"
+#include "../TexturesSingleton.h"
 
 
 MapButton::MapButton(std::shared_ptr<sf::RenderWindow> window, std::string title)
 	: Button(window, title), completed(false)
 {
-	textures.loadTick();
-	completed_sprite.setTexture(*textures.getTick());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadTick();
+	completed_sprite.setTexture(*textures->getTick());
 }
 
 MapButton::MapButton(std::shared_ptr<sf::RenderWindow> window, std::wstring title)
 	: Button(window, title), completed(false)
 {
-	textures.loadTick();
-	completed_sprite.setTexture(*textures.getTick());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadTick();
+	completed_sprite.setTexture(*textures->getTick());
 }
 
 void MapButton::handleEvents(sf::Event& event)

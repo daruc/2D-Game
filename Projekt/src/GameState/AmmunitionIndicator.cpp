@@ -2,6 +2,8 @@
 
 #include "AmmunitionIndicator.h"
 #include "../Player.h"
+#include "../FontSingleton.h"
+#include "../TexturesSingleton.h"
 
 
 namespace
@@ -9,20 +11,19 @@ namespace
 	const float TEXT_POSITION_X_RIGHT_OFFSET = 70.0f;
 	const float TEXT_POSITION_Y_TOP_OFFSET = 8.0f;
 	const int FONT_SIZE = 17;
-	const char* FONT_FILE_NAME = "font.ttf";
 }
 
 AmmunitionIndicator::AmmunitionIndicator(std::shared_ptr<sf::RenderWindow> window, Player * player)
 	: player(player)
 {
-	font.loadFromFile(FONT_FILE_NAME);
-	text.setFont(font);
+	text.setFont(FontSingleton::getInstance()->getFont());
 	float resolutionX = window->getSize().x;
 	text.setPosition(resolutionX - TEXT_POSITION_X_RIGHT_OFFSET, TEXT_POSITION_Y_TOP_OFFSET);
 	text.setCharacterSize(FONT_SIZE);
 
-	textures.loadGunGui();
-	sprite.setTexture(*textures.getGunGui());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadGunGui();
+	sprite.setTexture(*textures->getGunGui());
 
 	sprite.setPosition(resolutionX - sprite.getLocalBounds().width, TEXT_POSITION_Y_TOP_OFFSET);
 }

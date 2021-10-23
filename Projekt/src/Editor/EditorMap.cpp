@@ -5,18 +5,19 @@
 #include "EditorMap.h"
 #include "../Enemy.h"
 #include "../Map.h"
-
+#include "../TexturesSingleton.h"
+#include "EditorConstants.h"
 
 const float SCROLLING_SPEED = 50.0f;
-const float LEFT_MAP_EDGE = 130.0f;
 
 EditorMap::EditorMap(std::shared_ptr<sf::RenderWindow> window)
 	: window(window), view(sf::FloatRect(0, 0, window->getSize().x, window->getSize().y))
 {
 	map = std::make_shared<Map>(window);
 	initBackground();
-	textures.loadMapType(1);
-	map->setGroundTexture(textures.getGround());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadMapType(1);
+	map->setGroundTexture(textures->getGround());
 }
 
 EditorMap::EditorMap(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<Map> map)
@@ -29,7 +30,7 @@ EditorMap::EditorMap(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 
 void EditorMap::initBackground()
 {
-	background.setSize(sf::Vector2f(LEFT_MAP_EDGE, window->getSize().y));
+	background.setSize(sf::Vector2f(EditorConstants::LEFT_MAP_EDGE, window->getSize().y));
 	background.setFillColor(sf::Color(0, 0, 100, 255));
 }
 
@@ -80,9 +81,9 @@ void EditorMap::draw(std::shared_ptr<sf::RenderWindow> window)
 
 void EditorMap::scrollRight()
 {
-	view.move(50.0f, 0.0f);
-	map->moveView(sf::Vector2f(50.0f, 0.0f));
-	moveAllPoints(-50.0f, 0.0f);
+	view.move(SCROLLING_SPEED, 0.0f);
+	map->moveView(sf::Vector2f(SCROLLING_SPEED, 0.0f));
+	moveAllPoints(-SCROLLING_SPEED, 0.0f);
 	std::cout << "view.move right\n";
 }
 
@@ -113,7 +114,7 @@ void EditorMap::scrollDown()
 
 void EditorMap::scrollUp()
 {
-	view.move(0.0f, -50.0f);
+	view.move(0.0f, -SCROLLING_SPEED);
 	map->moveView(sf::Vector2f(0.0f, -SCROLLING_SPEED));
 	moveAllPoints(0.0f, SCROLLING_SPEED);
 	std::cout << "view.move up\n";
@@ -145,7 +146,8 @@ size_t EditorMap::getPointsCount() const
 
 void EditorMap::addGroundShape()
 {
-	map->addShape(points, textures.getGround());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	map->addShape(points, textures->getGround());
 }
 
 void EditorMap::addFireShape()
@@ -239,8 +241,9 @@ void EditorMap::setMapType4()
 
 void EditorMap::reloadMapTypeTextures()
 {
-	textures.loadMapType(map->getType());
-	map->setGroundTexture(textures.getGround());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadMapType(map->getType());
+	map->setGroundTexture(textures->getGround());
 }
 
 sf::Vector2f EditorMap::popPoint(Space space)

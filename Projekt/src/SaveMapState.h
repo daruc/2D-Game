@@ -19,7 +19,6 @@ private:
 	sf::RectangleShape background;
 	std::vector<std::shared_ptr<Control>> controls;
 	std::shared_ptr<Map> map;
-	sf::Font font;
 	sf::Text title;
 	std::shared_ptr<TextField> text_field;
 

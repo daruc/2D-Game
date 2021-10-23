@@ -5,16 +5,13 @@
 
 #include "../Drawable.h"
 #include "../Updatable.h"
-#include "../Textures.h"
 
 
 class TimeIndicator	: public Drawable, public Updatable
 {
 private:
 	float elapsed_seconds;
-	Textures textures;
 	sf::Sprite sprite;
-	sf::Font font;
 	sf::Text text;
 
 public:

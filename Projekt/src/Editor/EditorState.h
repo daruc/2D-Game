@@ -10,7 +10,6 @@
 
 #include "../State.h"
 #include "../Map.h"
-#include "../Textures.h"
 #include "../Drawable.h"
 #include "../Updatable.h"
 #include "../Strings.h"

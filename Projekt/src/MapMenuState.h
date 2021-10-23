@@ -7,7 +7,6 @@
 
 #include "GUI/Control.h"
 #include "State.h"
-#include "Textures.h"
 #include "GUI/GridLayout.h"
 
 
@@ -17,14 +16,12 @@ class TextField;
 class MapMenuState : public State
 {
 private:
-	sf::Font font;
 	sf::Text title;
 
 	GridLayout grid_layout;
 	std::shared_ptr<TextField> text_field;
 	std::vector<std::shared_ptr<Control>> controls;
 	sf::RectangleShape background;
-	Textures textures;
 
 	sf::Vector2f calculateScreenCenter() const;
 	sf::Vector2f calculateMapGridPosition() const;

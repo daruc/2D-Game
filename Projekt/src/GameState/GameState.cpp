@@ -7,6 +7,7 @@
 #include "../GameOverState.h"
 #include "../Utils/Utils.h"
 #include "../Enemy.h"
+#include "../TexturesSingleton.h"
 
 
 namespace {
@@ -38,17 +39,19 @@ GameState::GameState(std::shared_ptr<sf::RenderWindow> window, std::shared_ptr<M
 
 void GameState::loadTextures()
 {
-	textures.loadCursor();
-	textures.loadFinish();
-	textures.loadMapType(map->getType());
-	map->setGroundTexture(textures.getGround());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	textures->loadCursor();
+	textures->loadFinish();
+	textures->loadMapType(map->getType());
+	map->setGroundTexture(textures->getGround());
 	loadCursorTextureAndSetOrigin();
 }
 
 void GameState::loadCursorTextureAndSetOrigin()
 {
-	cursor.setTexture(*textures.getCursor(), true);
-	sf::Vector2f cursor_origin(textures.getCursor()->getSize());
+	TexturesSingleton* textures = TexturesSingleton::getInstance();
+	cursor.setTexture(*textures->getCursor(), true);
+	sf::Vector2f cursor_origin(textures->getCursor()->getSize());
 	cursor_origin /= 2.0f;
 	cursor.setOrigin(cursor_origin);
 }

@@ -3,7 +3,6 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "../Textures.h"
 #include "../Drawable.h"
 #include "../Updatable.h"
 
@@ -14,10 +13,8 @@ class Player;
 class AmmunitionIndicator : public Drawable, public Updatable
 {
 private:
-	Textures textures;
 	Player * player;
 	sf::Sprite sprite;
-	sf::Font font;
 	sf::Text text;
 
 public:

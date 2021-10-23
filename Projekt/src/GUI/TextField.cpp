@@ -5,15 +5,14 @@
 
 #include "TextField.h"
 #include "Control.h"
+#include "../FontSingleton.h"
+#include "GUIConstants.h"
 
 
 namespace
 {
-	const char* FONT_FILE = "font.ttf";
 	const char NOT_ALLOWED_CHAR = '#';
 	const float SECONDS_TO_CHANGE_CURSOR_VISIBILITY = 0.4f;
-	const size_t TEXT_SIZE = 25;
-	const sf::Color TEXT_COLOR(sf::Color::Black);
 	const sf::Color FILL_COLOR(sf::Color::White);
 	const sf::Vector2f TEXT_POSITION_OFFSET(3.0f, 3.0f);
 	const float OUTLINE_THICKNESS = 2.0f;
@@ -34,15 +33,10 @@ TextField::TextField(std::shared_ptr <sf::RenderWindow> window)
 
 void TextField::initText()
 {
-	if (!font.loadFromFile(FONT_FILE))
-	{
-		std::cout << "Cannot load font from file.\n";
-	}
-
-	text.setFont(font);
+	text.setFont(FontSingleton::getInstance()->getFont());
 	text.setString("");
-	text.setCharacterSize(TEXT_SIZE);
-	text.setColor(TEXT_COLOR);
+	text.setCharacterSize(GUIConstants::BUTTON_TEXT_SIZE);
+	text.setColor(GUIConstants::BUTTON_TEXT_COLOR);
 }
 
 void TextField::initRectangle()
@@ -55,7 +49,7 @@ void TextField::initRectangle()
 void TextField::initCursor()
 {
 	cursor.setSize(CURSOR_SIZE);
-	cursor.setFillColor(TEXT_COLOR);
+	cursor.setFillColor(GUIConstants::BUTTON_TEXT_COLOR);
 }
 
 void TextField::handleEvents(sf::Event & event)

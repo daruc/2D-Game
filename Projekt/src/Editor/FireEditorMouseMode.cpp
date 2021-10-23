@@ -5,6 +5,7 @@
 #include "FireEditorMouseMode.h"
 #include "CommandAddFireShape.h"
 #include "CommandAddPoint.h"
+#include "EditorConstants.h"
 
 
 FireEditorMouseMode::FireEditorMouseMode(std::shared_ptr<sf::RenderWindow> window, 
@@ -29,7 +30,7 @@ void FireEditorMouseMode::handleLeftMouseButton()
 {
 	sf::Vector2i coor = sf::Mouse::getPosition(*window);
 	std::cout << "fire, coor.x = " << coor.x << ", coor.y = " << coor.y << std::endl;
-	if (coor.x > 130)
+	if (coor.x > EditorConstants::LEFT_MAP_EDGE)
 	{
 		sf::Vector2f position(coor.x - 1, coor.y - 1);
 		auto command = std::make_shared<CommandAddPoint>(editor_state->getEditorMapPtr(), position);

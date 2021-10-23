@@ -2,7 +2,6 @@
 #define MAP_BUTTON_H
 
 #include <SFML/Graphics.hpp>
-#include "../Textures.h"
 #include "Button.h"
 #include "Control.h"
 
@@ -10,7 +9,6 @@
 class MapButton : public Button
 {
 private:
-	Textures textures;
 	sf::Sprite completed_sprite;
 	bool completed;
 

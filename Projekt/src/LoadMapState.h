@@ -21,7 +21,6 @@ private:
 	std::shared_ptr<Map> prev_map;
 	std::vector<std::shared_ptr<Control>> controls;
 	std::shared_ptr<TextField> text_field;
-	sf::Font font;
 	sf::Text title;
 
 	sf::Vector2f getScreenCenter(std::shared_ptr<sf::RenderWindow> window) const;

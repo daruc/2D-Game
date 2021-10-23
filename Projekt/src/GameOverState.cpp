@@ -6,6 +6,7 @@
 #include "MapMenuState.h"
 #include "GameOverState.h"
 #include "Strings.h"
+#include "FontSingleton.h"
 
 
 namespace {
@@ -19,11 +20,6 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 	Strings* strings = Strings::Instance();
 	createBackButton(strings);
 
-	if (!font.loadFromFile("font.ttf"))
-	{
-		std::cout << "Cannot load font from file.\n";
-	}
-
 	if (isWin)
 	{
 		initWin(strings, seconds);
@@ -35,8 +31,8 @@ GameOverState::GameOverState(std::shared_ptr<sf::RenderWindow> window, bool isWi
 
 	sound.setBuffer(sound_buffer);
 	title.setPosition(250.0f, 20.0f);
-	title.setFont(font);
-	time.setFont(font);
+	title.setFont(FontSingleton::getInstance()->getFont());
+	time.setFont(FontSingleton::getInstance()->getFont());
 	time.setPosition(window->getSize().x / 2 - 100.0f, window->getSize().y / 2 - 15.0f);
 
 	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
