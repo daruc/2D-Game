@@ -1,7 +1,7 @@
 import glob
 import sys
 argv = sys.argv
-files = glob.glob(str(argv[1]) + '\\*.h')
+files = glob.glob(str(argv[1]) + '\\**\\*.h', recursive=True)
 lines_h = 0
 files_h = 0
 lines_cpp = 0
@@ -20,12 +20,12 @@ for file in files:
 	lines_h += count(file)
 	files_h += 1
 	
-files = glob.glob(str(argv[1]) + '\\*.cpp')
+files = glob.glob(str(argv[1]) + '\\**\\*.cpp', recursive=True)
 for file in files:
 	lines_cpp += count(file)
 	files_cpp += 1
 	
-files = glob.glob(str(argv[1]) + '\\*.hpp')
+files = glob.glob(str(argv[1]) + '\\**\\*.hpp', recursive=True)
 for file in files:
 	lines_hpp += count(file)
 	files_hpp += 1
