@@ -1,7 +1,10 @@
-#include "Map.h"
-#include "Enemy.h"
 #include <utility>
 #include <cstring>
+
+#include "Map.h"
+#include "Enemy.h"
+#include "Bullet.h"
+#include "Blood.h"
 
 
 Map::Map(std::shared_ptr<sf::RenderWindow> window)
@@ -101,9 +104,9 @@ void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 	finish.draw(window);
 
 	//draw bullets
-	for (std::shared_ptr<sf::RectangleShape> bullet : bullets)
+	for (std::shared_ptr<Bullet> bullet : bullets)
 	{
-		window->draw(*bullet);
+		bullet->draw(window);
 	}
 
 	// draw enemies
@@ -241,8 +244,8 @@ void Map::addEnemy(std::shared_ptr<Enemy> enemy)
 
 void Map::addBlood(sf::Vector2f bloodPosition)
 {
-	std::shared_ptr<Blood> new_blood = std::make_shared<Blood>(bloodPosition);
-	blood.push_back(new_blood);
+	std::shared_ptr<Blood> new_blood = std::make_shared<Blood>(bloodPosition + viewOffset);
+	blood.emplace_back(new_blood);
 }
 
 void Map::update(float delta_seconds)
@@ -250,6 +253,22 @@ void Map::update(float delta_seconds)
 	updateBlood(delta_seconds);
 	player.update(delta_seconds);
 	removeOutOfDateBlood();
+
+	for (std::shared_ptr<Bullet> bullet : bullets)
+	{
+		bullet->update(delta_seconds);
+	}
+	
+	bullets.remove_if(
+		[](std::shared_ptr<Bullet> bullet) {
+			return bullet->isReadyToRemove();
+		}
+	);
+
+	for (std::shared_ptr<Enemy> enemy : enemies)
+	{
+		enemy->update(delta_seconds);
+	}
 }
 
 void Map::updateBlood(float delta_seconds)

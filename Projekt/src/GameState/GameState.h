@@ -39,7 +39,6 @@ private:
 	sf::SoundBuffer empty_gun_buffer;
 	sf::SoundBuffer reload_buffer;
 	sf::Sound gunshot;
-	sf::Sound hit_enemy;
 	sf::Sound knock;
 	sf::Sound empty_gun;
 	sf::Sound reload;

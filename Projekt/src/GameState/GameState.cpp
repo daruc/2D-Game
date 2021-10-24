@@ -65,7 +65,6 @@ void GameState::initView()
 void GameState::loadSounds()
 {
 	loadGunshotSound();
-	loadHitEnemySound();
 	loadKnockSound();
 	loadEmptyGunSound();
 	loadReloadSound();
@@ -78,16 +77,7 @@ void GameState::loadGunshotSound()
 		std::cout << "Cannot load file gunshot.wav\n";
 	}
 	gunshot.setBuffer(gunshot_buffer);
-}
-
-void GameState::loadHitEnemySound()
-{
-	if (!hit_enemy_buffer.loadFromFile("sounds\\hit_enemy.wav"))
-	{
-		std::cout << "Cannot load file hit_enemy.wav\n";
-	}
-	hit_enemy.setBuffer(hit_enemy_buffer);
-	physics.setHitEnemySound(&hit_enemy);
+	gunshot.setVolume(20);
 }
 
 void GameState::loadKnockSound()
@@ -97,7 +87,7 @@ void GameState::loadKnockSound()
 		std::cout << "Cannot load file knock.wav\n";
 	}
 	knock.setBuffer(knock_buffer);
-	knock.setVolume(50);
+	knock.setVolume(20);
 	physics.setKnockSound(&knock);
 }
 
@@ -108,7 +98,7 @@ void GameState::loadEmptyGunSound()
 		std::cout << "Cannnot load file emtpy_gun.wav\n";
 	}
 	empty_gun.setBuffer(empty_gun_buffer);
-	empty_gun.setVolume(50);
+	empty_gun.setVolume(20);
 }
 
 void GameState::loadReloadSound()

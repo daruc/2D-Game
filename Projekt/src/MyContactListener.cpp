@@ -2,6 +2,8 @@
 #include "MyContactListener.h"
 #include "MapShape.h"
 #include "Utils/Utils.h"
+#include "Bullet.h"
+#include "Enemy.h"
 
 
 MyContactListener::MyContactListener()
@@ -28,6 +30,16 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		on_ground = true;
 	}
 
+	if (reinterpret_cast<int&>(fixture_a->GetUserData()) == 10)
+	{
+		std::cout << "fixture_a = bullet\n";
+	}
+
+	if (reinterpret_cast<int&>(fixture_b->GetUserData()) == 10)
+	{
+		std::cout << "fixture_b = bullet\n";
+	}
+/*
 	if (reinterpret_cast<int&>(fixture_a->GetUserData()) == 10 && fixture_b != player
 		&& reinterpret_cast<int&>(fixture_b->GetUserData()) != 3)
 	{
@@ -92,6 +104,16 @@ void MyContactListener::BeginContact(b2Contact* contact)
 		remove_list->push_back(*it_1);
 		bullet_list->erase(it_1);
 		map->getBulletsList()->erase(it_2);
+	}
+*/
+	for (std::shared_ptr<Bullet> bullet : *map->getBulletsList())
+	{
+		bullet->beginContact(contact);
+	}
+
+	for (std::shared_ptr<Enemy> enemy : *map->getEnenemiesList())
+	{
+		enemy->beginContact(contact);
 	}
 
 	bool bPlayer = false;

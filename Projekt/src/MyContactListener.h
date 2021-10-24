@@ -21,7 +21,6 @@ private:
 	std::list<b2Body*>* bullet_list;
 	std::list<b2Body*>* remove_list;
 	b2World* world_ptr;
-	sf::Sound* ptr_hit_enemy;
 	sf::Sound* ptr_knock;
 
 public:
@@ -31,7 +30,6 @@ public:
 	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 	void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 	inline void setMap(std::shared_ptr<Map> map) { this->map = map; }
-	inline void setHitEnemySound(sf::Sound* hit_enemy) { ptr_hit_enemy = hit_enemy; }
 	inline void setKnockSound(sf::Sound* knock) { ptr_knock = knock; }
 	inline void setBulletList(std::list<b2Body*>* bullet_list)
 	{

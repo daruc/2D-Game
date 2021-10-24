@@ -210,6 +210,18 @@
     <ClInclude Include="src\GUI\GUIConstants.h">
       <Filter>Source Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Bullet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fixture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FixtureId.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoundsSingleton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AnimatedSprite.cpp">
@@ -366,6 +378,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\TexturesSingleton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Bullet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FixtureId.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundsSingleton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

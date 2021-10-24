@@ -4,12 +4,12 @@
 #include <list>
 #include <memory>
 #include <vector>
+#include <mutex>
 
 #include <SFML/Graphics.hpp>
 
 #include "Binary.h"
 #include "MapShape.h"
-#include "Blood.h"
 #include "Drawable.h"
 #include "Updatable.h"
 #include "Finish.h"
@@ -17,6 +17,8 @@
 
 
 class Enemy;
+class Bullet;
+class Blood;
 
 class Map : public Binary, public Updatable, public Drawable
 {
@@ -26,7 +28,7 @@ private:
 	Player player;
 	Finish finish;
 	std::vector<std::shared_ptr<MapShape>> shapes;
-	std::list<std::shared_ptr<sf::RectangleShape>> bullets;
+	std::list<std::shared_ptr<Bullet>> bullets;
 	std::list<std::shared_ptr<Enemy>> enemies;
 	std::list<std::shared_ptr<Blood>> blood;
 	sf::Vector2f viewOffset;
@@ -53,7 +55,7 @@ public:
 	inline auto getEnemiesEnd() { return enemies.end(); }
 	inline int getType() { return type; }
 	inline void setType(int type) { this->type = type; }
-	inline std::list<std::shared_ptr<sf::RectangleShape>>* getBulletsList() { return &bullets; }
+	inline std::list<std::shared_ptr<Bullet>>* getBulletsList() { return &bullets; }
 	inline std::list<std::shared_ptr<Enemy>>* getEnenemiesList() { return &enemies; }
 	void setPlayerPosition(float x, float y);
 	void setFinishPosition(float x, float y);
