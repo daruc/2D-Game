@@ -68,6 +68,7 @@ public:
 	void fromBinary(char* bytes) override;
 	size_t binarySize() const override;
 	Player * getPlayer();
+	Finish* getFinish();
 };
 
 #endif

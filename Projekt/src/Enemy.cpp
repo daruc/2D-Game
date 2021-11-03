@@ -81,9 +81,7 @@ void Enemy::initFixture(b2World* b2world, std::shared_ptr<Map> map)
 	b2BodyDef bodyDef;
 	bodyDef.type = b2_dynamicBody;
 	bodyDef.fixedRotation = true;
-	//sf::Vector2f position = getPosition();	// TODO
 
-	//bodyDef.position.Set(pixels2Meters(position.x + 25), pixels2Meters(position.y + 50));
 	b2body = b2world->CreateBody(&bodyDef);
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(1.0f / 2, 2.0f / 2);

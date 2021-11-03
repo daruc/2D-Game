@@ -19,12 +19,12 @@ ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 	Strings* strings = Strings::Instance();
 	initBack(window, strings);
 
-	std::tuple<sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key> keys = load();
+	controls_manager.load();
 
-	initLeftField(window, keys, center, strings);
-	initRightField(window, keys, center, strings);
-	initCrouchField(window, keys, center, strings);
-	initJumpField(window, keys, center, strings);
+	initLeftField(window, controls_manager, center, strings);
+	initRightField(window, controls_manager, center, strings);
+	initCrouchField(window, controls_manager, center, strings);
+	initJumpField(window, controls_manager, center, strings);
 	initSaveButton(window, center, strings);
 	initTitle(strings);
 	initBackground(window);
@@ -42,37 +42,37 @@ void ControlsState::initBack(std::shared_ptr<sf::RenderWindow>& window, Strings*
 	controls.push_back(back);
 }
 
-void ControlsState::initRightField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings)
+void ControlsState::initRightField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings)
 {
-	right_field = std::make_shared<KeyField>(window, std::get<1>(keys));
+	right_field = std::make_shared<KeyField>(window, controls_manager.getRight());
 	right_field->setDimensions(120.0f, 40.0f);
 	right_field->setPosition(sf::Vector2f(center - 60.0f, 150.0f));
 	right_field->setDescription(strings->get("turn_right"));
 	controls.push_back(right_field);
 }
 
-void ControlsState::initLeftField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center,
+void ControlsState::initLeftField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center,
 	Strings* strings)
 {
-	left_field = std::make_shared<KeyField>(window, std::get<0>(keys));
+	left_field = std::make_shared<KeyField>(window, controls_manager.getLeft());
 	left_field->setDimensions(120.0f, 40.0f);
 	left_field->setPosition(sf::Vector2f(center - 60.0f, 100.0f));
 	left_field->setDescription(strings->get("turn_left"));
 	controls.push_back(left_field);
 }
 
-void ControlsState::initCrouchField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings)
+void ControlsState::initCrouchField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings)
 {
-	crouch_field = std::make_shared<KeyField>(window, std::get<2>(keys));
+	crouch_field = std::make_shared<KeyField>(window, controls_manager.getCrouch());
 	crouch_field->setDimensions(120.0f, 40.0f);
 	crouch_field->setPosition(sf::Vector2f(center - 60.0f, 200.0f));
 	crouch_field->setDescription(strings->get("crouch"));
 	controls.push_back(crouch_field);
 }
 
-void ControlsState::initJumpField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings)
+void ControlsState::initJumpField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings)
 {
-	jump_field = std::make_shared<KeyField>(window, std::get<3>(keys));
+	jump_field = std::make_shared<KeyField>(window, controls_manager.getJump());
 	jump_field->setDimensions(120.0f, 40.0f);
 	jump_field->setPosition(sf::Vector2f(center - 60.0f, 250.0f));
 	jump_field->setDescription(strings->get("jump"));
@@ -86,7 +86,11 @@ void ControlsState::initSaveButton(std::shared_ptr<sf::RenderWindow>& window, fl
 	save_button->setPosition(sf::Vector2f(center - 50.0f, 400.0f));
 	save_button->addListener([this](std::string str)->void {
 		std::cout << "click " << str << std::endl;
-		save();
+		controls_manager.setLeft(left_field->getKey());
+		controls_manager.setRight(right_field->getKey());
+		controls_manager.setJump(jump_field->getKey());
+		controls_manager.setCrouch(crouch_field->getKey());
+		controls_manager.save();
 	});
 	controls.push_back(save_button);
 }
@@ -102,60 +106,6 @@ void ControlsState::initBackground(std::shared_ptr<sf::RenderWindow>& window)
 {
 	background.setFillColor(GUIConstants::HEADER_COLOR);
 	background.setSize(sf::Vector2f(window->getSize().x, 80.0f));
-}
-
-
-std::tuple<sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key>
-	ControlsState::load()
-{
-	std::ifstream fin;
-	fin.open("controls.bin", std::fstream::binary | std::fstream::in);
-	if (!fin.is_open())
-	{
-		std::cout << "Cannot open controls.bin file.\n";
-	}
-
-	char buffer[16];
-	fin.read(buffer, 16);
-	int left, right, crouch, jump;
-	memcpy(&left, buffer, 4);
-	memcpy(&right, buffer + 4, 4);
-	memcpy(&crouch, buffer + 8, 4);
-	memcpy(&jump, buffer + 12, 4);
-
-	return std::make_tuple(static_cast<sf::Keyboard::Key> (left),
-		static_cast<sf::Keyboard::Key> (right),
-		static_cast<sf::Keyboard::Key> (crouch),
-		static_cast<sf::Keyboard::Key> (jump));
-}
-
-void ControlsState::save()
-{
-	std::ofstream fout;
-	fout.open("controls.bin", std::fstream::out | std::fstream::binary | std::fstream::trunc);
-	if (!fout.is_open())
-	{
-		std::cout << "Cannot open controls.bin file.\n";
-	}
-
-	int key = (int) left_field->getKey();
-	char bytes[4];
-	memcpy(bytes, &key, sizeof(key));
-	fout.write(bytes, sizeof(bytes));
-
-	key = (int) right_field->getKey();
-	memcpy(bytes, &key, sizeof(key));
-	fout.write(bytes, sizeof(bytes));
-
-	key = (int) crouch_field->getKey();
-	memcpy(bytes, &key, sizeof(key));
-	fout.write(bytes, sizeof(bytes));
-
-	key = (int)jump_field->getKey();
-	memcpy(bytes, &key, sizeof(key));
-	fout.write(bytes, sizeof(bytes));
-
-	fout.close();
 }
 
 ControlsState::~ControlsState()

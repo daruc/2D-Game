@@ -5,9 +5,17 @@
 #include "Updatable.h"
 #include "Drawable.h"
 #include "Binary.h"
+#include "Fixture.h"
+#include "ControlsManager.h"
 
 
-class Player : public Updatable, public Drawable, public Binary
+class b2Body;
+class b2Fixture;
+class b2World;
+class Map;
+
+
+class Player : public Updatable, public Drawable, public Binary, public Fixture
 {
 private:
 	enum Anim {
@@ -24,21 +32,49 @@ private:
 	bool crouch;
 	std::shared_ptr<sf::RenderWindow> window;
 
+	b2World* b2world;
+	b2Fixture* b2fixture;
+	b2Body* b2body;
+	std::shared_ptr<Map> map;
+
+	bool win;
+	bool dead;
+	float max_speed;
+
+	ControlsManager controls_manager;
+
 	void configureAnimations();
+	void assignSpritePositionToFixturePosition();
+	void handleControls();
+
+	void goLeft();
+	void playAnimationGoLeftForward();
+	void playAnimationGoLeftBackward();
+	void applyForceGoLeft();
+
+	void goRight();
+	void playAnimationGoRightForward();
+	void playAnimationGoRightBackward();
+	void applyForceGoRight();
+
+	void stopLeft();
+	void stopRight();
+
+	void goJump();
+	void goCrouch();
+
+	bool isLookingLeft() const;
+	void updatePistolRotation();
 
 public:
 	Player(std::shared_ptr<sf::RenderWindow> window);
+	~Player();
+	void initFixture(b2World* b2world, std::shared_ptr<Map> map);
+	void beginContact(b2Contact* contact) override;
 	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setPosition(sf::Vector2f pos);
 	sf::Vector2f getPosition() const;
-
-	void goLeft();
-	void goRight();
-	void stopLeft();
-	void stopRight();
-	void goLeftBack();
-	void goRightBack();
 
 	void goCrouchLeft();
 	void goCrouchRight();
@@ -58,6 +94,9 @@ public:
 	std::vector<char> toBinary() const override;
 	void fromBinary(char* bytes) override;
 	size_t binarySize() const override;
+
+	inline bool isWin() const { return win; }
+	inline bool isDead() const { return dead; }
 };
 
 #endif

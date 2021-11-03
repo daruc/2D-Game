@@ -2,16 +2,27 @@
 #define MAP_SHAPE_H
 
 #include <SFML/Graphics.hpp>
+#include <box2d/box2d.h>
 #include "Binary.h"
+#include "Fixture.h"
 
 
-class MapShape : public sf::ConvexShape, public Binary
+class b2Body;
+class b2World;
+
+class MapShape : public sf::ConvexShape, public Binary, public Fixture
 {
 public:
 	enum Type
 	{
 		GROUND, FIRE
 	};
+
+	MapShape();
+	~MapShape();
+	void initFixture(b2World* b2world);
+	std::vector<b2Vec2> getPoints();
+
 	void setType(Type type);
 	Type getType() const;
 
@@ -21,6 +32,8 @@ public:
 
 private:
 	Type type;
+	b2Body* b2body;
+	b2World* b2world;
 };
 
 #endif

@@ -25,6 +25,7 @@
     <ClInclude Include="src\Binary.h" />
     <ClInclude Include="src\Blood.h" />
     <ClInclude Include="src\Bullet.h" />
+    <ClInclude Include="src\ControlsManager.h" />
     <ClInclude Include="src\ControlsState.h" />
     <ClInclude Include="src\Drawable.h" />
     <ClInclude Include="src\Drop.h" />
@@ -87,6 +88,7 @@
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Blood.cpp" />
     <ClCompile Include="src\Bullet.cpp" />
+    <ClCompile Include="src\ControlsManager.cpp" />
     <ClCompile Include="src\ControlsState.cpp" />
     <ClCompile Include="src\Drop.cpp" />
     <ClCompile Include="src\Editor\CommandAddEnemy.cpp" />

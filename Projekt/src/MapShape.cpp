@@ -1,5 +1,54 @@
+#include <vector>
+#include <box2d/box2d.h>
 #include "MapShape.h"
+#include "Utils/Utils.h"
+#include "FixtureId.h"
 
+
+MapShape::MapShape()
+	: b2body(nullptr),
+	b2world(nullptr)
+{
+
+}
+
+MapShape::~MapShape()
+{
+	if (b2body)
+	{
+		b2world->DestroyBody(b2body);
+	}
+}
+
+void MapShape::initFixture(b2World* b2world)
+{
+	b2BodyDef ground_body_def;
+	ground_body_def.position.Set(pixels2Meters(getPosition().x), pixels2Meters(getPosition().y));
+	b2body = b2world->CreateBody(&ground_body_def);
+	b2PolygonShape ground_box;
+	std::vector<b2Vec2> points = getPoints();
+	ground_box.Set(points.data(), points.size());
+
+	b2FixtureDef fixture_def = {};
+	fixture_def.shape = &ground_box;
+	fixture_def.userData.pointer = static_cast<uintptr_t>(FixtureId::GROUND);
+
+	b2body->CreateFixture(&fixture_def);
+}
+
+std::vector<b2Vec2> MapShape::getPoints()
+{
+	size_t size = getPointCount();
+	std::vector<b2Vec2> points(size);
+
+	for (size_t i = 0; i < size; ++i)
+	{
+		sf::Vector2f point = getPoint(i);
+		points[i] = b2Vec2(pixels2Meters(point.x), pixels2Meters(point.y));
+	}
+
+	return points;
+}
 
 void MapShape::setType(Type type)
 {

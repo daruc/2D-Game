@@ -8,34 +8,31 @@
 #include "State.h"
 #include "GUI/Control.h"
 #include "GUI/KeyField.h"
+#include "ControlsManager.h"
 
 
 class Strings;
-typedef std::tuple<sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key, sf::Keyboard::Key> Keys;
 
 class ControlsState : public State
 {
 private:
 	sf::Text title;
 	sf::RectangleShape background;
-
 	std::vector<std::shared_ptr<Control>> controls;
+	ControlsManager controls_manager;
 
-	std::shared_ptr<KeyField> left_field;
 	std::shared_ptr<KeyField> right_field;
-	std::shared_ptr<KeyField> crouch_field;
+	std::shared_ptr<KeyField> left_field;
 	std::shared_ptr<KeyField> jump_field;
+	std::shared_ptr<KeyField> crouch_field;
 
-	void save();
-	Keys load();
-
-	void initRightField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
-	void initCrouchField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
-	void initJumpField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
+	void initRightField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings);
+	void initCrouchField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings);
+	void initJumpField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings);
 	void initSaveButton(std::shared_ptr<sf::RenderWindow>& window, float center, Strings* strings);
 	void initTitle(Strings* strings);
 	void initBackground(std::shared_ptr<sf::RenderWindow>& window);
-	void initLeftField(std::shared_ptr<sf::RenderWindow>& window, Keys& keys, float center, Strings* strings);
+	void initLeftField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings);
 	void initBack(std::shared_ptr<sf::RenderWindow>& window, Strings* strings);
 	void handleExitEvent(sf::Event & event);
 	void handleControlsEvent(sf::Event event);

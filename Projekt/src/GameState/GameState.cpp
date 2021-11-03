@@ -268,7 +268,7 @@ void GameState::update(float delta_seconds)
 
 void GameState::checkWin()
 {
-	if (physics.isWin())
+	if (map->getPlayer()->isWin())
 	{
 		window->setMouseCursorVisible(true);
 		done = true;
@@ -310,7 +310,7 @@ void GameState::markMapAsCompleted()
 
 void GameState::checkDead()
 {
-	if (physics.isDead())
+	if (map->getPlayer()->isDead())
 	{
 		window->setMouseCursorVisible(true);
 		done = true;

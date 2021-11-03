@@ -303,3 +303,8 @@ Player * Map::getPlayer()
 {
 	return &player;
 }
+
+Finish* Map::getFinish()
+{
+	return &finish;
+}
