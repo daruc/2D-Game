@@ -91,31 +91,24 @@ void Map::setFinishPosition(float x, float y)
 
 void Map::draw(std::shared_ptr<sf::RenderWindow> window)
 {
-	//draw ground
 	for (std::shared_ptr<MapShape> shape : shapes)
 	{
 		window->draw(*shape);
 	}
 
-	// draw player
 	player.draw(window);
-
-	// draw finish
 	finish.draw(window);
 
-	//draw bullets
 	for (std::shared_ptr<Bullet> bullet : bullets)
 	{
 		bullet->draw(window);
 	}
 
-	// draw enemies
 	for (std::shared_ptr<Enemy> enemy : enemies)
 	{
 		enemy->draw(window);
 	}
 
-	//draw blood
 	for (std::shared_ptr<Blood> blood_item : blood)
 	{
 		blood_item->draw(window);
@@ -215,14 +208,13 @@ size_t Map::binarySize() const
 	size_t size = sizeof(type)
 		+ player.binarySize()
 		+ finish.binarySize()
-		+ sizeof(shapes.size());	//type + player and finish position + nShapes
+		+ sizeof(shapes.size());
 
 	for (std::shared_ptr<MapShape> map_shape : shapes)
 	{
 		size += map_shape->binarySize();
 	}
 
-	//number of enemies
 	size += sizeof(enemies.size());
 	for (std::shared_ptr<Enemy> enemy : enemies)
 	{

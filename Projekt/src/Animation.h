@@ -14,6 +14,9 @@ private:
 	std::vector<sf::IntRect> frames;
 	int current_frame;
 
+	sf::IntRect inrementAndGetFrame();
+	sf::IntRect decrementAndGetFrame();
+
 public:
 	Animation();
 	void addFrame(sf::IntRect rectangle);

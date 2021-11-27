@@ -33,7 +33,7 @@ public:
 	virtual void handleEvents(sf::Event & event);
 	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
-	void setDimensions(float width, float height);
+	void setDimensions(sf::Vector2f dimensions);
 	void setPosition(sf::Vector2f position) override;
 	void setDescription(std::wstring str);
 	inline sf::Keyboard::Key getKey() const { return key; }

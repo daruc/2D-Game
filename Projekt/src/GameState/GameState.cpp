@@ -13,6 +13,7 @@
 namespace {
 	const float BULLET_SOURCE_OFFSET_RADIUS = 27.0f;
 	const float BULLET_SOURCE_VERTICAL_OFFSET = -7.0f;
+	const char* FILE_MAPS = "maps.bin";
 }
 
 
@@ -288,7 +289,7 @@ bool GameState::isNotUserMap() const
 
 void GameState::markMapAsCompleted()
 {
-	std::ifstream ifstream("maps.bin", std::ios::binary);
+	std::ifstream ifstream(FILE_MAPS, std::ios::binary);
 	bool maps[18];
 	for (int i = 0; i < 18; ++i)
 	{
@@ -300,7 +301,7 @@ void GameState::markMapAsCompleted()
 
 	maps[map_index.value()] = true;
 
-	std::ofstream ofstream("maps.bin", std::ios::binary | std::ios::trunc);
+	std::ofstream ofstream(FILE_MAPS, std::ios::binary | std::ios::trunc);
 	for (int i = 0; i < 18; ++i)
 	{
 		ofstream << static_cast<char>(maps[i]);

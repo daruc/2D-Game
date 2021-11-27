@@ -12,6 +12,12 @@
 #include "GUI/GUIConstants.h"
 
 
+namespace
+{
+	const sf::Vector2f KEY_FIELD_DIMENSIONS(120.0f, 40.0f);
+}
+
+
 ControlsState::ControlsState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window)
 {
@@ -45,7 +51,7 @@ void ControlsState::initBack(std::shared_ptr<sf::RenderWindow>& window, Strings*
 void ControlsState::initRightField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings)
 {
 	right_field = std::make_shared<KeyField>(window, controls_manager.getRight());
-	right_field->setDimensions(120.0f, 40.0f);
+	right_field->setDimensions(KEY_FIELD_DIMENSIONS);
 	right_field->setPosition(sf::Vector2f(center - 60.0f, 150.0f));
 	right_field->setDescription(strings->get("turn_right"));
 	controls.push_back(right_field);
@@ -55,7 +61,7 @@ void ControlsState::initLeftField(std::shared_ptr<sf::RenderWindow>& window, Con
 	Strings* strings)
 {
 	left_field = std::make_shared<KeyField>(window, controls_manager.getLeft());
-	left_field->setDimensions(120.0f, 40.0f);
+	left_field->setDimensions(KEY_FIELD_DIMENSIONS);
 	left_field->setPosition(sf::Vector2f(center - 60.0f, 100.0f));
 	left_field->setDescription(strings->get("turn_left"));
 	controls.push_back(left_field);
@@ -64,7 +70,7 @@ void ControlsState::initLeftField(std::shared_ptr<sf::RenderWindow>& window, Con
 void ControlsState::initCrouchField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings)
 {
 	crouch_field = std::make_shared<KeyField>(window, controls_manager.getCrouch());
-	crouch_field->setDimensions(120.0f, 40.0f);
+	crouch_field->setDimensions(KEY_FIELD_DIMENSIONS);
 	crouch_field->setPosition(sf::Vector2f(center - 60.0f, 200.0f));
 	crouch_field->setDescription(strings->get("crouch"));
 	controls.push_back(crouch_field);
@@ -73,7 +79,7 @@ void ControlsState::initCrouchField(std::shared_ptr<sf::RenderWindow>& window, C
 void ControlsState::initJumpField(std::shared_ptr<sf::RenderWindow>& window, ControlsManager& controls_manager, float center, Strings* strings)
 {
 	jump_field = std::make_shared<KeyField>(window, controls_manager.getJump());
-	jump_field->setDimensions(120.0f, 40.0f);
+	jump_field->setDimensions(KEY_FIELD_DIMENSIONS);
 	jump_field->setPosition(sf::Vector2f(center - 60.0f, 250.0f));
 	jump_field->setDescription(strings->get("jump"));
 	controls.push_back(jump_field);

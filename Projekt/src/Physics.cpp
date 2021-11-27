@@ -66,8 +66,6 @@ void Physics::loadMap(std::shared_ptr<Map> map)
 	}
 
 	map->getPlayer()->initFixture(&world, map);
-
-	//finish
 	map->getFinish()->initFixture(&world, map);
 
 	clock.restart();

@@ -10,14 +10,6 @@
 class Drop : public Drawable, public Updatable
 {
 private:
-	const float SHOW_TIME = 0.8f;
-	const float GRAVITATION = 5.0f;
-	const float SPEED = 0.003f;
-	const sf::Color COLOR;
-	const sf::Uint8 MAX_OPACITY = 255;
-	const int MAX_SIZE = 6;
-	const int MIN_SIZE = 1;
-	
 	float secondsToDestroy;
 	sf::Vector2f velocity;
 	sf::RectangleShape shape;

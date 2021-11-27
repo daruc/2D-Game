@@ -16,45 +16,49 @@ sf::IntRect Animation::nextFrame()
 {
 	if (play_forward)
 	{
-		if (is_looped)
-		{
-			int size = frames.size();
-			int temp = current_frame;
-
-			++current_frame;
-			if (current_frame >= size)
-			{
-				current_frame = 0;
-			}
-
-			return frames[temp];
-		}
-		else
-		{
-			return frames[current_frame++];
-		}
+		return inrementAndGetFrame();
 	}
-	else
+
+	return decrementAndGetFrame();
+}
+
+sf::IntRect Animation::inrementAndGetFrame()
+{
+	if (is_looped)
 	{
-		if (is_looped)
-		{
-			int size = frames.size();
-			
-			int temp = current_frame;
+		int size = frames.size();
+		int temp = current_frame;
 
-			--current_frame;
-			if (current_frame < 0)
-			{
-				current_frame = size - 1;
-			}
-
-			return frames[temp];
-		}
-		else
+		++current_frame;
+		if (current_frame >= size)
 		{
-			return frames[current_frame--];
+			current_frame = 0;
 		}
+
+		return frames[temp];
 	}
+
+	return frames[current_frame++];
+}
+
+sf::IntRect Animation::decrementAndGetFrame()
+{
+	if (is_looped)
+	{
+		int size = frames.size();
+
+		int temp = current_frame;
+
+		--current_frame;
+		if (current_frame < 0)
+		{
+			current_frame = size - 1;
+		}
+
+		return frames[temp];
+	}
+
+	return frames[current_frame--];
 }
 
 bool Animation::hasNext() const
@@ -63,32 +67,23 @@ bool Animation::hasNext() const
 	{
 		return true;
 	}
-	else
+
+	if (play_forward)
 	{
-		if (play_forward)
+		int size = frames.size();
+		if (current_frame == size)
 		{
-			int size = frames.size();
-			if (current_frame == size)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
+			return false;
 		}
-		else
-		{
-			if (current_frame == -1)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
+		return true;
 	}
+
+	if (current_frame == -1)
+	{
+		return false;
+	}
+
+	return true;
 }
 
 void Animation::reset()

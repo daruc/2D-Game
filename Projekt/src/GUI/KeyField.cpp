@@ -451,9 +451,9 @@ void KeyField::draw(std::shared_ptr<sf::RenderWindow> window)
 	window->draw(description);
 }
 
-void KeyField::setDimensions(float width, float height)
+void KeyField::setDimensions(sf::Vector2f dimensions)
 {
-	rectangle.setSize(sf::Vector2f(width, height));
+	rectangle.setSize(dimensions);
 }
 
 void KeyField::setPosition(sf::Vector2f position)

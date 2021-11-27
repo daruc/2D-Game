@@ -23,17 +23,7 @@ void Player::initFixture(b2World* b2world, std::shared_ptr<Map> map)
 	bodyDef.fixedRotation = true;
 
 	b2body = b2world->CreateBody(&bodyDef);
-	b2PolygonShape dynamicBox;
-	dynamicBox.SetAsBox(1.0f / 2, 2.0f / 2);
-
-	b2FixtureDef fixtureDef;
-	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 40.0f;
-	fixtureDef.friction = 0.4f;
-	fixtureDef.restitution = 0.3f;
-	fixtureDef.userData.pointer = static_cast<uintptr_t>(FixtureId::PLAYER);
-	b2fixture = b2body->CreateFixture(&fixtureDef);
-
+	initFixture();
 	assignSpritePositionToFixturePosition();
 }
 
@@ -71,6 +61,34 @@ void Player::beginContact(b2Contact* contact)
 	{
 		std::cout << "fire\n";
 		dead = true;
+	}
+	else if (fixtureHasId(other_fixture, FixtureId::GROUND))
+	{
+		std::cout << "begin ground\n";
+		can_jump = true;
+	}
+}
+
+void Player::endContact(b2Contact* contact)
+{
+	b2Fixture* fixture_a = contact->GetFixtureA();
+	b2Fixture* fixture_b = contact->GetFixtureB();
+
+	if (fixture_a != b2fixture && fixture_b != b2fixture)
+	{
+		return;
+	}
+
+	b2Fixture* other_fixture = fixture_a;
+	if (fixture_a == b2fixture)
+	{
+		other_fixture = fixture_b;
+	}
+
+	if (fixtureHasId(other_fixture, FixtureId::GROUND))
+	{
+		can_jump = false;
+		std::cout << "end ground\n";
 	}
 }
 
@@ -128,7 +146,9 @@ Player::Player(std::shared_ptr<sf::RenderWindow> window)
 	bullets = max_bullets;
 	health = 3;
 	max_speed = 3.0f;
+	max_crouch_speed = 2.0f;
 	crouch = false;
+	can_jump = false;
 	this->window = window;
 
 	if (!texture_pistol.loadFromFile("graphics\\pistol.png"))
@@ -197,6 +217,15 @@ void Player::updatePistolRotation()
 
 void Player::handleControls()
 {
+	if (!crouch && sf::Keyboard::isKeyPressed(controls_manager.getCrouch()))
+	{
+		setCrouch(true);
+	}
+	else if (crouch && !sf::Keyboard::isKeyPressed(controls_manager.getCrouch()))
+	{
+		setCrouch(false);
+	}
+
 	if (sf::Keyboard::isKeyPressed(controls_manager.getLeft()))
 	{
 		goLeft();
@@ -209,10 +238,6 @@ void Player::handleControls()
 	{
 		goJump();
 	}
-	else if (sf::Keyboard::isKeyPressed(controls_manager.getCrouch()))
-	{
-		goCrouch();
-	}
 	else if (isLookingLeft())
 	{
 		stopLeft();
@@ -221,6 +246,11 @@ void Player::handleControls()
 	{
 		stopRight();
 	}
+}
+
+void Player::handleCrouchControls()
+{
+	setCrouch(true);
 }
 
 void Player::draw(std::shared_ptr<sf::RenderWindow> window)
@@ -253,16 +283,58 @@ sf::Vector2f Player::getPosition() const
 
 void Player::goLeft()
 {
-	if (isLookingLeft())
+	if (crouch)
 	{
-		playAnimationGoLeftForward();
+		if (isLookingLeft())
+		{
+			playAnimationCrouchGoLeftForward();
+		}
+		else
+		{
+			playAnimationCrouchGoLeftBackward();
+		}
+		applyForceCrouchGoLeft();
 	}
 	else
 	{
-		playAnimationGoLeftBackward();
+		if (isLookingLeft())
+		{
+			playAnimationGoLeftForward();
+		}
+		else
+		{
+			playAnimationGoLeftBackward();
+		}
+		applyForceGoLeft();
 	}
+}
 
-	applyForceGoLeft();
+void Player::playAnimationCrouchGoLeftForward()
+{
+	sprite.selectAnimation(CROUCH_LEFT);
+	sprite.setDirection(CROUCH_LEFT, true);
+	sprite.stopAnimation(false);
+}
+
+void Player::playAnimationCrouchGoLeftBackward()
+{
+	sprite.selectAnimation(CROUCH_RIGHT);
+	sprite.setDirection(CROUCH_RIGHT, false);
+	sprite.stopAnimation(false);
+}
+
+void Player::applyForceCrouchGoLeft()
+{
+	b2Vec2 velocity = b2body->GetLinearVelocity();
+
+	if (velocity.x >= 0)
+	{
+		b2body->ApplyForce(b2Vec2(-1000.0f, 0.f), b2body->GetWorldCenter(), true);
+	}
+	else if (velocity.x >= -max_crouch_speed)
+	{
+		b2body->ApplyForce(b2Vec2(-10000.0f, 0.f), b2body->GetWorldCenter(), true);
+	}
 }
 
 void Player::playAnimationGoLeftForward()
@@ -301,15 +373,57 @@ bool Player::isLookingLeft() const
 
 void Player::goRight()
 {
-	if (isLookingLeft())
+	if (crouch)
 	{
-		playAnimationGoRightBackward();
+		if (isLookingLeft())
+		{
+			playAnimationCrouchGoRightBackward();
+		}
+		else
+		{
+			playAnimationCrouchGoRightForward();
+		}
+		applyForceCrouchGoRight();
 	}
 	else
 	{
-		playAnimationGoRightForward();
+		if (isLookingLeft())
+		{
+			playAnimationGoRightBackward();
+		}
+		else
+		{
+			playAnimationGoRightForward();
+		}
+		applyForceGoRight();
 	}
-	applyForceGoRight();
+}
+
+void Player::playAnimationCrouchGoRightBackward()
+{
+	sprite.selectAnimation(CROUCH_LEFT);
+	sprite.setDirection(CROUCH_LEFT, false);
+	sprite.stopAnimation(false);
+}
+
+void Player::playAnimationCrouchGoRightForward()
+{
+	sprite.selectAnimation(CROUCH_RIGHT);
+	sprite.setDirection(CROUCH_RIGHT, true);
+	sprite.stopAnimation(false);
+}
+
+void Player::applyForceCrouchGoRight()
+{
+	b2Vec2 velocity = b2body->GetLinearVelocity();
+	if (velocity.x <= 0)
+	{
+		b2body->ApplyForce(b2Vec2(1000.0f, 0.f), b2body->GetWorldCenter(), true);
+	}
+	else if (velocity.x <= max_crouch_speed)
+	{
+		b2body->ApplyForce(b2Vec2(10000.0f, 0.f), b2body->GetWorldCenter(), true);
+	}
 }
 
 void Player::playAnimationGoRightBackward()
@@ -341,71 +455,34 @@ void Player::applyForceGoRight()
 
 void Player::stopLeft()
 {
-	sprite.selectAnimation(LEFT);
-	sprite.setDirection(LEFT, true);
-	sprite.stopAnimation(true);
+	if (crouch)
+	{
+		sprite.selectAnimation(CROUCH_LEFT);
+		sprite.setDirection(CROUCH_LEFT, true);
+		sprite.stopAnimation(true);
+	}
+	else
+	{
+		sprite.selectAnimation(LEFT);
+		sprite.setDirection(LEFT, true);
+		sprite.stopAnimation(true);
+	}
 }
 
 void Player::stopRight()
 {
-	sprite.selectAnimation(RIGHT);
-	sprite.setDirection(RIGHT, true);
-	sprite.stopAnimation(true);
-}
-
-void Player::goCrouchLeft()
-{
-	sprite.selectAnimation(CROUCH_LEFT);
-	if (sprite.getDirection(CROUCH_LEFT) == false)
+	if (crouch)
 	{
-		sprite.setDirection(CROUCH_LEFT, true);
-	}
-	sprite.stopAnimation(false);
-}
-
-void Player::goCrouchRight()
-{
-	sprite.selectAnimation(CROUCH_RIGHT);
-	if (sprite.getDirection(CROUCH_RIGHT) == false)
-	{
+		sprite.selectAnimation(CROUCH_RIGHT);
 		sprite.setDirection(CROUCH_RIGHT, true);
+		sprite.stopAnimation(true);
 	}
-	sprite.stopAnimation(false);
-}
-
-void Player::stopCrouchLeft()
-{
-	sprite.selectAnimation(CROUCH_LEFT);
-	sprite.setDirection(CROUCH_LEFT, true);
-	sprite.stopAnimation(true);
-}
-
-void Player::stopCrouchRight()
-{
-	sprite.selectAnimation(CROUCH_RIGHT);
-	sprite.setDirection(CROUCH_RIGHT, true);
-	sprite.stopAnimation(true);
-}
-
-void Player::goCrouchLeftBack()
-{
-	sprite.selectAnimation(CROUCH_RIGHT);
-	if (sprite.getDirection(CROUCH_RIGHT))
+	else
 	{
-		sprite.setDirection(CROUCH_RIGHT, false);
+		sprite.selectAnimation(RIGHT);
+		sprite.setDirection(RIGHT, true);
+		sprite.stopAnimation(true);
 	}
-
-	sprite.stopAnimation(false);
-}
-
-void Player::goCrouchRightBack()
-{
-	sprite.selectAnimation(CROUCH_LEFT);
-	if (sprite.getDirection(CROUCH_LEFT))
-	{
-		sprite.setDirection(CROUCH_LEFT, false);
-	}
-	sprite.stopAnimation(false);
 }
 
 bool Player::shoot()
@@ -439,13 +516,55 @@ void Player::setCrouch(bool crouch)
 	{
 		pos.y = pos.x = meters2pixels(1.0f) / 2.0f;
 		sprite.setOrigin(pos);
+
+		initCrouchFixture();
 	}
 	else
 	{
 		pos.x = meters2pixels(1.0f) / 2.0f;
 		pos.y = meters2pixels(2.0f) / 2.0f;
 		sprite.setOrigin(pos);
+
+		initFixture();
 	}
+}
+
+void Player::initFixture()
+{
+	if (b2fixture)
+	{
+		b2body->DestroyFixture(b2fixture);
+	}
+
+	b2PolygonShape dynamicBox;
+	dynamicBox.SetAsBox(1.0f / 2, 2.0f / 2);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &dynamicBox;
+	fixtureDef.density = 40.0f;
+	fixtureDef.friction = 0.4f;
+	fixtureDef.restitution = 0.3f;
+	fixtureDef.userData.pointer = static_cast<uintptr_t>(FixtureId::PLAYER);
+	b2fixture = b2body->CreateFixture(&fixtureDef);
+}
+
+void Player::initCrouchFixture()
+{
+	if (b2fixture)
+	{
+		b2body->DestroyFixture(b2fixture);
+	}
+
+	b2PolygonShape dynamicBox;
+	dynamicBox.SetAsBox(1.0f / 2, 1.0f / 2);
+
+	b2FixtureDef fixtureDef;
+	fixtureDef.shape = &dynamicBox;
+	fixtureDef.density = 80.0f;
+	fixtureDef.friction = 0.4f;
+	fixtureDef.restitution = 0.3f;
+	fixtureDef.userData.pointer = static_cast<uintptr_t>(FixtureId::PLAYER);
+	b2fixture = b2body->CreateFixture(&fixtureDef);
 }
 
 std::vector<char> Player::toBinary() const
@@ -471,11 +590,8 @@ size_t Player::binarySize() const
 
 void Player::goJump()
 {
-	// TODO
-	b2body->ApplyLinearImpulse(b2Vec2(0.0f, -800.0f), b2Vec2(b2body->GetPosition()), true);
-}
-
-void Player::goCrouch()
-{
-	// TODO
+	if (can_jump)
+	{
+		b2body->ApplyLinearImpulse(b2Vec2(0.0f, -800.0f), b2Vec2(b2body->GetPosition()), true);
+	}
 }

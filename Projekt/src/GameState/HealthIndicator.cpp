@@ -4,7 +4,7 @@
 
 
 namespace {
-	sf::Vector2f POSITION(0.0f, 0.0f);
+	const sf::Vector2f POSITION(0.0f, 0.0f);
 }
 
 HealthIndicator::HealthIndicator(Player * player)

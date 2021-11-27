@@ -18,7 +18,11 @@
 #include "EditorCommand.h"
 
 
-const sf::Vector2f BUTTON_DIMENSIONS(130.0f, 40.0f);
+namespace
+{
+	const sf::Vector2f BUTTON_DIMENSIONS(130.0f, 40.0f);
+}
+
 
 EditorState::EditorState(std::shared_ptr<sf::RenderWindow> window)
 	: State(window), editor_map(window)

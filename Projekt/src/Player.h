@@ -30,6 +30,7 @@ private:
 	unsigned int health;
 	const unsigned int max_bullets;
 	bool crouch;
+	bool can_jump;
 	std::shared_ptr<sf::RenderWindow> window;
 
 	b2World* b2world;
@@ -40,48 +41,53 @@ private:
 	bool win;
 	bool dead;
 	float max_speed;
+	float max_crouch_speed;
 
 	ControlsManager controls_manager;
 
 	void configureAnimations();
 	void assignSpritePositionToFixturePosition();
 	void handleControls();
+	void handleCrouchControls();
 
 	void goLeft();
 	void playAnimationGoLeftForward();
 	void playAnimationGoLeftBackward();
 	void applyForceGoLeft();
+	void playAnimationCrouchGoLeftForward();
+	void playAnimationCrouchGoLeftBackward();
+	void applyForceCrouchGoLeft();
 
 	void goRight();
 	void playAnimationGoRightForward();
 	void playAnimationGoRightBackward();
 	void applyForceGoRight();
+	void playAnimationCrouchGoRightBackward();
+	void playAnimationCrouchGoRightForward();
+	void applyForceCrouchGoRight();
 
 	void stopLeft();
 	void stopRight();
 
 	void goJump();
-	void goCrouch();
 
 	bool isLookingLeft() const;
 	void updatePistolRotation();
+
+	void initFixture();
+	void initCrouchFixture();
 
 public:
 	Player(std::shared_ptr<sf::RenderWindow> window);
 	~Player();
 	void initFixture(b2World* b2world, std::shared_ptr<Map> map);
 	void beginContact(b2Contact* contact) override;
+	void endContact(b2Contact* contact) override;
 	void update(float delta_seconds) override;
 	void draw(std::shared_ptr<sf::RenderWindow> window) override;
 	void setPosition(sf::Vector2f pos);
 	sf::Vector2f getPosition() const;
 
-	void goCrouchLeft();
-	void goCrouchRight();
-	void stopCrouchLeft();
-	void stopCrouchRight();
-	void goCrouchLeftBack();
-	void goCrouchRightBack();
 
 	bool shoot();
 

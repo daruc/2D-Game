@@ -3,13 +3,20 @@
 #include "SoundsSingleton.h"
 
 
+namespace
+{
+	const std::string HIT_ENEMY_FILE("sounds\\hit_enemy.wav");
+	const int VOLUME = 20;
+}
+
+
 SoundsSingleton::SoundsSingleton()
 {
-	if (!hit_enemy_buffer.loadFromFile("sounds\\hit_enemy.wav"))
+	if (!hit_enemy_buffer.loadFromFile(HIT_ENEMY_FILE))
 	{
 		std::cout << "Cannot load file hit_enemy.wav\n";
 	}
-	volume = 20;
+	volume = VOLUME;
 }
 
 SoundsSingleton* SoundsSingleton::getInstance()
