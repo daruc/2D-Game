@@ -1,0 +1,1 @@
+![alt text](https://github.com/daruc/2D-Game/blob/master/screenshot.png "Screenshot")
